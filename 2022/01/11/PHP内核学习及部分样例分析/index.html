@@ -1,0 +1,584 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/1avatar.png">
+  <link rel="icon" href="/img/1avatar.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="D3n13d">
+  <meta name="keywords" content="Web,CTF,渗透测试">
+  
+    <meta name="description" content="内核剖析前置知识目录结构 build 放置和源码编译相关的文件，比如 buildconf，和检查环境的脚本  ext     拓展目录，所有非php基础功能比如 substring 都在这个目录以下  main   PHP基础设施  Zend   Zend主要实现语言核心的运行环境，比如脚本语法解析，opcode执行及其拓展机制  pear    PHP拓展与应用仓库，包含PEAR核心文件  sa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP内核学习及部分样例分析">
+<meta property="og:url" content="https://d3n13d.github.io/2022/01/11/PHP%E5%86%85%E6%A0%B8%E5%AD%A6%E4%B9%A0%E5%8F%8A%E9%83%A8%E5%88%86%E6%A0%B7%E4%BE%8B%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="D3n13d &#39;s blog">
+<meta property="og:description" content="内核剖析前置知识目录结构 build 放置和源码编译相关的文件，比如 buildconf，和检查环境的脚本  ext     拓展目录，所有非php基础功能比如 substring 都在这个目录以下  main   PHP基础设施  Zend   Zend主要实现语言核心的运行环境，比如脚本语法解析，opcode执行及其拓展机制  pear    PHP拓展与应用仓库，包含PEAR核心文件  sa">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201101726955.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201101732820.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201101733999.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201101735370.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201102325878.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201110002241.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201111036660.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201111055574.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/12605103/1637894016529-904881bd-de45-4515-997f-49165545676e.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/12605103/1637895614445-a5c1df59-b098-43d6-b2d5-d6528408641a.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/12605103/1637895698080-b5defae8-2cf9-45b6-8ada-f8c0dbb212c3.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/12605103/1637895806520-e880d450-5f7f-45e0-a8cf-3e6f3a39b6d0.png">
+<meta property="article:published_time" content="2022-01-11T03:38:14.000Z">
+<meta property="article:modified_time" content="2022-01-11T03:39:18.067Z">
+<meta property="article:author" content="D3n13d">
+<meta property="article:tag" content="PHP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201101726955.png">
+  
+  
+  <title>PHP内核学习及部分样例分析 - D3n13d &#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"d3n13d.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="D3n13d 's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>D3n13d &#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="PHP内核学习及部分样例分析">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-01-11 11:38" pubdate>
+        2022年1月11日 中午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      14k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      116 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">PHP内核学习及部分样例分析</h1>
+            
+            <div class="markdown-body">
+              <h1 id="内核剖析"><a href="#内核剖析" class="headerlink" title="内核剖析"></a>内核剖析</h1><h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><ul>
+<li><p><strong>build</strong> 放置和源码编译相关的文件，比如 buildconf，和检查环境的脚本</p>
+</li>
+<li><p><strong>ext</strong>     拓展目录，所有非php基础功能比如 <strong>substring</strong> 都在这个目录以下</p>
+</li>
+<li><p><strong>main</strong>   PHP基础设施</p>
+</li>
+<li><p><strong>Zend</strong>   Zend主要实现语言核心的运行环境，比如脚本语法解析，opcode执行及其拓展机制</p>
+</li>
+<li><p><strong>pear</strong>    PHP拓展与应用仓库，包含PEAR核心文件</p>
+</li>
+<li><p><strong>sapi</strong>    和各种服务器的接口调用，例如apache、IIS等，也包含一般的fastcgi、cgi等</p>
+</li>
+<li><p><strong>win32</strong>    Windows环境下编译PHP有关脚本</p>
+</li>
+<li><p><strong>TSRM</strong>     线程安全目录</p>
+</li>
+</ul>
+<h3 id="PHP生命周期"><a href="#PHP生命周期" class="headerlink" title="PHP生命周期"></a>PHP生命周期</h3><div class="code-wrapper"><pre><code class="hljs">SAPI指PHP具体应用的编程接口，一切以 **SAPI 开始**，无论是php-cli，还是php-server。比如我们命令行参数传递给PHP解释器要执行的脚本，相当于是通过URL请求了一个PHP页面。
+
+PHP 执行的两个阶段，处理请求之前的开始阶段，请求之后的结束阶段。
+
+处理请求之前的的开始阶段包括 ：
+
+    1️⃣ 模块初始化阶段 (MINIT)，只执行一次
+
+    2️⃣ 模块激活阶段 (RINIT)
+</code></pre></div>
+<h4 id="单进程的SAPI生命周期"><a href="#单进程的SAPI生命周期" class="headerlink" title="单进程的SAPI生命周期"></a>单进程的SAPI生命周期</h4><p><strong>CLI/CGI模式</strong>都属于单进程的SASPI模式</p>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201101726955.png" srcset="/img/loading.gif" lazyload alt="image-20220110172604804"></p>
+<div class="code-wrapper"><pre><code class="hljs">如图完成了一个 接受参数 -&gt; 创建进程 -&gt; 处理请求 -&gt; 销毁进程 -&gt; 终止进程的操作
+</code></pre></div>
+<h4 id="多进程的SAPI生命周期"><a href="#多进程的SAPI生命周期" class="headerlink" title="多进程的SAPI生命周期"></a>多进程的SAPI生命周期</h4><div class="code-wrapper"><pre><code class="hljs">通常PHP是**编译一个中间件的模块**来处理PHP请求。Apache一般会采取多进程模式。Apache会fork出多个子进程，每个进程内存空间相对独立，整个进程的生命周期会处理多个请求，只有apache关闭或者进程结束后才会进行关闭阶段。
+</code></pre></div>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201101732820.png" srcset="/img/loading.gif" lazyload alt="image-20220110173239751"></p>
+<p>多线程的SAPI生命周期和 多进程类似，不同的是多线程是在生命周期里<strong>并行的重复 请求 关闭的阶段</strong></p>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201101733999.png" srcset="/img/loading.gif" lazyload alt="image-20220110173308947"></p>
+<h3 id="SAPI概述"><a href="#SAPI概述" class="headerlink" title="SAPI概述"></a>SAPI概述</h3><div class="code-wrapper"><pre><code class="hljs">PHP中和服务相关的操作都是通过SAPI的接口实现
+</code></pre></div>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201101735370.png" srcset="/img/loading.gif" lazyload alt="image-20220110173552318"></p>
+<div class="code-wrapper"><pre><code class="hljs">    各个服务的抽象层值之间遵守着相同的约定，这里称之为 SAPI 接口。每个SAPI实现都是一个 _sapi_moudle_struct 结构体变量。
+</code></pre></div>
+<p>demo:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> <span class="hljs-title">php_cgi_startup</span><span class="hljs-params">(sapi_module_struct *sapi_module)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> (php_module_startup(sapi_module, &amp;cgi_module_entry, <span class="hljs-number">1</span>) == FAILURE) &#123;<br>		<span class="hljs-keyword">return</span> FAILURE;<br>	&#125;<br>	<span class="hljs-keyword">return</span> SUCCESS;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<div class="code-wrapper"><pre><code class="hljs">经过测试这个返回值是 string(6) &quot;SUCCESS&quot;，而且可以用作条件判断
+</code></pre></div>
+<p><code>if(php_cgi_startup())&#123; echo 1;&#125;</code></p>
+<p>如果 SUCCESS，输出1</p>
+<h3 id="FastCGI"><a href="#FastCGI" class="headerlink" title="FastCGI"></a>FastCGI</h3><div class="code-wrapper"><pre><code class="hljs">**CGI **能实现语言解释器与web服务器的通信。
+
+**FastCGI** 服务器中间件和某个语言后端 进行数据交换的协议，它可以一直执行，还可以支持分布式运算
+</code></pre></div>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201102325878.png" srcset="/img/loading.gif" lazyload alt="image-20220110232512816"></p>
+<h2 id="PHP脚本执行流程"><a href="#PHP脚本执行流程" class="headerlink" title="PHP脚本执行流程"></a>PHP脚本执行流程</h2><blockquote>
+<p>从这里开始就开始分几个二级标题，因为我觉得这已经脱离了前置知识的范畴</p>
+</blockquote>
+<div class="code-wrapper"><pre><code class="hljs">先来说一说PHP，PHP是解释性语言，它无需编译即可“直接运行”
+
+但是我们知道最底层是机器语言，实际上还是要有一个转换过程的，这个时候就回需要一个**解释器**，由解释器来执行这些代码，一般会在运行时实时编译，以此来提高效率。PHP为了提高执行效率，提出了opcode缓存拓展(APC,xcache,eAccelerator等)，这样就可以避免重新编译带来的性能损失。
+
+一般来说，程序会经过这样的阶段：
+</code></pre></div>
+<p>1️⃣传递给php需要执行的文件</p>
+<p>2️⃣php完成准备工作后启动PHP及Zend虚拟机，加载注册的拓展模块</p>
+<p>3️⃣读取脚本，Zend引擎对脚本文件进行词法分析，语法分析</p>
+<p>4️⃣编译为opcode</p>
+<div class="code-wrapper"><pre><code class="hljs">对于语法分析见($PHP_SRC/Zend/zend_language_parser)，它将源代码切成数组
+</code></pre></div>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201110002241.png" srcset="/img/loading.gif" lazyload alt="image-20220111000256180"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">union</span> _<span class="hljs-title">zend_value</span> &#123;</span>   <span class="hljs-comment">//变量存储在这个联合体里</span><br>	zend_long         lval;				<span class="hljs-comment">/* long value */</span><br>	<span class="hljs-keyword">double</span>            dval;				<span class="hljs-comment">/* double value */</span><br>	zend_refcounted  *counted;<br>	zend_string      *str;<br>	zend_array       *arr;<br>	zend_object      *obj;<br>	zend_resource    *res;<br>	zend_reference   *ref;   <span class="hljs-comment">//引用次数</span><br>	zend_ast_ref     *ast;<br>	zval             *zv;<br>	<span class="hljs-keyword">void</span>             *ptr;<br>	zend_class_entry *ce;<br>	zend_function    *func;<br>	<span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>		<span class="hljs-keyword">uint32_t</span> w1;<br>		<span class="hljs-keyword">uint32_t</span> w2;<br>	&#125; ww;<br>&#125; zend_value;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> _<span class="hljs-title">zval_struct</span> &#123;</span><br>	zend_value        value;			<span class="hljs-comment">/* value */</span><br>	<span class="hljs-class"><span class="hljs-keyword">union</span> &#123;</span><br>		<span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>			ZEND_ENDIAN_LOHI_3(<br>				zend_uchar    type,			<span class="hljs-comment">/* active type */</span><br>				zend_uchar    type_flags,<br>				<span class="hljs-keyword">union</span> &#123;<br>					<span class="hljs-keyword">uint16_t</span>  extra;        <span class="hljs-comment">/* not further specified */</span><br>				&#125; u)<br>		&#125; v;<br>		<span class="hljs-keyword">uint32_t</span> type_info;<br>	&#125; u1;<br>	<span class="hljs-class"><span class="hljs-keyword">union</span> &#123;</span><br>		<span class="hljs-keyword">uint32_t</span>     next;                 <span class="hljs-comment">/* hash collision chain */</span><br>		<span class="hljs-keyword">uint32_t</span>     cache_slot;           <span class="hljs-comment">/* cache slot (for RECV_INIT) */</span><br>		<span class="hljs-keyword">uint32_t</span>     opline_num;           <span class="hljs-comment">/* opline number (for FAST_CALL) */</span><br>		<span class="hljs-keyword">uint32_t</span>     lineno;               <span class="hljs-comment">/* line number (for ast nodes) */</span><br>		<span class="hljs-keyword">uint32_t</span>     num_args;             <span class="hljs-comment">/* arguments number for EX(This) */</span><br>		<span class="hljs-keyword">uint32_t</span>     fe_pos;               <span class="hljs-comment">/* foreach position */</span><br>		<span class="hljs-keyword">uint32_t</span>     fe_iter_idx;          <span class="hljs-comment">/* foreach iterator index */</span><br>		<span class="hljs-keyword">uint32_t</span>     access_flags;         <span class="hljs-comment">/* class constant access flags */</span><br>		<span class="hljs-keyword">uint32_t</span>     property_guard;       <span class="hljs-comment">/* single property guard */</span><br>		<span class="hljs-keyword">uint32_t</span>     constant_flags;       <span class="hljs-comment">/* constant flags */</span><br>		<span class="hljs-keyword">uint32_t</span>     extra;                <span class="hljs-comment">/* not further specified */</span><br>	&#125; u2;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>哈希表：通过哈希函数，讲特定的键映射到特定的值的数据结构，维护键和值的对应关系，但是时间复杂度是O(1)比链表O(n)，效率更高</p>
+<h2 id="PHP经典问题解析"><a href="#PHP经典问题解析" class="headerlink" title="PHP经典问题解析"></a>PHP经典问题解析</h2><h3 id="PHP字符串解析问题"><a href="#PHP字符串解析问题" class="headerlink" title="PHP字符串解析问题"></a>PHP字符串解析问题</h3><p>首先来看一段代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>    parse_str(<span class="hljs-string">&#x27;test[abc=1&#x27;</span>,<span class="hljs-variable">$tmp</span>);<br>    var_dump(<span class="hljs-variable">$tmp</span>);<br>    parse_str(<span class="hljs-string">&#x27;test abc=1&#x27;</span>,<span class="hljs-variable">$tmp</span>);<br>    var_dump(<span class="hljs-variable">$tmp</span>);<br>    parse_str(<span class="hljs-string">&#x27;test.abc=1&#x27;</span>,<span class="hljs-variable">$tmp</span>);<br>    var_dump(<span class="hljs-variable">$tmp</span>);<br><span class="hljs-comment">//我们一定期望 tmp 的键名 分别是 test[abc,test abc,test.abc 然而预期的现象并没有发生</span><br><span class="hljs-comment">//返回结果</span><br><br>E:\审计专用\easyFirewall-shell\审计\test.php:<span class="hljs-number">3</span>:<br><span class="hljs-keyword">array</span>(<span class="hljs-number">1</span>) &#123;<br>  <span class="hljs-string">&#x27;test_abc&#x27;</span> =&gt;<br>  <span class="hljs-keyword">string</span>(<span class="hljs-number">1</span>) <span class="hljs-string">&quot;1&quot;</span><br>&#125;<br>E:\审计专用\easyFirewall-shell\审计\test.php:<span class="hljs-number">5</span>:<br><span class="hljs-keyword">array</span>(<span class="hljs-number">1</span>) &#123;<br>  <span class="hljs-string">&#x27;test_abc&#x27;</span> =&gt;<br>  <span class="hljs-keyword">string</span>(<span class="hljs-number">1</span>) <span class="hljs-string">&quot;1&quot;</span><br>&#125;<br>E:\审计专用\easyFirewall-shell\审计\test.php:<span class="hljs-number">7</span>:<br><span class="hljs-keyword">array</span>(<span class="hljs-number">1</span>) &#123;<br>  <span class="hljs-string">&#x27;test_abc&#x27;</span> =&gt;<br>  <span class="hljs-keyword">string</span>(<span class="hljs-number">1</span>) <span class="hljs-string">&quot;1&quot;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>我们发现 ‘[‘ ,’ ‘和’.’，都被替换为了’_’，接下来让我们从内核的角度看一下为什么会出现这样的问题。</p>
+<p>构建简单的PHP代码如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>    <span class="hljs-variable">$tmp</span>=<span class="hljs-string">&#x27;&#x27;</span>;<br>    parse_str(<span class="hljs-string">&#x27;test[ab=1&#x27;</span>,<span class="hljs-variable">$tmp</span>);<br>    var_dump(<span class="hljs-variable">$tmp</span>);<br><span class="hljs-meta">?&gt;</span><br><br></code></pre></td></tr></table></figure>
+
+<p>关于 parse_str 函数的定义是在 <code>$PHP_SRC/ext/standard/string.c line 5033</code> 处</p>
+<p>让我们来简单看一下函数定义的代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs c">PHP_FUNCTION(parse_str)<br>&#123;<br>	<span class="hljs-keyword">char</span> *arg;<br>	zval *arrayArg = <span class="hljs-literal">NULL</span>;<br>	<span class="hljs-keyword">char</span> *res = <span class="hljs-literal">NULL</span>;<br>	<span class="hljs-keyword">size_t</span> arglen;<br><br>	ZEND_PARSE_PARAMETERS_START(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>) <span class="hljs-comment">//Zend虚拟机只负责脚本语义解析，所以这里不用过分关注</span><br>		Z_PARAM_STRING(arg, arglen)<br>		<span class="hljs-function">Z_PARAM_OPTIONAL</span><br><span class="hljs-function">		<span class="hljs-title">Z_PARAM_ZVAL</span><span class="hljs-params">(arrayArg)</span></span><br><span class="hljs-function">	<span class="hljs-title">ZEND_PARSE_PARAMETERS_END</span><span class="hljs-params">()</span></span>;<br><br>	res = estrndup(arg, arglen);   <span class="hljs-comment">//将字符串拷贝到新建的位置处</span><br><br>	<span class="hljs-keyword">if</span> (arrayArg == <span class="hljs-literal">NULL</span>) &#123;<br>		zval tmp;<br>		zend_array *symbol_table;<br>		<span class="hljs-keyword">if</span> (zend_forbid_dynamic_call(<span class="hljs-string">&quot;parse_str() with a single argument&quot;</span>) == FAILURE) &#123;  <span class="hljs-comment">//错误处理</span><br>			efree(res);<br>			<span class="hljs-keyword">return</span>;<br>		&#125;<br><br>		php_error_docref(<span class="hljs-literal">NULL</span>, E_DEPRECATED, <span class="hljs-string">&quot;Calling parse_str() without the result argument is deprecated&quot;</span>);<br><br>		symbol_table = zend_rebuild_symbol_table();<br>		ZVAL_ARR(&amp;tmp, symbol_table);<br>		sapi_module.treat_data(PARSE_STRING, res, &amp;tmp);     <span class="hljs-comment">//负责线程不安全的处理方法，我这里是TS版本所以实际这里不必关注</span><br>		<span class="hljs-keyword">if</span> (UNEXPECTED(zend_hash_del(symbol_table, ZSTR_KNOWN(ZEND_STR_THIS)) == SUCCESS)) &#123;<br>			zend_throw_error(<span class="hljs-literal">NULL</span>, <span class="hljs-string">&quot;Cannot re-assign $this&quot;</span>);<br>		&#125;<br>	&#125; <span class="hljs-keyword">else</span> 	&#123;<br>		arrayArg = zend_try_array_init(arrayArg);<br>		<span class="hljs-keyword">if</span> (!arrayArg) &#123;<br>			efree(res);<br>			<span class="hljs-keyword">return</span>;<br>		&#125;<br><br>		sapi_module.treat_data(PARSE_STRING, res, arrayArg);  <span class="hljs-comment">//这里真正开始解析变量也就是在这个地方下断点</span><br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>跟进来到  <code>$PHP_SRC/main/php_variables.c</code></p>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201111036660.png" srcset="/img/loading.gif" lazyload alt="image-20220111103617451"></p>
+<p>这里给出源码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function">SAPI_API <span class="hljs-title">SAPI_TREAT_DATA_FUNC</span><span class="hljs-params">(php_default_treat_data)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">char</span> *res = <span class="hljs-literal">NULL</span>, *var, *val, *separator = <span class="hljs-literal">NULL</span>;<br>	<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *c_var;<br>	zval <span class="hljs-built_in">array</span>;<br>	<span class="hljs-keyword">int</span> free_buffer = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">char</span> *strtok_buf = <span class="hljs-literal">NULL</span>;<br>	zend_long count = <span class="hljs-number">0</span>;<br><br>	ZVAL_UNDEF(&amp;<span class="hljs-built_in">array</span>);<br>	<span class="hljs-keyword">switch</span> (arg) &#123;<br>		<span class="hljs-keyword">case</span> PARSE_POST:<br>		<span class="hljs-keyword">case</span> PARSE_GET:<br>		<span class="hljs-keyword">case</span> PARSE_COOKIE:<br>			array_init(&amp;<span class="hljs-built_in">array</span>);<br>			<span class="hljs-keyword">switch</span> (arg) &#123;<br>				<span class="hljs-keyword">case</span> PARSE_POST:<br>					zval_ptr_dtor_nogc(&amp;PG(http_globals)[TRACK_VARS_POST]);<br>					ZVAL_COPY_VALUE(&amp;PG(http_globals)[TRACK_VARS_POST], &amp;<span class="hljs-built_in">array</span>);<br>					<span class="hljs-keyword">break</span>;<br>				<span class="hljs-keyword">case</span> PARSE_GET:<br>					zval_ptr_dtor_nogc(&amp;PG(http_globals)[TRACK_VARS_GET]);<br>					ZVAL_COPY_VALUE(&amp;PG(http_globals)[TRACK_VARS_GET], &amp;<span class="hljs-built_in">array</span>);<br>					<span class="hljs-keyword">break</span>;<br>				<span class="hljs-keyword">case</span> PARSE_COOKIE:<br>					zval_ptr_dtor_nogc(&amp;PG(http_globals)[TRACK_VARS_COOKIE]);<br>					ZVAL_COPY_VALUE(&amp;PG(http_globals)[TRACK_VARS_COOKIE], &amp;<span class="hljs-built_in">array</span>);<br>					<span class="hljs-keyword">break</span>;<br>			&#125;<br>			<span class="hljs-keyword">break</span>;<br>		<span class="hljs-keyword">default</span>:<br>			ZVAL_COPY_VALUE(&amp;<span class="hljs-built_in">array</span>, destArray);<br>			<span class="hljs-keyword">break</span>;<br>	&#125;<br><br>	<span class="hljs-keyword">if</span> (arg == PARSE_POST) &#123;    <span class="hljs-comment">//根据变量的不同类型运行不同解析方法</span><br>		sapi_handle_post(&amp;<span class="hljs-built_in">array</span>);<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br><br>	<span class="hljs-keyword">if</span> (arg == PARSE_GET) &#123;		<span class="hljs-comment">/* GET data */</span><br>		c_var = SG(request_info).query_string;<br>		<span class="hljs-keyword">if</span> (c_var &amp;&amp; *c_var) &#123;<br>			res = (<span class="hljs-keyword">char</span> *) estrdup(c_var);<br>			free_buffer = <span class="hljs-number">1</span>;<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			free_buffer = <span class="hljs-number">0</span>;<br>		&#125;<br>	&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arg == PARSE_COOKIE) &#123;		<span class="hljs-comment">/* Cookie data */</span><br>		c_var = SG(request_info).cookie_data;<br>		<span class="hljs-keyword">if</span> (c_var &amp;&amp; *c_var) &#123;<br>			res = (<span class="hljs-keyword">char</span> *) estrdup(c_var);<br>			free_buffer = <span class="hljs-number">1</span>;<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			free_buffer = <span class="hljs-number">0</span>;<br>		&#125;<br>	&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arg == PARSE_STRING) &#123;		<span class="hljs-comment">/* String data */</span>  <span class="hljs-comment">//解析字符串 这个才是我们关注的，但是这里没有函数调用接着往下看</span><br>		res = str;<br>		free_buffer = <span class="hljs-number">1</span>;<br>	&#125;<br><br>	<span class="hljs-keyword">if</span> (!res) &#123;<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br><br>	<span class="hljs-keyword">switch</span> (arg) &#123;<br>		<span class="hljs-keyword">case</span> PARSE_GET:<br>		<span class="hljs-keyword">case</span> PARSE_STRING:<br>			separator = PG(arg_separator).input;  <span class="hljs-comment">//PG是为了解决线程安全的全局变量宏</span><br>			<span class="hljs-keyword">break</span>;<br>		<span class="hljs-keyword">case</span> PARSE_COOKIE:<br>			separator = <span class="hljs-string">&quot;;\0&quot;</span>;<br>			<span class="hljs-keyword">break</span>;<br>	&#125;<br><br>	var = php_strtok_r(res, separator, &amp;strtok_buf);  <span class="hljs-comment">//字符串切片存入数组，因为这里&amp;strtok_buf是NULL所以这里只是遍历没有影响</span><br><br>	<span class="hljs-keyword">while</span> (var) &#123;<br>		<span class="hljs-keyword">size_t</span> val_len;<br>		<span class="hljs-keyword">size_t</span> new_val_len;<br><br>		val = <span class="hljs-built_in">strchr</span>(var, <span class="hljs-string">&#x27;=&#x27;</span>);   <span class="hljs-comment">//=用于区分变量名，变量名对应的变量值 这里val取到了变量的值</span><br><br>		<span class="hljs-keyword">if</span> (arg == PARSE_COOKIE) &#123;<br>			<span class="hljs-comment">/* Remove leading spaces from cookie names, needed for multi-cookie header where ; can be followed by a space */</span><br>			<span class="hljs-keyword">while</span> (<span class="hljs-built_in">isspace</span>(*var)) &#123;<br>				var++;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (var == val || *var == <span class="hljs-string">&#x27;\0&#x27;</span>) &#123;<br>				<span class="hljs-keyword">goto</span> next_cookie;<br>			&#125;<br>		&#125;<br><br>		<span class="hljs-keyword">if</span> (++count &gt; PG(max_input_vars)) &#123;<br>			php_error_docref(<span class="hljs-literal">NULL</span>, E_WARNING, <span class="hljs-string">&quot;Input variables exceeded &quot;</span> ZEND_LONG_FMT <span class="hljs-string">&quot;. To increase the limit change max_input_vars in php.ini.&quot;</span>, PG(max_input_vars));      <span class="hljs-comment">//越界检测</span><br>			<span class="hljs-keyword">break</span>;<br>		&#125;<br><br>		<span class="hljs-keyword">if</span> (val) &#123; <span class="hljs-comment">/* have a value */</span>   <span class="hljs-comment">//就是在尾巴加上结束符</span><br><br>			*val++ = <span class="hljs-string">&#x27;\0&#x27;</span>;<br><br>			<span class="hljs-keyword">if</span> (arg == PARSE_COOKIE) &#123;<br>				val_len = php_raw_url_decode(val, <span class="hljs-built_in">strlen</span>(val));<br>			&#125; <span class="hljs-keyword">else</span> &#123;<br>				val_len = php_url_decode(val, <span class="hljs-built_in">strlen</span>(val));<br>			&#125;<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			val     = <span class="hljs-string">&quot;&quot;</span>;<br>			val_len =  <span class="hljs-number">0</span>;<br>		&#125;<br><br>		val = estrndup(val, val_len);<br>		<span class="hljs-keyword">if</span> (arg != PARSE_COOKIE) &#123;<br>			php_url_decode(var, <span class="hljs-built_in">strlen</span>(var));<br>		&#125;<br>		<span class="hljs-keyword">if</span> (sapi_module.input_filter(arg, var, &amp;val, val_len, &amp;new_val_len)) &#123;<br>			php_register_variable_safe(var, val, new_val_len, &amp;<span class="hljs-built_in">array</span>);   <span class="hljs-comment">//这里开始真正注册变量了 标重点！！！！！！！！！！！！下面放图</span><br>		&#125;<br>		efree(val);<br>next_cookie:<br>		var = php_strtok_r(<span class="hljs-literal">NULL</span>, separator, &amp;strtok_buf);<br>	&#125;<br><br>	<span class="hljs-keyword">if</span> (free_buffer) &#123;<br>		efree(res);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>可以看到最终会运行 php_register_variable_ex  上面的 ZVAL_NEW_STR 是注册字符串操作</p>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201111055574.png" srcset="/img/loading.gif" lazyload alt="image-20220111105528468"></p>
+<p>终于来到了真正产生问题的地方，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function">PHPAPI <span class="hljs-keyword">void</span> <span class="hljs-title">php_register_variable_ex</span><span class="hljs-params">(<span class="hljs-keyword">char</span> *var_name, zval *val, zval *track_vars_array)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">char</span> *p = <span class="hljs-literal">NULL</span>;<br>	<span class="hljs-keyword">char</span> *ip = <span class="hljs-literal">NULL</span>;		<span class="hljs-comment">/* index pointer */</span><br>	<span class="hljs-keyword">char</span> *index;<br>	<span class="hljs-keyword">char</span> *var, *var_orig;<br>	<span class="hljs-keyword">size_t</span> var_len, index_len;<br>	zval gpc_element, *gpc_element_p;<br>	zend_bool is_array = <span class="hljs-number">0</span>;<br>	HashTable *symtable1 = <span class="hljs-literal">NULL</span>;<br>	ALLOCA_FLAG(use_heap)<br><br>	assert(var_name != <span class="hljs-literal">NULL</span>);<br><br>	<span class="hljs-keyword">if</span> (track_vars_array &amp;&amp; Z_TYPE_P(track_vars_array) == IS_ARRAY) &#123;<br>		symtable1 = Z_ARRVAL_P(track_vars_array);<br>	&#125;<br><br>	<span class="hljs-keyword">if</span> (!symtable1) &#123;<br>		<span class="hljs-comment">/* Nothing to do */</span><br>		zval_ptr_dtor_nogc(val);<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br><br><br>	<span class="hljs-comment">/* ignore leading spaces in the variable name */</span><br>	<span class="hljs-keyword">while</span> (*var_name==<span class="hljs-string">&#x27; &#x27;</span>) &#123;<br>		var_name++;<br>	&#125;<br><br>	<span class="hljs-comment">/*</span><br><span class="hljs-comment">	 * Prepare variable name</span><br><span class="hljs-comment">	 */</span><br>	var_len = <span class="hljs-built_in">strlen</span>(var_name);<br>	var = var_orig = do_alloca(var_len + <span class="hljs-number">1</span>, use_heap); <span class="hljs-comment">//传值</span><br>	<span class="hljs-built_in">memcpy</span>(var_orig, var_name, var_len + <span class="hljs-number">1</span>);<br><br>	<span class="hljs-comment">/* ensure that we don&#x27;t have spaces or dots in the variable name (not binary safe) */</span><br>	<span class="hljs-keyword">for</span> (p = var; *p; p++) &#123;<br>		<span class="hljs-keyword">if</span> (*p == <span class="hljs-string">&#x27; &#x27;</span> || *p == <span class="hljs-string">&#x27;.&#x27;</span>) &#123;   <span class="hljs-comment">//空格 和 点 会被替换成下划线 </span><br>			*p=<span class="hljs-string">&#x27;_&#x27;</span>;<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (*p == <span class="hljs-string">&#x27;[&#x27;</span>) &#123;  <span class="hljs-comment">//如果变量的数组存在 [ 会被认为是array型的变量</span><br>			is_array = <span class="hljs-number">1</span>;<br>			ip = p;<br>			*p = <span class="hljs-number">0</span>;<br>			<span class="hljs-keyword">break</span>;<br>		&#125;<br>	&#125;<br>	var_len = p - var;<br><br>	<span class="hljs-keyword">if</span> (var_len==<span class="hljs-number">0</span>) &#123; <span class="hljs-comment">/* empty variable name, or variable name with a space in it */</span><br>		zval_ptr_dtor_nogc(val);<br>		free_alloca(var_orig, use_heap);<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br><br>	<span class="hljs-keyword">if</span> (var_len == <span class="hljs-keyword">sizeof</span>(<span class="hljs-string">&quot;this&quot;</span>)<span class="hljs-number">-1</span> &amp;&amp; EG(current_execute_data)) &#123;<br>		zend_execute_data *ex = EG(current_execute_data);<br><br>		<span class="hljs-keyword">while</span> (ex) &#123;<br>			<span class="hljs-keyword">if</span> (ex-&gt;func &amp;&amp; ZEND_USER_CODE(ex-&gt;func-&gt;common.type)) &#123;<br>				<span class="hljs-keyword">if</span> ((ZEND_CALL_INFO(ex) &amp; ZEND_CALL_HAS_SYMBOL_TABLE)<br>						&amp;&amp; ex-&gt;symbol_table == symtable1) &#123;<br>					<span class="hljs-keyword">if</span> (<span class="hljs-built_in">memcmp</span>(var, <span class="hljs-string">&quot;this&quot;</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-string">&quot;this&quot;</span>)<span class="hljs-number">-1</span>) == <span class="hljs-number">0</span>) &#123;<br>						zend_throw_error(<span class="hljs-literal">NULL</span>, <span class="hljs-string">&quot;Cannot re-assign $this&quot;</span>);<br>						zval_ptr_dtor_nogc(val);<br>						free_alloca(var_orig, use_heap);<br>						<span class="hljs-keyword">return</span>;<br>					&#125;<br>				&#125;<br>				<span class="hljs-keyword">break</span>;<br>			&#125;<br>			ex = ex-&gt;prev_execute_data;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-comment">/* GLOBALS hijack attempt, reject parameter */</span><br>	<span class="hljs-keyword">if</span> (symtable1 == &amp;EG(symbol_table) &amp;&amp;<br>		var_len == <span class="hljs-keyword">sizeof</span>(<span class="hljs-string">&quot;GLOBALS&quot;</span>)<span class="hljs-number">-1</span> &amp;&amp;<br>		!<span class="hljs-built_in">memcmp</span>(var, <span class="hljs-string">&quot;GLOBALS&quot;</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-string">&quot;GLOBALS&quot;</span>)<span class="hljs-number">-1</span>)) &#123;<br>		zval_ptr_dtor_nogc(val);<br>		free_alloca(var_orig, use_heap);<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br><br>	index = var;<br>	index_len = var_len;<br><br>	<span class="hljs-keyword">if</span> (is_array) &#123;<br>		<span class="hljs-keyword">int</span> nest_level = <span class="hljs-number">0</span>;<br>		<span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br>			<span class="hljs-keyword">char</span> *index_s;<br>			<span class="hljs-keyword">size_t</span> new_idx_len = <span class="hljs-number">0</span>;<br><br>			<span class="hljs-keyword">if</span>(++nest_level &gt; PG(max_input_nesting_level)) &#123;<br>				HashTable *ht;<br>				<span class="hljs-comment">/* too many levels of nesting */</span><br><br>				<span class="hljs-keyword">if</span> (track_vars_array) &#123;<br>					ht = Z_ARRVAL_P(track_vars_array);<br>					zend_symtable_str_del(ht, var, var_len);<br>				&#125;<br><br>				zval_ptr_dtor_nogc(val);<br><br>				<span class="hljs-comment">/* do not output the error message to the screen,</span><br><span class="hljs-comment">				 this helps us to to avoid &quot;information disclosure&quot; */</span><br>				<span class="hljs-keyword">if</span> (!PG(display_errors)) &#123;<br>					php_error_docref(<span class="hljs-literal">NULL</span>, E_WARNING, <span class="hljs-string">&quot;Input variable nesting level exceeded &quot;</span> ZEND_LONG_FMT <span class="hljs-string">&quot;. To increase the limit change max_input_nesting_level in php.ini.&quot;</span>, PG(max_input_nesting_level));<br>				&#125;<br>				free_alloca(var_orig, use_heap);<br>				<span class="hljs-keyword">return</span>;<br>			&#125;<br><br>			ip++;<br>			index_s = ip;<br>			<span class="hljs-keyword">if</span> (<span class="hljs-built_in">isspace</span>(*ip)) &#123;<br>				ip++;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (*ip==<span class="hljs-string">&#x27;]&#x27;</span>) &#123;<br>				index_s = <span class="hljs-literal">NULL</span>;<br>			&#125; <span class="hljs-keyword">else</span> &#123;<br>				ip = <span class="hljs-built_in">strchr</span>(ip, <span class="hljs-string">&#x27;]&#x27;</span>);<br>				<span class="hljs-keyword">if</span> (!ip) &#123;<br>					<span class="hljs-comment">/* PHP variables cannot contain &#x27;[&#x27; in their names, so we replace the character with a &#x27;_&#x27; */</span><br>					*(index_s - <span class="hljs-number">1</span>) = <span class="hljs-string">&#x27;_&#x27;</span>;       <span class="hljs-comment">//这里就是&#x27;[&#x27;被替换成&#x27;_&#x27;的原因了 在处理数组的逻辑中如果找不到对应的 &#x27;[&#x27;就 替换为 &#x27;_&#x27;</span><br><br>					index_len = <span class="hljs-number">0</span>;<br>					<span class="hljs-keyword">if</span> (index) &#123;<br>						index_len = <span class="hljs-built_in">strlen</span>(index);<br>					&#125;<br>					<span class="hljs-keyword">goto</span> plain_var;<br>					<span class="hljs-keyword">return</span>;<br>				&#125;<br>				*ip = <span class="hljs-number">0</span>;<br>				new_idx_len = <span class="hljs-built_in">strlen</span>(index_s);<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> (!index) &#123;<br>				array_init(&amp;gpc_element);<br>				<span class="hljs-keyword">if</span> ((gpc_element_p = zend_hash_next_index_insert(symtable1, &amp;gpc_element)) == <span class="hljs-literal">NULL</span>) &#123;<br>					zend_array_destroy(Z_ARR(gpc_element));<br>					zval_ptr_dtor_nogc(val);<br>					free_alloca(var_orig, use_heap);<br>					<span class="hljs-keyword">return</span>;<br>				&#125;<br>			&#125; <span class="hljs-keyword">else</span> &#123;<br>				gpc_element_p = zend_symtable_str_find(symtable1, index, index_len);<br>				<span class="hljs-keyword">if</span> (!gpc_element_p) &#123;<br>					zval tmp;<br>					array_init(&amp;tmp);<br>					gpc_element_p = zend_symtable_str_update_ind(symtable1, index, index_len, &amp;tmp);<br>				&#125; <span class="hljs-keyword">else</span> &#123;<br>					<span class="hljs-keyword">if</span> (Z_TYPE_P(gpc_element_p) == IS_INDIRECT) &#123;<br>						gpc_element_p = Z_INDIRECT_P(gpc_element_p);<br>					&#125;<br>					<span class="hljs-keyword">if</span> (Z_TYPE_P(gpc_element_p) != IS_ARRAY) &#123;<br>						zval_ptr_dtor_nogc(gpc_element_p);<br>						array_init(gpc_element_p);<br>					&#125; <span class="hljs-keyword">else</span> &#123;<br>						SEPARATE_ARRAY(gpc_element_p);<br>					&#125;<br>				&#125;<br>			&#125;<br>			symtable1 = Z_ARRVAL_P(gpc_element_p);<br>			<span class="hljs-comment">/* ip pointed to the &#x27;[&#x27; character, now obtain the key */</span><br>			index = index_s;<br>			index_len = new_idx_len;<br><br>			ip++;<br>			<span class="hljs-keyword">if</span> (*ip == <span class="hljs-string">&#x27;[&#x27;</span>) &#123;<br>				is_array = <span class="hljs-number">1</span>;<br>				*ip = <span class="hljs-number">0</span>;<br>			&#125; <span class="hljs-keyword">else</span> &#123;<br>				<span class="hljs-keyword">goto</span> plain_var;<br>			&#125;<br>		&#125;<br>	&#125; <span class="hljs-keyword">else</span> &#123;<br></code></pre></td></tr></table></figure>
+
+<p>总结一下吧</p>
+<p>对于 ‘ ‘ 和  ‘.’ 成因在于,算是隐性的PHP特性</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">for</span> (p = var; *p; p++) &#123;<br>	<span class="hljs-keyword">if</span> (*p == <span class="hljs-string">&#x27; &#x27;</span> || *p == <span class="hljs-string">&#x27;.&#x27;</span>) &#123;   <span class="hljs-comment">//空格 和 点 会被替换成下划线 </span><br>		*p=<span class="hljs-string">&#x27;_&#x27;</span>;<br>	&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (*p == <span class="hljs-string">&#x27;[&#x27;</span>) &#123;  <span class="hljs-comment">//如果变量的数组存在 [ 会被认为是array型的变量</span><br>		is_array = <span class="hljs-number">1</span>;<br>		ip = p;<br>		*p = <span class="hljs-number">0</span>;<br>		<span class="hljs-keyword">break</span>;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>对于’[‘</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">for</span> (p = var; *p; p++) &#123;<br>	<span class="hljs-keyword">if</span> (*p == <span class="hljs-string">&#x27; &#x27;</span> || *p == <span class="hljs-string">&#x27;.&#x27;</span>) &#123;   <span class="hljs-comment">//空格 和 点 会被替换成下划线 </span><br>		*p=<span class="hljs-string">&#x27;_&#x27;</span>;<br>	&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (*p == <span class="hljs-string">&#x27;[&#x27;</span>) &#123;  <span class="hljs-comment">//如果变量的数组存在 [ 会被认为是array型的变量</span><br>		is_array = <span class="hljs-number">1</span>;   <span class="hljs-comment">//数组标志位</span><br>		ip = p;<br>		*p = <span class="hljs-number">0</span>;<br>		<span class="hljs-keyword">break</span>;<br>	&#125;<br>&#125;<br><span class="hljs-keyword">if</span> (is_array) &#123;<br>	...<br>           ip++;<br>		index_s = ip;<br>		<span class="hljs-keyword">if</span> (<span class="hljs-built_in">isspace</span>(*ip)) &#123;<br>			ip++;<br>		&#125;<br>		<span class="hljs-keyword">if</span> (*ip==<span class="hljs-string">&#x27;]&#x27;</span>) &#123;<br>			index_s = <span class="hljs-literal">NULL</span>;<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			ip = <span class="hljs-built_in">strchr</span>(ip, <span class="hljs-string">&#x27;]&#x27;</span>);<br>			<span class="hljs-keyword">if</span> (!ip) &#123;<br>				<span class="hljs-comment">/* PHP variables cannot contain &#x27;[&#x27; in their names, so we replace the character with a &#x27;_&#x27; */</span><br>				*(index_s - <span class="hljs-number">1</span>) = <span class="hljs-string">&#x27;_&#x27;</span>;  <span class="hljs-comment">//这里就是&#x27;[&#x27;被替换成&#x27;_&#x27;的原因了 在处理数组的逻辑中如果找不到对应的 &#x27;[&#x27;就 替换为 &#x27;_&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h3><p>phar反序列化触发函数<code>finfo_file/finfo_buffer/mime_content_type</code></p>
+<p>做题遇到的 稍微看看这里只看finfo_file这个函数</p>
+<p>首先看看为什么phar可以用来做反序列化，在<code>/ext/phar/phar.c#line618</code>处phar在处理元数据(metadata)时调用了反序列化函数，如图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12605103/1637894016529-904881bd-de45-4515-997f-49165545676e.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>然后来看看 finfo_file 是如何触发反序列化的</p>
+<p>追踪到 <code>/ext/fileinfo/fileinfo.c#line600</code> 发现了 finfo_file具体实现的函数_php_finfo_get_type</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12605103/1637895614445-a5c1df59-b098-43d6-b2d5-d6528408641a.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>跟进 _php_finfo_get_type #line432处，发现_php_finfo_get_type 的实现方法</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12605103/1637895698080-b5defae8-2cf9-45b6-8ada-f8c0dbb212c3.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>line553 发现这里有打开文件流的操作，且这行代码一定会执行一遍。这里使用的是php_stream系列的API，可以使用stream_get_wrapper看到系统内注册了哪一些wrapper</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/12605103/1637895806520-e880d450-5f7f-45e0-a8cf-3e6f3a39b6d0.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>发现了phar 因此我们理解了 finfo_file成为 phar反序列化影响函数的原因。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/PHP/">PHP</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/01/09/Linux%E6%97%A5%E5%B8%B8%E5%B0%8F%E6%8A%80%E5%B7%A7/">
+                        <span class="hidden-mobile">Linux日常小技巧</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
