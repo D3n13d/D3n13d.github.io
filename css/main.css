@@ -1526,14 +1526,13 @@ post-custom {
 .toc-body {
   max-height: 75vh;
   overflow-y: auto;
-  overflow: -moz-scrollbars-none;
-  -ms-overflow-style: none;
+  position: relative;
 }
-.toc-body ol {
+ol {
   list-style: none;
   padding-inline-start: 1rem;
 }
-.toc-body::-webkit-scrollbar {
+::-webkit-scrollbar {
   display: none;
 }
 .tocbot-list ol {

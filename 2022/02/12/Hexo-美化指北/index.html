@@ -1,0 +1,619 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.proxy.ustclug.org/css2?family=Noto+Serif+SC&display=swap" rel="stylesheet">
+
+ <link rel="apple-touch-icon" sizes="76x76" href="/img/1avatar.png">
+  <link rel="icon" href="/img/1avatar.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="D3n13d">
+  <meta name="keywords" content="Web,CTF,渗透测试">
+  
+    <meta name="description" content="Hexo 优化指北主题：Hexo-Fluid 仓库地址: https:&#x2F;&#x2F;github.com&#x2F;fluid-dev&#x2F;hexo-theme-fluid.git 用户文档：https:&#x2F;&#x2F;hexo.fluid-dev.com&#x2F;docs&#x2F; 这里会写的比较糙，尽量看不难。 官方优化选项先看看官方文档给了哪些值得拿来优化的选项，整理了一下有：  懒加载 - 提高访问速度  打字机  文章摘要   Front">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo 美化指北">
+<meta property="og:url" content="https://d3n13d.github.io/2022/02/12/Hexo-%E7%BE%8E%E5%8C%96%E6%8C%87%E5%8C%97/index.html">
+<meta property="og:site_name" content="D3n13d &#39;s blog">
+<meta property="og:description" content="Hexo 优化指北主题：Hexo-Fluid 仓库地址: https:&#x2F;&#x2F;github.com&#x2F;fluid-dev&#x2F;hexo-theme-fluid.git 用户文档：https:&#x2F;&#x2F;hexo.fluid-dev.com&#x2F;docs&#x2F; 这里会写的比较糙，尽量看不难。 官方优化选项先看看官方文档给了哪些值得拿来优化的选项，整理了一下有：  懒加载 - 提高访问速度  打字机  文章摘要   Front">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-11T16:18:01.000Z">
+<meta property="article:modified_time" content="2022-02-11T16:19:15.990Z">
+<meta property="article:author" content="D3n13d">
+<meta property="article:tag" content="Web,CTF,渗透测试">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>Hexo 美化指北 - D3n13d &#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/test.css">
+<link rel="stylesheet" href="/css/code.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"d3n13d.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":2,"color":"#29d","options":{"showSpinner":true,"trickleSpeed":80}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":21256305,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="D3n13d 's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>D3n13d &#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                时间线
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友人
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/tree.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Hexo 美化指北">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      D3n13d
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-12 00:18" pubdate>
+        2022年2月12日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.1k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      11 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Hexo 美化指北</h1>
+            
+            <div class="markdown-body">
+              <h1 id="Hexo-优化指北"><a href="#Hexo-优化指北" class="headerlink" title="Hexo 优化指北"></a>Hexo 优化指北</h1><p>主题：Hexo-Fluid</p>
+<p>仓库地址: <a target="_blank" rel="noopener" href="https://github.com/fluid-dev/hexo-theme-fluid.git">https://github.com/fluid-dev/hexo-theme-fluid.git</a></p>
+<p>用户文档：<a target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/docs/">https://hexo.fluid-dev.com/docs/</a></p>
+<p>这里会写的比较糙，尽量看不难。</p>
+<h2 id="官方优化选项"><a href="#官方优化选项" class="headerlink" title="官方优化选项"></a>官方优化选项</h2><p>先看看官方文档给了哪些值得拿来优化的选项，整理了一下有：</p>
+<ul>
+<li><p>懒加载 - 提高访问速度</p>
+</li>
+<li><p>打字机</p>
+</li>
+<li><p>文章摘要 </p>
+</li>
+<li><p>Front matter - 涉及文章的tag,categories</p>
+</li>
+<li><p>覆盖配置 - 以后只更新<code>_config.fluid.yml </code> 会方便很多</p>
+</li>
+<li><p>文章跳转方式</p>
+</li>
+<li><p>评论插件</p>
+</li>
+</ul>
+<p> 这些自己直接看文档就好，已经很详细了</p>
+<h2 id="资源替换"><a href="#资源替换" class="headerlink" title="资源替换"></a>资源替换</h2><p>对于 <code>_config.fluid.yml</code> 是按照每个页面的配置选项进行工作的。</p>
+<h3 id="顶部资源大图替换"><a href="#顶部资源大图替换" class="headerlink" title="顶部资源大图替换"></a>顶部资源大图替换</h3><p>来到配置文件，比如更新首页的资源那么有</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">index:</span><br>  <span class="hljs-comment"># 首页 Banner 头图，可以是相对路径或绝对路径，以下相同</span><br>  <span class="hljs-comment"># Path of Banner image, can be a relative path or an absolute path, the same on other pages</span><br>  <span class="hljs-comment"># banner_img: /img/default.png   默认选项</span><br>  <span class="hljs-attr">banner_img:</span> <span class="hljs-string">/img/bg/desert.jpg</span>   <span class="hljs-comment"># 对应存放在 /source/img/bg/desert.jpg</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="页面子标题"><a href="#页面子标题" class="headerlink" title="页面子标题"></a>页面子标题</h3><p>修改 <code>\hexo\themes\hexo-theme-fluid\languages\zh-CN.yml</code></p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">archive:</span><br>  <span class="hljs-attr">title:</span> <span class="hljs-string">时间线</span><br>  <span class="hljs-attr">subtitle:</span> <span class="hljs-string">时间线</span><br></code></pre></td></tr></table></figure>
+
+<p>修改  <code>_config.fluid.yml</code></p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">archive:</span><br>  <span class="hljs-attr">banner_img:</span> <span class="hljs-string">/img/bg/desert.jpg</span><br>  <span class="hljs-comment">#banner_img: /img/bg/kungfu.jpg</span><br>  <span class="hljs-attr">banner_img_height:</span> <span class="hljs-number">60</span><br>  <span class="hljs-attr">banner_mask_alpha:</span> <span class="hljs-number">0.3</span><br>  <span class="hljs-attr">subtitle:</span> <span class="hljs-string">时间线</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="页脚优化"><a href="#页脚优化" class="headerlink" title="页脚优化"></a>页脚优化</h2><p>修改 <code>\hexo\themes\hexo-theme-fluid\layout\_partial\footer.ejs</code></p>
+<p>这里实现运行时间显示</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs ejs">&lt;footer class=&quot;text-center mt-5 py-3&quot;&gt;<br>  &lt;div class=&quot;footer-content&quot;&gt;<br>    &lt;div&gt;<br>      &lt;span id=&quot;timeDate&quot;&gt;载入天数...&lt;/span&gt;<br>      &lt;span id=&quot;times&quot;&gt;载入时分秒...&lt;/span&gt;<br>      &lt;script&gt;<br>      var now = new Date();<br>      function createtime()&#123;<br>          var grt= new Date(&quot;00/00/1970 00:00:00&quot;);//此处修改你的建站时间或者网站上线时间<br>          now.setTime(now.getTime()+250);<br>          days = (now - grt ) / 1000 / 60 / 60 / 24;<br>          dnum = Math.floor(days);<br>          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);<br>          hnum = Math.floor(hours);<br>          if(String(hnum).length ==1 )&#123;<br>              hnum = &quot;0&quot; + hnum;<br>          &#125;<br>          minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);<br>          mnum = Math.floor(minutes);<br>          if(String(mnum).length ==1 )&#123;<br>                    mnum = &quot;0&quot; + mnum;<br>          &#125;<br>          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);<br>          snum = Math.round(seconds);<br>          if(String(snum).length ==1 )&#123;<br>                    snum = &quot;0&quot; + snum;<br>          &#125;<br>          document.getElementById(&quot;timeDate&quot;).innerHTML = &quot;🚀 &amp;nbsp;&quot;+dnum+&quot;&amp;nbsp天&quot;;  //此次自定义显示内容<br>          document.getElementById(&quot;times&quot;).innerHTML = hnum + &quot;&amp;nbsp小时&amp;nbsp&quot; + mnum + &quot;&amp;nbsp分&amp;nbsp&quot; + snum + &quot;&amp;nbsp秒&quot;;<br>      &#125;<br>      setInterval(&quot;createtime()&quot;,250);<br>      &lt;/script&gt;<br>    &lt;/div&gt;<br>  &lt;/div&gt;<br>    div&gt;©2022&lt;a href=&quot;/&quot;&gt;&amp;nbsp;&amp;nbsp;blogname&lt;/a&gt;&lt;/div&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="访问统计"><a href="#访问统计" class="headerlink" title="访问统计"></a>访问统计</h2><p>推荐用busuanzi，虽然我调试的时候调了很久而且有时候容易失效，但是人家两行代码不需要域名绑定</p>
+<p>修改 <code>\hexo\themes\hexo-theme-fluid\layout\_partial\footer.ejs</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ejs">&lt;!-- 不蒜子统计 --&gt;<br>  &lt;script async src=&quot;//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js&quot;&gt;&lt;/script&gt;<br>        &lt;span &gt;本站总访问量：<br>        &lt;span id=&quot;busuanzi_value_site_pv&quot;&gt;&lt;/span&gt;次&lt;/span&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="修改你的滚动条"><a href="#修改你的滚动条" class="headerlink" title="修改你的滚动条"></a>修改你的滚动条</h2><p>新建 <code>hexo\themes\hexo-theme-fluid\source\scroll.styl</code></p>
+<p>填入</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs css">::-webkit-scrollbar &#123;<br>  width: <span class="hljs-number">10px</span>;<br>  <span class="hljs-attribute">height</span>: <span class="hljs-number">6px</span>;<br>&#125;<br><br>::-webkit-scrollbar-thumb &#123;<br>  background-color: <span class="hljs-number">#a6a6a6</span>;<br>  <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">1rem</span>;<br>  <span class="hljs-attribute">min-height</span>: <span class="hljs-number">60px</span>;<br><br>  &amp;<span class="hljs-selector-pseudo">:hover</span> &#123;<br>    <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#757575</span>;<br>  &#125;<br><br>  &amp;<span class="hljs-selector-pseudo">:active</span> &#123;<br>    <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#424242</span>;<br>  &#125;<br>&#125;<br><br>::-webkit-scrollbar-corner &#123;<br>  background-color: transparent;<br>&#125;<br><br><span class="hljs-selector-attr">[data-user-color-scheme=<span class="hljs-string">&#x27;dark&#x27;</span>]</span> &#123;<br>  ::-webkit-scrollbar-thumb &#123;<br>    background-color: <span class="hljs-number">#687582</span>;<br><br>    &amp;<span class="hljs-selector-pseudo">:hover</span> &#123;<br>      <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#9da8b3</span>;<br>    &#125;<br><br>    &amp;<span class="hljs-selector-pseudo">:active</span> &#123;<br>      <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#c5d0db</span>;<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>随后在 <code>_config.fluid.yml</code> 应用你的更改</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-comment"># 指定自定义 .css 文件路径，用法和 custom_js 相同</span><br><span class="hljs-comment"># The usage is the same as custom_js</span><br><span class="hljs-attr">custom_css:</span><br><span class="hljs-bullet">-</span> <span class="hljs-string">/css/scroll</span><br><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="更换字体"><a href="#更换字体" class="headerlink" title="更换字体"></a>更换字体</h2><p>思源宋体牛逼</p>
+<p>在 <code>hexo\themes\hexo-theme-fluid\layout\_partial\head.ejs</code>  添加 在 <code>&lt;meta charset=&quot;UTF-8&quot;&gt;</code> 之下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ejs">&lt;link href=&quot;https://fonts.proxy.ustclug.org/css2?family=Noto+Serif+SC&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;<br></code></pre></td></tr></table></figure>
+
+<p>随后在 <code>hexo\themes\hexo-theme-fluid\source\css\variables\base.styl</code>添加字体 作用语句是下代码块的第四行 添加上 Noto Serif SC 即可</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span> Font<br><span class="hljs-variable">$font</span>-size = theme-config(<span class="hljs-string">&quot;font.font_size&quot;</span>, <span class="hljs-string">&quot;16px&quot;</span>)<br><span class="hljs-variable">$letter</span>-spacing = theme-config(<span class="hljs-string">&quot;font.letter_spacing&quot;</span>, <span class="hljs-string">&quot;0.02em&quot;</span>)<br><span class="hljs-variable">$font</span>-family = theme-config(<span class="hljs-string">&quot;font.font_family&quot;</span>, <span class="hljs-string">&#x27;&quot;Noto Serif SC&quot;,var(--font-family-sans-serif)&#x27;</span>)   <br></code></pre></td></tr></table></figure>
+
+<p>最后我在 <code>_config.fluid.yml</code> 修改了如下选项</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-attribute">font</span>:<br>  <span class="hljs-attribute">font_size</span>: <span class="hljs-number">18px</span><br>  <span class="hljs-attribute">font_family</span>: Noto Serif SC<br>  <span class="hljs-attribute">custom_css</span>: <span class="hljs-attribute">https</span>:<span class="hljs-comment">//fonts.proxy.ustclug.org/css2?family=Noto+Serif+SC&amp;display=swap</span><br>  <span class="hljs-attribute">letter_spacing</span>: <span class="hljs-number">0.02em</span><br>  <span class="hljs-attribute">code_font_size</span>: <span class="hljs-number">85%</span><br></code></pre></td></tr></table></figure>
+
+<p>如果你的更改仅在本地生效，尝试</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">hexo clean<br>hexo g -d<br></code></pre></td></tr></table></figure>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/hexo/">hexo</a>
+                    
+                  </div>
+                
+                
+              </div>
+              <p class="note note-warning">
+                <strong>本文作者: </strong><a href="/">D3n13d</a> <br>
+                <strong>本文链接: </strong><a href="https://d3n13d.github.io/2022/02/12/Hexo-%E7%BE%8E%E5%8C%96%E6%8C%87%E5%8C%97/">https://d3n13d.github.io/2022/02/12/Hexo-%E7%BE%8E%E5%8C%96%E6%8C%87%E5%8C%97/</a> <br>
+                <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                   </p>
+                   
+              <!-- 
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+               -->
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/11/Leetcode-20%E5%A4%A9%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E8%AE%A1%E5%88%92%E4%B9%8B%E7%AE%97%E6%B3%95%E5%85%A5%E9%97%A8/">
+                        <span class="hidden-mobile">Leetcode 20天算法刷题计划之算法入门</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      var light = 'preferred-color-scheme';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
+      var s = document.createElement('script');
+      s.setAttribute('src', 'https://utteranc.es/client.js');
+      s.setAttribute('repo', 'D3n13d/utterances');
+      s.setAttribute('issue-term', 'title');
+      
+      s.setAttribute('theme', schema);
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('comments').appendChild(s);
+    })
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202202110012686.png" srcset="/img/loading.gif" lazyload class="rounded mx-auto d-block mt-5" style="width:120px; height:120px;">
+  <br>
+  <center> # 曾记否，到中流击水，浪遏飞舟？ </center>
+<footer class="text-center mt-5 py-3">
+
+  
+  <div class="footer-content">
+    <div>
+      <span id="timeDate">载入天数...</span>
+      <span id="times">载入时分秒...</span>
+      <script>
+      var now = new Date();
+      function createtime(){
+          var grt= new Date("01/07/2022 00:00:00");//此处修改你的建站时间或者网站上线时间
+          now.setTime(now.getTime()+250);
+          days = (now - grt ) / 1000 / 60 / 60 / 24;
+          dnum = Math.floor(days);
+          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+          hnum = Math.floor(hours);
+          if(String(hnum).length ==1 ){
+              hnum = "0" + hnum;
+          }
+          minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+          mnum = Math.floor(minutes);
+          if(String(mnum).length ==1 ){
+                    mnum = "0" + mnum;
+          }
+          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+          snum = Math.round(seconds);
+          if(String(snum).length ==1 ){
+                    snum = "0" + snum;
+          }
+          
+          document.getElementById("timeDate").innerHTML = "🚀 &nbsp;"+dnum+"&nbsp天";  //此次自定义显示内容
+          document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+      }  //此次自定义显示内容
+      setInterval("createtime()",250);
+      </script>
+    </div>
+  </div>
+
+  
+  
+    <!-- 不蒜子统计 -->
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span >本站总访问量：
+            <span id="busuanzi_value_site_pv"></span>次</span>
+    
+    
+    
+    
+    
+    
+  <div>©2022<a href="https://d3n13d.github.io/">&nbsp;&nbsp;D3n13d 的快乐小屋</a></div>
+
+  
+</footer>
+
+
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":true,"trickleSpeed":80})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script>
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
