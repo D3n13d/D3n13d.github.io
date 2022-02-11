@@ -18,12 +18,12 @@
   <meta name="author" content="D3n13d">
   <meta name="keywords" content="Web,CTF,渗透测试">
   
-    <meta name="description" content="信息安全-C++逆向基础存储单位​    bit     最小单位 0&#x2F;1 ​    Byte  1Byte&#x3D;8bit ​    DWORD   1DWORD&#x3D;2Byte 寄存器通用寄存器​    eax    累加器寄存器，用于进行数学运算。 ​    ebx    基数寄存器 ​    ecx    计数器 ​    edx    数据寄存器 ​    ESI    原地址寄存器 ​    E">
+    <meta name="description" content="信息安全-C++逆向基础存储单位​    bit     最小单位 0&#x2F;1 ​    Byte  1Byte&#x3D;8bit ​    DWORD   1DWORD&#x3D;2Byte 寄存器通用寄存器​    eax    累加器寄存器，用于进行数学运算。 ​    ebx    基数寄存器 ​    ecx    计数器 ​    edx    数据寄存器 ​    ESI">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++逆向笔记">
 <meta property="og:url" content="https://d3n13d.github.io/2022/01/07/C-%E9%80%86%E5%90%91%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="D3n13d &#39;s blog">
-<meta property="og:description" content="信息安全-C++逆向基础存储单位​    bit     最小单位 0&#x2F;1 ​    Byte  1Byte&#x3D;8bit ​    DWORD   1DWORD&#x3D;2Byte 寄存器通用寄存器​    eax    累加器寄存器，用于进行数学运算。 ​    ebx    基数寄存器 ​    ecx    计数器 ​    edx    数据寄存器 ​    ESI    原地址寄存器 ​    E">
+<meta property="og:description" content="信息安全-C++逆向基础存储单位​    bit     最小单位 0&#x2F;1 ​    Byte  1Byte&#x3D;8bit ​    DWORD   1DWORD&#x3D;2Byte 寄存器通用寄存器​    eax    累加器寄存器，用于进行数学运算。 ​    ebx    基数寄存器 ​    ecx    计数器 ​    edx    数据寄存器 ​    ESI">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202112261422135.png">
 <meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202112261718094.png">
@@ -70,6 +70,7 @@
 <!-- 自定义样式保持在最底部 -->
 
   
+<link rel="stylesheet" href="/css/test.css">
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 
 
@@ -219,7 +220,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      33k 字
+      34k 字
     </span>
   
 
@@ -228,7 +229,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      278 分钟
+      280 分钟
     </span>
   
 
@@ -260,9 +261,9 @@
             <h1 style="display: none">C++逆向笔记</h1>
             
             <div class="markdown-body">
-              <h1 id="信息安全-C-逆向"><a href="#信息安全-C-逆向" class="headerlink" title="信息安全-C++逆向"></a>信息安全-C++逆向</h1><h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><h3 id="存储单位"><a href="#存储单位" class="headerlink" title="存储单位"></a>存储单位</h3><p>​    bit     最小单位 0/1</p>
-<p>​    Byte  1Byte=8bit</p>
-<p>​    DWORD   1DWORD=2Byte</p>
+              <h1 id="信息安全-C-逆向"><a href="#信息安全-C-逆向" class="headerlink" title="信息安全-C++逆向"></a>信息安全-C++逆向</h1><h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><h3 id="存储单位"><a href="#存储单位" class="headerlink" title="存储单位"></a>存储单位</h3><p>​    bit     最小单位 0&#x2F;1</p>
+<p>​    Byte  1Byte&#x3D;8bit</p>
+<p>​    DWORD   1DWORD&#x3D;2Byte</p>
 <h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><h4 id="通用寄存器"><a href="#通用寄存器" class="headerlink" title="通用寄存器"></a>通用寄存器</h4><p>​    eax    累加器寄存器，用于进行数学运算。</p>
 <p>​    ebx    基数寄存器</p>
 <p>​    ecx    计数器</p>
@@ -295,7 +296,7 @@
 <p><strong>CDQ</strong></p>
 <p>语法：CDQ</p>
 <p>CDQ指令第一次出现时通常不好理解。它通常出现在除法前面，作用是将EDX的所有位变成EAX最高位的值，</p>
-<p>比如当EAX&gt;=80000000h时，其二进制最高位为1，则EDX被32位全赋值为1，即FFFFFFFF</p>
+<p>比如当EAX&gt;&#x3D;80000000h时，其二进制最高位为1，则EDX被32位全赋值为1，即FFFFFFFF</p>
 <p>若EAX&lt;80000000，则其二进制最高位为0，EDX为00000000。</p>
 <p>然后将EDX：EAX组成新数(64位)：FFFFFFFF 80000000</p>
 <p><strong>DEC (自减)</strong></p>
@@ -311,7 +312,7 @@
 <p>例：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs html">mov eax,64                      ;<br>; EAX = 64h = 100<br>mov ecx,9                       ;; <br>ECX = 9<br>div ecx                         ;; EAX除以ECX<br></code></pre></td></tr></table></figure>
 
-<p>在除法之后 EAX = 100/9 = 0B(十进制：11) 并且 ECX = 100 MOD 9 = 1</p>
+<p>在除法之后 EAX &#x3D; 100&#x2F;9 &#x3D; 0B(十进制：11) 并且 ECX &#x3D; 100 MOD 9 &#x3D; 1</p>
 <p>div指令可以标记CF、OF、ZF</p>
 <p><strong>IDIV (整除)</strong></p>
 <p>语法: IDIV 除数</p>
@@ -330,9 +331,9 @@
 <p><strong>MUL (乘法)</strong></p>
 <p>语法：MUL 数值</p>
 <p>这个指令同IMUL一样，不过MUL可以乘无符号数。</p>
-<p><strong>REP/REPE/REPZ/REPNE/REPNZ</strong></p>
-<p>语法: REP/REPE/REPZ/REPNE/REPNZ ins</p>
-<p>重复上面的指令：直到CX=0。ins必须是一个操作符，比如CMPS、INS、LODS、MOVS、OUTS、SCAS 或 STOS</p>
+<p><strong>REP&#x2F;REPE&#x2F;REPZ&#x2F;REPNE&#x2F;REPNZ</strong></p>
+<p>语法: REP&#x2F;REPE&#x2F;REPZ&#x2F;REPNE&#x2F;REPNZ ins</p>
+<p>重复上面的指令：直到CX&#x3D;0。ins必须是一个操作符，比如CMPS、INS、LODS、MOVS、OUTS、SCAS 或 STOS</p>
 <p><strong>RET (返回)</strong></p>
 <p>语法：RET</p>
 <p>RET digit</p>
@@ -340,7 +341,7 @@
 <p>RET digit在返回前会清理栈</p>
 <p><strong>TEST</strong></p>
 <p>语法：TEST 操作符、操作符</p>
-<p>这个指令99%都是用于”TEST EAX, EAX”，它执行与AND相同的功能，但是并不储存数据。如果EAX=0就会标记ZF，如果EAX不是0，就会清空ZF</p>
+<p>这个指令99%都是用于”TEST EAX, EAX”，它执行与AND相同的功能，但是并不储存数据。如果EAX&#x3D;0就会标记ZF，如果EAX不是0，就会清空ZF</p>
 <p><strong>XOR</strong></p>
 <p>语法：XOR 目的数,源数</p>
 <p>XOR指令对两个数进行异或操作</p>
@@ -373,15 +374,15 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><code class="hljs c"> <span class="hljs-function"><span class="hljs-keyword">int</span> __cdecl <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **argv, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **envp)</span></span><br><span class="hljs-function">.text:0000000000401550                 <span class="hljs-keyword">public</span> main</span><br><span class="hljs-function">.text:0000000000401550 main            proc near               </span>; CODE XREF: __tmainCRTStartup+<span class="hljs-number">242</span>↑p<br>.text:<span class="hljs-number">0000000000401550</span>                                         ; DATA XREF: .pdata:<span class="hljs-number">000000000040506</span>C↓o<br>.text:<span class="hljs-number">0000000000401550</span><br>.text:<span class="hljs-number">0000000000401550</span> var_4           = dword ptr <span class="hljs-number">-4</span>   <span class="hljs-comment">//</span><br>.text:<span class="hljs-number">0000000000401550</span> arg_0           = dword ptr  <span class="hljs-number">10</span>h  <span class="hljs-comment">//argc</span><br>.text:<span class="hljs-number">0000000000401550</span> arg_8           = qword ptr  <span class="hljs-number">18</span>h  <span class="hljs-comment">//argv</span><br>.text:<span class="hljs-number">0000000000401550</span><br>.text:<span class="hljs-number">0000000000401550</span>                 push    rbp<br>.text:<span class="hljs-number">0000000000401551</span>                 mov     rbp, rsp<br>.text:<span class="hljs-number">0000000000401554</span>                 sub     rsp, <span class="hljs-number">30</span>h<br>.text:<span class="hljs-number">0000000000401558</span>                 mov     [rbp+arg_0], ecx<br>.text:<span class="hljs-number">000000000040155B</span>                 mov     [rbp+arg_8], rdx<br>.text:<span class="hljs-number">000000000040155F</span>                 call    __main<br>.text:<span class="hljs-number">0000000000401564</span>                 mov     [rbp+var_4], <span class="hljs-number">5</span>   <span class="hljs-comment">//var_a=5</span><br>.text:<span class="hljs-number">000000000040156B</span>                 lea     rax, [rbp+var_4]  <br>.text:<span class="hljs-number">000000000040156F</span>                 mov     rdx, rax<br>.text:<span class="hljs-number">0000000000401572</span>                 lea     rcx, Format     ; <span class="hljs-string">&quot;%d&quot;</span><br>.text:<span class="hljs-number">0000000000401579</span>                 call    <span class="hljs-built_in">scanf</span><br>.text:<span class="hljs-number">000000000040157</span>E                 cmp     [rbp+arg_0], <span class="hljs-number">0</span>  <span class="hljs-comment">//argc -0  //if (var_a==0)&#123; pintf(&quot;argc == 0\r&quot;);&#125;</span><br>.text:<span class="hljs-number">0000000000401582</span>                 jnz     <span class="hljs-keyword">short</span> loc_401592<br>.text:<span class="hljs-number">0000000000401584</span>                 lea     rcx, Buffer     ; <span class="hljs-string">&quot;argc == 0\r&quot;</span><br>.text:<span class="hljs-number">000000000040158B</span>                 call    <span class="hljs-built_in">puts</span><br>.text:<span class="hljs-number">0000000000401590</span>                 jmp     <span class="hljs-keyword">short</span> loc_4015DA  <span class="hljs-comment">//直接结束</span><br>.text:<span class="hljs-number">0000000000401592</span> ; ---------------------------------------------------------------------------<br>.text:<span class="hljs-number">0000000000401592</span>  <span class="hljs-comment">//这里可以看到是直接无条件跳转到这里 结束指向同一个 地址loc_4015DA 由于loc_4015BE后才是统一结束判断地址 因为 那里是对应的else语句 因此可以判断使用了 ifelif语句结构</span><br>.text:<span class="hljs-number">0000000000401592</span> loc_401592:                             ; CODE XREF: main+<span class="hljs-number">32</span>↑j  <span class="hljs-comment">//if</span><br>.text:<span class="hljs-number">0000000000401592</span>                 cmp     [rbp+arg_0], <span class="hljs-number">1</span>  <span class="hljs-comment">//elif (var_a==1)&#123; pintf(&quot;argc == 1\r&quot;);&#125;</span><br>.text:<span class="hljs-number">0000000000401596</span>                 jnz     <span class="hljs-keyword">short</span> h<br>.text:<span class="hljs-number">0000000000401598</span>                 lea     rcx, aArgc1     ; <span class="hljs-string">&quot;argc == 1\r&quot;</span><br>.text:<span class="hljs-number">000000000040159F</span>                 call    <span class="hljs-built_in">puts</span><br>.text:<span class="hljs-number">00000000004015</span>A4                 jmp     <span class="hljs-keyword">short</span> loc_4015DA<br>.text:<span class="hljs-number">00000000004015</span>A6 ; ---------------------------------------------------------------------------<br>.text:<span class="hljs-number">00000000004015</span>A6<br>.text:<span class="hljs-number">00000000004015</span>A6 loc_4015A6:                             ; CODE XREF: main+<span class="hljs-number">46</span>↑j <span class="hljs-comment">//elif (var_a==2)&#123; pintf(&quot;argc == 2\r&quot;);&#125;</span><br>.text:<span class="hljs-number">00000000004015</span>A6                 cmp     [rbp+arg_0], <span class="hljs-number">2</span><br>.text:<span class="hljs-number">00000000004015</span>AA                 jnz     <span class="hljs-keyword">short</span> loc_4015BA<br>.text:<span class="hljs-number">00000000004015</span>AC                 lea     rcx, aArgc2     ; <span class="hljs-string">&quot;argc == 2\r&quot;</span><br>.text:<span class="hljs-number">00000000004015B</span>3                 call    <span class="hljs-built_in">puts</span><br>.text:<span class="hljs-number">00000000004015B</span>8                 jmp     <span class="hljs-keyword">short</span> loc_4015DA<br>.text:<span class="hljs-number">00000000004015B</span>A ; ---------------------------------------------------------------------------<br>.text:<span class="hljs-number">00000000004015B</span>A<br>.text:<span class="hljs-number">00000000004015B</span>A loc_4015BA:                             ; CODE XREF: main+<span class="hljs-number">5</span>A↑j <span class="hljs-comment">//elif (var_a==3)&#123; pintf(&quot;argc == 3\r&quot;);&#125;</span><br>.text:<span class="hljs-number">00000000004015B</span>A                 cmp     [rbp+arg_0], <span class="hljs-number">3</span><br>.text:<span class="hljs-number">00000000004015B</span>E                 jnz     <span class="hljs-keyword">short</span> loc_4015CE<br>.text:<span class="hljs-number">00000000004015</span>C0                 lea     rcx, aArgc3     ; <span class="hljs-string">&quot;argc == 3\r&quot;</span><br>.text:<span class="hljs-number">00000000004015</span>C7                 call    <span class="hljs-built_in">puts</span><br>.text:<span class="hljs-number">00000000004015</span>CC                 jmp     <span class="hljs-keyword">short</span> loc_4015DA<br>.text:<span class="hljs-number">00000000004015</span>CE ; ---------------------------------------------------------------------------<br>.text:<span class="hljs-number">00000000004015</span>CE<br>.text:<span class="hljs-number">00000000004015</span>CE loc_4015CE:                             ; CODE XREF: main+<span class="hljs-number">6</span>E↑j<br>.text:<span class="hljs-number">00000000004015</span>CE                 lea     rcx, aElse      ; <span class="hljs-string">&quot;else\r&quot;</span><br>.text:<span class="hljs-number">00000000004015</span>D5                 call    <span class="hljs-built_in">puts</span><br>.text:<span class="hljs-number">00000000004015</span>DA<br>.text:<span class="hljs-number">00000000004015</span>DA loc_4015DA:                             ; CODE XREF: main+<span class="hljs-number">40</span>↑j<br>.text:<span class="hljs-number">00000000004015</span>DA                                         ; main+<span class="hljs-number">54</span>↑j ...<br>.text:<span class="hljs-number">00000000004015</span>DA                 lea     rcx, aHaha      ; <span class="hljs-string">&quot;haha\r&quot;</span><br>.text:<span class="hljs-number">00000000004015E1</span>                 call    <span class="hljs-built_in">puts</span><br>.text:<span class="hljs-number">00000000004015E6</span>                 lea     rcx, aHaha      ; <span class="hljs-string">&quot;haha\r&quot;</span><br>.text:<span class="hljs-number">00000000004015</span>ED                 call    <span class="hljs-built_in">puts</span><br>.text:<span class="hljs-number">00000000004015F</span>2                 lea     rcx, aHaha      ; <span class="hljs-string">&quot;haha\r&quot;</span><br>.text:<span class="hljs-number">00000000004015F</span>9                 call    <span class="hljs-built_in">puts</span><br>.text:<span class="hljs-number">00000000004015F</span>E                 lea     rcx, aHaha      ; <span class="hljs-string">&quot;haha\r&quot;</span><br>.text:<span class="hljs-number">0000000000401605</span>                 call    <span class="hljs-built_in">puts</span><br>.text:<span class="hljs-number">000000000040160</span>A                 lea     rcx, aHaha      ; <span class="hljs-string">&quot;haha\r&quot;</span><br>.text:<span class="hljs-number">0000000000401611</span>                 call    <span class="hljs-built_in">puts</span><br>.text:<span class="hljs-number">0000000000401616</span>                 mov     eax, [rbp+var_4]<br>.text:<span class="hljs-number">0000000000401619</span>                 add     rsp, <span class="hljs-number">30</span>h<br>.text:<span class="hljs-number">000000000040161</span>D                 pop     rbp<br>.text:<span class="hljs-number">000000000040161</span>E                 retn<br>.text:<span class="hljs-number">000000000040161</span>E main            endp<br></code></pre></td></tr></table></figure>
 
 <h3 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h3><p>特点：</p>
-<p>​    特点1: // 注意，和elseif不同，内容中没有break的话，编译不会自动加入break（就是jmp 结尾） </p>
-<p>​    特点2: // 内容连着写，这是为了符合C语言的语法：case中不写break，会顺着执行下一条case</p>
-<p>​    特点3:// 跳转表是从0开始的，因此记录最小值，switch的判断中会让元素减去最小值，再查表。减去最小值的好处：如果输入小于最小值，那么这个输入再减去最小值就会变成负数， 而比较时使用ja，也就是用无符号数判断，那么这个负数就会变成一个很大的数，同样会跳转</p>
+<p>​    特点1: &#x2F;&#x2F; 注意，和elseif不同，内容中没有break的话，编译不会自动加入break（就是jmp 结尾） </p>
+<p>​    特点2: &#x2F;&#x2F; 内容连着写，这是为了符合C语言的语法：case中不写break，会顺着执行下一条case</p>
+<p>​    特点3:&#x2F;&#x2F; 跳转表是从0开始的，因此记录最小值，switch的判断中会让元素减去最小值，再查表。减去最小值的好处：如果输入小于最小值，那么这个输入再减去最小值就会变成负数， 而比较时使用ja，也就是用无符号数判断，那么这个负数就会变成一个很大的数，同样会跳转</p>
 <h4 id="ezswitch小于3"><a href="#ezswitch小于3" class="headerlink" title="ezswitch小于3"></a>ezswitch小于3</h4><p>switch</p>
 <p>当case情况小于等于3时，ifelse和switch并没有什么区别</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span>* argv[])</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">switch</span>(argc)<br>    &#123;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;case 0\n&quot;</span>);<br><br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;case 1\n&quot;</span>);<br><br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;case 2\n&quot;</span>);<br><br>        <span class="hljs-keyword">break</span>;<br>    &#125;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;HelloWorld\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>对应反汇编</p>
-<p>//下面这里编辑器做了优化 减少了一次跳转 0 1 2  =&gt; 1 2 0</p>
+<p>&#x2F;&#x2F;下面这里编辑器做了优化 减少了一次跳转 0 1 2  &#x3D;&gt; 1 2 0</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs c">.text:<span class="hljs-number">0000000000401550</span> ; <span class="hljs-function"><span class="hljs-keyword">int</span> __cdecl <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **argv, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> **envp)</span></span><br><span class="hljs-function">.text:0000000000401550                 <span class="hljs-keyword">public</span> main</span><br><span class="hljs-function">.text:0000000000401550 main            proc near               </span>; CODE XREF: __tmainCRTStartup+<span class="hljs-number">242</span>↑p<br>.text:<span class="hljs-number">0000000000401550</span>                                         ; DATA XREF: .pdata:<span class="hljs-number">000000000040506</span>C↓o<br>.text:<span class="hljs-number">0000000000401550</span><br>.text:<span class="hljs-number">0000000000401550</span> arg_0           = dword ptr  <span class="hljs-number">10</span>h<br>.text:<span class="hljs-number">0000000000401550</span> arg_8           = qword ptr  <span class="hljs-number">18</span>h<br>.text:<span class="hljs-number">0000000000401550</span><br>.text:<span class="hljs-number">0000000000401550</span>                 push    rbp<br>.text:<span class="hljs-number">0000000000401551</span>                 mov     rbp, rsp<br>.text:<span class="hljs-number">0000000000401554</span>                 sub     rsp, <span class="hljs-number">20</span>h<br>.text:<span class="hljs-number">0000000000401558</span>                 mov     [rbp+arg_0], ecx<br>.text:<span class="hljs-number">000000000040155B</span>                 mov     [rbp+arg_8], rdx<br>.text:<span class="hljs-number">000000000040155F</span>                 call    __main<br>.text:<span class="hljs-number">0000000000401564</span>                 cmp     [rbp+arg_0], <span class="hljs-number">1</span><br>.text:<span class="hljs-number">0000000000401568</span>                 jz      <span class="hljs-keyword">short</span> loc_401584<br>.text:<span class="hljs-number">000000000040156</span>A                 cmp     [rbp+arg_0], <span class="hljs-number">2</span><br>.text:<span class="hljs-number">000000000040156</span>E                 jz      <span class="hljs-keyword">short</span> loc_401592<br>.text:<span class="hljs-number">0000000000401570</span>                 cmp     [rbp+arg_0], <span class="hljs-number">0</span><br>.text:<span class="hljs-number">0000000000401574</span>                 jnz     <span class="hljs-keyword">short</span> loc_40159F<br>.text:<span class="hljs-number">0000000000401576</span>                 lea     rcx, Buffer     ; <span class="hljs-string">&quot;case 0&quot;</span><br>.text:<span class="hljs-number">000000000040157</span>D                 call    <span class="hljs-built_in">puts</span><br>.text:<span class="hljs-number">0000000000401582</span>                 jmp     <span class="hljs-keyword">short</span> loc_40159F<br>.text:<span class="hljs-number">0000000000401584</span> ; ---------------------------------------------------------------------------<br>.text:<span class="hljs-number">0000000000401584</span><br>.text:<span class="hljs-number">0000000000401584</span> loc_401584:                             ; CODE XREF: main+<span class="hljs-number">18</span>↑j<br>.text:<span class="hljs-number">0000000000401584</span>                 lea     rcx, aCase1     ; <span class="hljs-string">&quot;case 1&quot;</span><br>.text:<span class="hljs-number">000000000040158B</span>                 call    <span class="hljs-built_in">puts</span><br>.text:<span class="hljs-number">0000000000401590</span>                 jmp     <span class="hljs-keyword">short</span> loc_40159F<br>.text:<span class="hljs-number">0000000000401592</span> ; ---------------------------------------------------------------------------<br>.text:<span class="hljs-number">0000000000401592</span><br>.text:<span class="hljs-number">0000000000401592</span> loc_401592:                             ; CODE XREF: main+<span class="hljs-number">1</span>E↑j<br>.text:<span class="hljs-number">0000000000401592</span>                 lea     rcx, aCase2     ; <span class="hljs-string">&quot;case 2&quot;</span><br>.text:<span class="hljs-number">0000000000401599</span>                 call    <span class="hljs-built_in">puts</span><br>.text:<span class="hljs-number">000000000040159</span>E                 nop<br>.text:<span class="hljs-number">000000000040159F</span><br>.text:<span class="hljs-number">000000000040159F</span> loc_40159F:                             ; CODE XREF: main+<span class="hljs-number">24</span>↑j<br>.text:<span class="hljs-number">000000000040159F</span>                                         ; main+<span class="hljs-number">32</span>↑j ...<br>.text:<span class="hljs-number">000000000040159F</span>                 lea     rcx, aHelloworld ; <span class="hljs-string">&quot;HelloWorld&quot;</span><br>.text:<span class="hljs-number">00000000004015</span>A6                 call    <span class="hljs-built_in">puts</span><br>.text:<span class="hljs-number">00000000004015</span>AB                 mov     eax, <span class="hljs-number">0</span><br>.text:<span class="hljs-number">00000000004015B</span>0                 add     rsp, <span class="hljs-number">20</span>h<br>.text:<span class="hljs-number">00000000004015B</span>4                 pop     rbp<br>.text:<span class="hljs-number">00000000004015B</span>5                 retn<br>.text:<span class="hljs-number">00000000004015B</span>5 main            endp<br></code></pre></td></tr></table></figure>
 
 <h4 id="switch-分支大于4"><a href="#switch-分支大于4" class="headerlink" title="switch 分支大于4"></a>switch 分支大于4</h4><p>注意switch分支大于4之后就有跳转表</p>
@@ -395,7 +396,7 @@
 <p>这是小表存放跳转的索引 即 edx</p>
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202112261422135.png" srcset="/img/loading.gif" lazyload alt="image-20211226142233001"></p>
 <p>内存会建立跳转表 存放 每个case后的函数体的起始地址</p>
-<p>这里的寻址类似于数组的寻址  address=[第一个case的起始地址+4*寄存器(步长)]</p>
+<p>这里的寻址类似于数组的寻址  address&#x3D;[第一个case的起始地址+4*寄存器(步长)]</p>
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202112261718094.png" srcset="/img/loading.gif" lazyload alt="image-20211226171819013"></p>
 <p>如图，展示了大表存储跳转表的地址</p>
 <p>可知     jmp [寄存器*4 + 0xxxxx] ;跳转表模式的重要特征</p>
@@ -464,7 +465,7 @@
 <p>公式先贴出来:</p>
 <p>　　<strong>Ary + sizeof(type[C][H]) * i + sizeof(type[H])*j + sizeof(type)*k</strong></p>
 <p> 代入公式看汇编</p>
-<p>　　1.eax = i的值</p>
+<p>　　1.eax &#x3D; i的值</p>
 <p>  　　2. eax * 30 ,相当于求 sizeof(type[C][H]) * i</p>
 <p>　　3.求出数组首地址+eax,也就是求出了 Ary[M]的位置,给Ecx赋值</p>
 <p>　　4.求出j的值</p>
@@ -478,8 +479,8 @@
 <figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs x86asm"><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401550</span> <span class="hljs-comment">; int __cdecl main(int argc, const char **argv, const char **envp)</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401550</span>                 <span class="hljs-meta">public</span> main<br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401550</span> main            proc <span class="hljs-built_in">near</span>               <span class="hljs-comment">; CODE XREF: __tmainCRTStartup+242↑p</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401550</span>                                         <span class="hljs-comment">; DATA XREF: .pdata:000000000040506C↓o</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401550</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401550</span> var_20          = <span class="hljs-built_in">byte</span> <span class="hljs-built_in">ptr</span> -<span class="hljs-number">20h</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401550</span> var_1C          = <span class="hljs-built_in">dword</span> <span class="hljs-built_in">ptr</span> -<span class="hljs-number">1Ch</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401550</span> var_18          = <span class="hljs-built_in">word</span> <span class="hljs-built_in">ptr</span> -<span class="hljs-number">18h</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401550</span> var_10          = <span class="hljs-built_in">qword</span> <span class="hljs-built_in">ptr</span> -<span class="hljs-number">10h</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401550</span> var_8           = <span class="hljs-built_in">dword</span> <span class="hljs-built_in">ptr</span> -<span class="hljs-number">8</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401550</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401550</span>                 <span class="hljs-keyword">push</span>    <span class="hljs-built_in">rbp</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401551</span>                 <span class="hljs-keyword">mov</span>     <span class="hljs-built_in">rbp</span>, <span class="hljs-built_in">rsp</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401554</span>                 <span class="hljs-keyword">sub</span>     <span class="hljs-built_in">rsp</span>, <span class="hljs-number">40h</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401558</span>                 <span class="hljs-keyword">call</span>    __main<br><span class="hljs-symbol">.text:</span><span class="hljs-number">000000000040155D</span>                 <span class="hljs-keyword">mov</span>     [<span class="hljs-built_in">rbp</span>+var_20], <span class="hljs-number">61h</span> <span class="hljs-comment">; &#x27;a&#x27;</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401561</span>                 <span class="hljs-keyword">mov</span>     [<span class="hljs-built_in">rbp</span>+var_1C], <span class="hljs-number">1</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401568</span>                 <span class="hljs-keyword">mov</span>     [<span class="hljs-built_in">rbp</span>+var_18], <span class="hljs-number">2</span><br><span class="hljs-symbol">.text:</span>000000000040156E                 <span class="hljs-keyword">movsd</span>   <span class="hljs-built_in">xmm0</span>, <span class="hljs-built_in">cs</span>:qword_404008<br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401576</span>                 <span class="hljs-keyword">movsd</span>   [<span class="hljs-built_in">rbp</span>+var_10], <span class="hljs-built_in">xmm0</span><br><span class="hljs-symbol">.text:</span>000000000040157B                 <span class="hljs-keyword">pxor</span>    <span class="hljs-built_in">xmm0</span>, <span class="hljs-built_in">xmm0</span><br><span class="hljs-symbol">.text:</span>000000000040157F                 <span class="hljs-keyword">movss</span>   [<span class="hljs-built_in">rbp</span>+var_8], <span class="hljs-built_in">xmm0</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401584</span>                 <span class="hljs-keyword">mov</span>     <span class="hljs-built_in">edx</span>, <span class="hljs-number">20h</span> <span class="hljs-comment">; &#x27; &#x27;</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401589</span>                 <span class="hljs-keyword">lea</span>     <span class="hljs-built_in">rcx</span>, Format     <span class="hljs-comment">; &quot;%d&quot;</span><br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401590</span>                 <span class="hljs-keyword">call</span>    printf<br><span class="hljs-symbol">.text:</span><span class="hljs-number">0000000000401595</span>                 <span class="hljs-keyword">mov</span>     <span class="hljs-built_in">eax</span>, <span class="hljs-number">0</span><br><span class="hljs-symbol">.text:</span>000000000040159A                 <span class="hljs-keyword">add</span>     <span class="hljs-built_in">rsp</span>, <span class="hljs-number">40h</span><br><span class="hljs-symbol">.text:</span>000000000040159E                 <span class="hljs-keyword">pop</span>     <span class="hljs-built_in">rbp</span><br><span class="hljs-symbol">.text:</span>000000000040159F                 <span class="hljs-keyword">retn</span><br><span class="hljs-symbol">.text:</span>000000000040159F main            endp<br></code></pre></td></tr></table></figure>
 
 <p>​    编译器对齐值,设置为 alg, MeMber offset 从0开始计算, 其中Member offset 要每次代入公式之后,加上自己成员所占的字节大小,继续参与下次运算</p>
-<p>　　结构体成员偏移计算公式:  MeMber offset % min(alg,sizeof(Member type)) == 0</p>
-<p>　　结构体总大小计算公式: 　 sizeof(struct) % min(Max type size,alg) == 0;</p>
+<p>　　结构体成员偏移计算公式:  MeMber offset % min(alg,sizeof(Member type)) &#x3D;&#x3D; 0</p>
+<p>　　结构体总大小计算公式: 　 sizeof(struct) % min(Max type size,alg) &#x3D;&#x3D; 0;</p>
 <h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>​    （对象调用成员函数时） lea ecx, [xxx]<br>​    (成员函数中) mov xxx，ecx ; 直接就使用了ecx call 成员函数 stdcall和cdec方式都是push传参（最后一个PUSH）<br>​    lea reg, 寄存器首地址 push reg call 成员函数<br>​    当给函数传参时第一个参数是地址，那么可以怀疑这个是类对象的成员函数 对象作为参数传递<br>​    成员简单：直接当作变量压栈，先定义的成员后压栈，后定义的成员先压栈（保证在栈中的 顺序和定义时一样）<br>​    成员复杂：将整个对象复制到栈顶（相当于整个压栈），具体操作<br>​    sub esp, 类对象长度 ; 预先申请栈空间，用于存储类对象的形参 mov ecx, 10<br>​    ;设置循环次数10次<br>​    rep movs 栈顶，对象地址 ;就是类似memcpy，将内容整体拷贝到栈顶（刚刚开辟的位置） call fun…<br>​    对象作为返回值 调用前会将对象返回的位置作为参数压栈（也就是调用方准备好空间，告诉子函数地址，到<br>时候子函数返回的过程就是直接写进那个地址）</p>
 <p>​    空类的实例占用1字节：目的是为了能够获取到该实例的地址 对象中先定义的变量在低地址处，后定义的变量在高地址处（类似数组） 内存对齐：<br>​    每个数据存放的地址必须是自身长度的整数倍 2结构体总长度必须是数据中最长类型长度的整数倍 如果指定了#pragma pack(n)，则原值和n取min 编译器用0xCC填充<br>​    类中静态变量：是具有作用域的全局变量（同静态变量） 所以静态成员变量可以生成对象就使用（用类访问） 也无需this指针<br>​    this指针：在对象调用自己的成员函数时，会MOV ecx, 对象首地址，而进入成员函数时会自动将 ecx入栈，也就是说，实际上函数多了一个参数，是指向自己对象首地址的指针，这就是this指 针。<br>​    thiscall方式特点：使用ecx传this指针</p>
 <h2 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h2><p>​    什么是防火墙 – 一种高级访问控制设备，置于<strong>不同网络安全域 之间的一系列部件的组合</strong>，它是<strong>不同网络安全 域间通信流的唯一通道</strong>，能根据企业有关的安全政策控制（允许、拒绝、监视、记录）进出网络的访问行为。</p>
@@ -688,95 +689,6 @@
   
 </footer>
 
-<!-- SCRIPTS -->
-<!-- 
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":true,"trickleSpeed":80})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-<!-- Plugins -->
-
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-  
-
-
-
-  
-    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
-  
-  
-    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
-  
-
-
-
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
-      
-        typing(title);
-      
-    })(window, document);
-  </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
-<script src="//cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script>
-
-
-
-<!-- 主题的启动项 保持在最底部 -->
-<script  src="/js/boot.js" ></script>
- -->
 
 
 

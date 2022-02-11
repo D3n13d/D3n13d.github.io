@@ -80,6 +80,7 @@
 <!-- 自定义样式保持在最底部 -->
 
   
+<link rel="stylesheet" href="/css/test.css">
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 
 
@@ -293,7 +294,7 @@
 <p>​    处理请求之前的的开始阶段包括 ：</p>
 <p>​        1️⃣ 模块初始化阶段 (MINIT)，只执行一次</p>
 <p>​        2️⃣ 模块激活阶段 (RINIT)</p>
-<h4 id="单进程的SAPI生命周期"><a href="#单进程的SAPI生命周期" class="headerlink" title="单进程的SAPI生命周期"></a>单进程的SAPI生命周期</h4><p><strong>CLI/CGI模式</strong>都属于单进程的SASPI模式</p>
+<h4 id="单进程的SAPI生命周期"><a href="#单进程的SAPI生命周期" class="headerlink" title="单进程的SAPI生命周期"></a>单进程的SAPI生命周期</h4><p><strong>CLI&#x2F;CGI模式</strong>都属于单进程的SASPI模式</p>
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201101726955.png" srcset="/img/loading.gif" lazyload alt="image-20220110172604804"></p>
 <p>如图完成了一个 接受参数 -&gt; 创建进程 -&gt; 处理请求 -&gt; 销毁进程 -&gt; 终止进程的操作</p>
 <h4 id="多进程的SAPI生命周期"><a href="#多进程的SAPI生命周期" class="headerlink" title="多进程的SAPI生命周期"></a>多进程的SAPI生命周期</h4><p>​    通常PHP是<strong>编译一个中间件的模块</strong>来处理PHP请求。Apache一般会采取多进程模式。Apache会fork出多个子进程，每个进程内存空间相对独立，整个进程的生命周期会处理多个请求，只有apache关闭或者进程结束后才会进行关闭阶段。</p>
@@ -322,7 +323,7 @@
 <p>​        2️⃣php完成准备工作后启动PHP及Zend虚拟机，加载注册的拓展模块</p>
 <p>​        3️⃣读取脚本，Zend引擎对脚本文件进行词法分析，语法分析</p>
 <p>​        4️⃣编译为opcode</p>
-<p>对于语法分析见($PHP_SRC/Zend/zend_language_parser)，它将源代码切成数组</p>
+<p>对于语法分析见($PHP_SRC&#x2F;Zend&#x2F;zend_language_parser)，它将源代码切成数组</p>
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201110002241.png" srcset="/img/loading.gif" lazyload alt="image-20220111000256180"></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">union</span> _<span class="hljs-title">zend_value</span> &#123;</span>   <span class="hljs-comment">//变量存储在这个联合体里</span><br>	zend_long         lval;				<span class="hljs-comment">/* long value */</span><br>	<span class="hljs-keyword">double</span>            dval;				<span class="hljs-comment">/* double value */</span><br>	zend_refcounted  *counted;<br>	zend_string      *str;<br>	zend_array       *arr;<br>	zend_object      *obj;<br>	zend_resource    *res;<br>	zend_reference   *ref;   <span class="hljs-comment">//引用次数</span><br>	zend_ast_ref     *ast;<br>	zval             *zv;<br>	<span class="hljs-keyword">void</span>             *ptr;<br>	zend_class_entry *ce;<br>	zend_function    *func;<br>	<span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>		<span class="hljs-keyword">uint32_t</span> w1;<br>		<span class="hljs-keyword">uint32_t</span> w2;<br>	&#125; ww;<br>&#125; zend_value;<br></code></pre></td></tr></table></figure>
 
@@ -569,95 +570,6 @@
   
 </footer>
 
-<!-- SCRIPTS -->
-<!-- 
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":true,"trickleSpeed":80})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-<!-- Plugins -->
-
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-  
-
-
-
-  
-    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
-  
-  
-    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
-  
-
-
-
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
-      
-        typing(title);
-      
-    })(window, document);
-  </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
-<script src="//cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script>
-
-
-
-<!-- 主题的启动项 保持在最底部 -->
-<script  src="/js/boot.js" ></script>
- -->
 
 
 

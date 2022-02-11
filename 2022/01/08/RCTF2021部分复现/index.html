@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201081755960.png">
 <meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201081809313.png">
 <meta property="article:published_time" content="2022-01-08T14:32:16.000Z">
-<meta property="article:modified_time" content="2022-01-09T03:43:35.849Z">
+<meta property="article:modified_time" content="2022-01-30T01:58:49.564Z">
 <meta property="article:author" content="D3n13d">
 <meta property="article:tag" content="Web">
 <meta name="twitter:card" content="summary_large_image">
@@ -71,6 +71,7 @@
 <!-- 自定义样式保持在最底部 -->
 
   
+<link rel="stylesheet" href="/css/test.css">
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 
 
@@ -270,12 +271,12 @@
 <li>PHP 开启register_argc_argv</li>
 <li>PHP以Server的形式运行</li>
 </ul>
-<p>pecl是PHP中用于管理扩展而使用的命令行工具，在Docker任意版本镜像中，pcel/pear都会被默认安装，安装的路径在<code>/usr/local/lib/php</code></p>
+<p>pecl是PHP中用于管理扩展而使用的命令行工具，在Docker任意版本镜像中，pcel&#x2F;pear都会被默认安装，安装的路径在<code>/usr/local/lib/php</code></p>
 <p>如图，在拖取下来的镜像中存在 pearcmd.php</p>
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201081736563.png" srcset="/img/loading.gif" lazyload alt="image-20220108173616492"></p>
 <p>如果这是PHP开启了 <code>register_argc_argv</code> 这个选项，那么我们传入的参数将会被当做命令行参数 argv</p>
 <blockquote>
-<p>RFC3875中规定，如果query-string中不包含没有编码的=，且请求是GET或HEAD，则query-string需要被作为命令行参数。但PHP没有严格按照RFC来处理，即使我们传入的query-string包含等号，也仍会被赋值给$_SERVER[‘argv’]</p>
+<p>RFC3875中规定，如果query-string中不包含没有编码的&#x3D;，且请求是GET或HEAD，则query-string需要被作为命令行参数。但PHP没有严格按照RFC来处理，即使我们传入的query-string包含等号，也仍会被赋值给$_SERVER[‘argv’]</p>
 </blockquote>
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201081755960.png" srcset="/img/loading.gif" lazyload alt="image-20220108175527866"></p>
 <p>接着我们查看 <code>pearcmd.php</code> ，发现config-create参数可以帮助我们创建一个文件，且内容可控，那这个时候就可以写入一个shell</p>
@@ -547,95 +548,6 @@ location @phpfpm &#123;
   
 </footer>
 
-<!-- SCRIPTS -->
-<!-- 
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":true,"trickleSpeed":80})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-<!-- Plugins -->
-
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-  
-
-
-
-  
-    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
-  
-  
-    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
-  
-
-
-
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
-      
-        typing(title);
-      
-    })(window, document);
-  </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
-<script src="//cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script>
-
-
-
-<!-- 主题的启动项 保持在最底部 -->
-<script  src="/js/boot.js" ></script>
- -->
 
 
 

