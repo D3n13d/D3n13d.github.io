@@ -194,6 +194,13 @@
 
   
   <url>
+    <loc>https://d3n13d.github.io/categories/Python/</loc>
+    <lastmod>2022-02-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://d3n13d.github.io/categories/Linux/</loc>
     <lastmod>2022-02-12</lastmod>
     <changefreq>weekly</changefreq>
