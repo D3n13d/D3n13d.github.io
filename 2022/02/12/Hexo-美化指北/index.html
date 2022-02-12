@@ -8,8 +8,7 @@
 <head>
   <meta charset="UTF-8">
   <link href="https://fonts.proxy.ustclug.org/css2?family=Noto+Serif+SC&display=swap" rel="stylesheet">
-
- <link rel="apple-touch-icon" sizes="76x76" href="/img/1avatar.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/1avatar.png">
   <link rel="icon" href="/img/1avatar.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -26,9 +25,9 @@
 <meta property="og:description" content="Hexo 美化指北主题：Hexo-Fluid 仓库地址: https:&#x2F;&#x2F;github.com&#x2F;fluid-dev&#x2F;hexo-theme-fluid.git 用户文档：https:&#x2F;&#x2F;hexo.fluid-dev.com&#x2F;docs&#x2F; 这里会写的比较糙，尽量看不难。 官方优化选项先看看官方文档给了哪些值得拿来优化的选项，整理了一下有：  懒加载 - 提高访问速度  打字机  文章摘要   Front">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-02-11T16:18:01.000Z">
-<meta property="article:modified_time" content="2022-02-11T16:20:34.539Z">
+<meta property="article:modified_time" content="2022-02-12T01:20:04.015Z">
 <meta property="article:author" content="D3n13d">
-<meta property="article:tag" content="Web,CTF,渗透测试">
+<meta property="article:tag" content="Hexo">
 <meta name="twitter:card" content="summary_large_image">
   
   
@@ -67,6 +66,8 @@
 <!-- 自定义样式保持在最底部 -->
 
   
+<link rel="stylesheet" href="/css/scroll.css">
+<link rel="stylesheet" href="/themes/hexo-theme-fluid/source/test.css">
 <link rel="stylesheet" href="/css/test.css">
 <link rel="stylesheet" href="/css/code.css">
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
@@ -75,7 +76,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"d3n13d.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":2,"color":"#29d","options":{"showSpinner":true,"trickleSpeed":80}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":21256305,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"d3n13d.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":2,"color":"#29d","options":{"showSpinner":true,"trickleSpeed":80}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":21256305,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
@@ -232,7 +233,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      11 分钟
+      17 分钟
     </span>
   
 
@@ -304,7 +305,7 @@
 <p>修改 <code>\hexo\themes\hexo-theme-fluid\layout\_partial\footer.ejs</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ejs">&lt;!-- 不蒜子统计 --&gt;<br>  &lt;script async src=&quot;//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js&quot;&gt;&lt;/script&gt;<br>        &lt;span &gt;本站总访问量：<br>        &lt;span id=&quot;busuanzi_value_site_pv&quot;&gt;&lt;/span&gt;次&lt;/span&gt;<br></code></pre></td></tr></table></figure>
 
-<h2 id="修改你的滚动条"><a href="#修改你的滚动条" class="headerlink" title="修改你的滚动条"></a>修改你的滚动条</h2><p>新建 <code>hexo\themes\hexo-theme-fluid\source\scroll.styl</code></p>
+<h2 id="修改你的滚动条"><a href="#修改你的滚动条" class="headerlink" title="修改你的滚动条"></a>修改你的滚动条</h2><p>新建 <code>hexo\themes\hexo-theme-fluid\source\css\scroll.styl</code></p>
 <p>填入</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs css">::-webkit-scrollbar &#123;<br>  width: <span class="hljs-number">10px</span>;<br>  <span class="hljs-attribute">height</span>: <span class="hljs-number">6px</span>;<br>&#125;<br><br>::-webkit-scrollbar-thumb &#123;<br>  background-color: <span class="hljs-number">#a6a6a6</span>;<br>  <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">1rem</span>;<br>  <span class="hljs-attribute">min-height</span>: <span class="hljs-number">60px</span>;<br><br>  &amp;<span class="hljs-selector-pseudo">:hover</span> &#123;<br>    <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#757575</span>;<br>  &#125;<br><br>  &amp;<span class="hljs-selector-pseudo">:active</span> &#123;<br>    <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#424242</span>;<br>  &#125;<br>&#125;<br><br>::-webkit-scrollbar-corner &#123;<br>  background-color: transparent;<br>&#125;<br><br><span class="hljs-selector-attr">[data-user-color-scheme=<span class="hljs-string">&#x27;dark&#x27;</span>]</span> &#123;<br>  ::-webkit-scrollbar-thumb &#123;<br>    background-color: <span class="hljs-number">#687582</span>;<br><br>    &amp;<span class="hljs-selector-pseudo">:hover</span> &#123;<br>      <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#9da8b3</span>;<br>    &#125;<br><br>    &amp;<span class="hljs-selector-pseudo">:active</span> &#123;<br>      <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#c5d0db</span>;<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -333,13 +334,13 @@
             <div>
               <div class="post-metas mb-3">
                 
-                  <div class="post-meta mr-3">
-                    <i class="iconfont icon-category"></i>
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/categories/hexo/">hexo</a>
+                      <a class="hover-with-bg" href="/tags/Hexo/">Hexo</a>
                     
                   </div>
-                
                 
               </div>
               <p class="note note-warning">
@@ -348,13 +349,6 @@
                 <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
                    </p>
                    
-              <!-- 
-                <p class="note note-warning">
-                  
-                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
-                  
-                </p>
-               -->
               
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
