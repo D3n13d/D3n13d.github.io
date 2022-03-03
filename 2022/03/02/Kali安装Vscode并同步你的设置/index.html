@@ -1,0 +1,608 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.proxy.ustclug.org/css2?family=Noto+Serif+SC&display=swap" rel="stylesheet">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/1avatar.png">
+  <link rel="icon" href="/img/bg/avatar1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="D3n13d">
+  <meta name="keywords" content="Web,CTF,渗透测试">
+  
+    <meta name="description" content="安装Vscode添加软件源123curl https:&#x2F;&#x2F;packages.microsoft.com&#x2F;keys&#x2F;microsoft.asc | gpg --dearmor &gt; microsoft.gpgmv microsoft.gpg &#x2F;etc&#x2F;apt&#x2F;trusted.gpg.d&#x2F;microsoft.gpgsh -c &amp;#x27;echo &quot;deb [arch&#x3D;amd64] ht">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kali安装Vscode并同步你的设置">
+<meta property="og:url" content="https://d3n13d.github.io/2022/03/02/Kali%E5%AE%89%E8%A3%85Vscode%E5%B9%B6%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E8%AE%BE%E7%BD%AE/index.html">
+<meta property="og:site_name" content="D3n13d &#39;s blog">
+<meta property="og:description" content="安装Vscode添加软件源123curl https:&#x2F;&#x2F;packages.microsoft.com&#x2F;keys&#x2F;microsoft.asc | gpg --dearmor &gt; microsoft.gpgmv microsoft.gpg &#x2F;etc&#x2F;apt&#x2F;trusted.gpg.d&#x2F;microsoft.gpgsh -c &amp;#x27;echo &quot;deb [arch&#x3D;amd64] ht">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203031933168.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203031934389.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203031935752.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203031936289.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203031939045.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203031943689.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203031943555.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203032203858.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203032204859.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203032205333.png">
+<meta property="article:published_time" content="2022-03-02T14:37:11.000Z">
+<meta property="article:modified_time" content="2022-03-03T14:06:35.693Z">
+<meta property="article:author" content="D3n13d">
+<meta property="article:tag" content="kali">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203031933168.png">
+  
+  
+  <title>Kali安装Vscode并同步你的设置 - D3n13d &#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/scroll.css">
+<link rel="stylesheet" href="/themes/hexo-theme-fluid/source/test.css">
+<link rel="stylesheet" href="/css/test.css">
+<link rel="stylesheet" href="/css/code.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"d3n13d.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":2,"color":"#29d","options":{"showSpinner":true,"trickleSpeed":80}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":21256305,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="D3n13d 's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>D3n13d &#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                时间线
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友人
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/tree.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Kali安装Vscode并同步你的设置">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      D3n13d
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-02 22:37" pubdate>
+        2022年3月2日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      732 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      3 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Kali安装Vscode并同步你的设置</h1>
+            
+            <div class="markdown-body">
+              <h2 id="安装Vscode"><a href="#安装Vscode" class="headerlink" title="安装Vscode"></a>安装Vscode</h2><h3 id="添加软件源"><a href="#添加软件源" class="headerlink" title="添加软件源"></a>添加软件源</h3><figure class="highlight shell"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><pre><code class="hljs shell">curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor &gt; microsoft.gpg<br>mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg<br>sh -c &#x27;echo &quot;deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main&quot; &gt; /etc/apt/sources.list.d/vscode.list&#x27;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="下载软件"><a href="#下载软件" class="headerlink" title="下载软件"></a>下载软件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">apt-get update<br>apt-get install code<br></code></pre></td></tr></table></figure>
+
+<p>note:如果你和我一样下载之后 图形化界面无法启动</p>
+<p>不如直接改一下启动别动 不去记那些繁琐的参数</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">vim ~/.bashrc<br>添加<br>alias code=&#x27;/usr/share/code/code --no-sandbox --unity-launch %F&#x27;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="同步你的设置"><a href="#同步你的设置" class="headerlink" title="同步你的设置"></a>同步你的设置</h2><ol>
+<li>Vscode 下载应用 Setting Sync</li>
+<li>进入github生成你的token，具体流程流程如下</li>
+</ol>
+<blockquote>
+<p> Github::Settings -&gt; Developer settings -&gt; Personal access tokens::Generate new token</p>
+</blockquote>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203031933168.png" srcset="/img/loading.gif" lazyload alt="image-20220303193312061"></p>
+<center>选择设置</center>
+
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203031934389.png" srcset="/img/loading.gif" lazyload alt="image-20220303193426336"></p>
+<center>选择开发者选项</center>
+
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203031935752.png" srcset="/img/loading.gif" lazyload alt="image-20220303193516707"></p>
+<center>生成你的token</center>
+
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203031936289.png" srcset="/img/loading.gif" lazyload alt="image-20220303193628224"></p>
+<center>完成这三项即可</center>    
+
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203031939045.png" srcset="/img/loading.gif" lazyload alt="image-20220303193915976"></p>
+<center>复制你的token</center>
+
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203031943689.png" srcset="/img/loading.gif" lazyload alt="image-20220303194308615"></p>
+<center>上传配置</center>
+
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203031943555.png" srcset="/img/loading.gif" lazyload alt="image-20220303194331501"></p>
+<center>授权应用</center>
+
+
+
+<p>3.上传你的配置<br><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203032203858.png" srcset="/img/loading.gif" lazyload alt="image-20220303220312719"></p>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203032204859.png" srcset="/img/loading.gif" lazyload alt="image-20220303220415816"></p>
+<p>上传成功之后你会得到一个GistID，保存下来。也就是图中Githubtoken下面那条</p>
+<p>4.在需要同步设置的地方安装插件并输入你的Gistid</p>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203032205333.png" srcset="/img/loading.gif" lazyload alt="image-20220303220526226">输入之后就可以成功同步你的设置了</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/kali/">kali</a>
+                    
+                  </div>
+                
+              </div>
+              <p class="note note-warning">
+                <strong>本文作者: </strong><a href="/">D3n13d</a> <br>
+                <strong>本文链接: </strong><a href="https://d3n13d.github.io/2022/03/02/Kali%E5%AE%89%E8%A3%85Vscode%E5%B9%B6%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E8%AE%BE%E7%BD%AE/">https://d3n13d.github.io/2022/03/02/Kali%E5%AE%89%E8%A3%85Vscode%E5%B9%B6%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E8%AE%BE%E7%BD%AE/</a> <br>
+                <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                   </p>
+                   
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/24/%E5%AE%89%E6%B4%B5%E6%9D%AF%202019-iamthinking%20TP6%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E5%AD%90%E5%88%86%E6%9E%90/">
+                        <span class="hidden-mobile">安洵杯 2019-iamthinking TP6反序列化链子分析</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      var light = 'preferred-color-scheme';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
+      var s = document.createElement('script');
+      s.setAttribute('src', 'https://utteranc.es/client.js');
+      s.setAttribute('repo', 'D3n13d/utterances');
+      s.setAttribute('issue-term', 'title');
+      
+      s.setAttribute('theme', schema);
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('comments').appendChild(s);
+    })
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202202110012686.png" srcset="/img/loading.gif" lazyload class="rounded mx-auto d-block mt-5" style="width:120px; height:120px;">
+  <br>
+  <center> # 曾记否，到中流击水，浪遏飞舟？ </center>
+<footer class="text-center mt-5 py-3">
+
+  
+  <div class="footer-content">
+    <div>
+      <span id="timeDate">载入天数...</span>
+      <span id="times">载入时分秒...</span>
+      <script>
+      var now = new Date();
+      function createtime(){
+          var grt= new Date("01/07/2022 00:00:00");//此处修改你的建站时间或者网站上线时间
+          now.setTime(now.getTime()+250);
+          days = (now - grt ) / 1000 / 60 / 60 / 24;
+          dnum = Math.floor(days);
+          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+          hnum = Math.floor(hours);
+          if(String(hnum).length ==1 ){
+              hnum = "0" + hnum;
+          }
+          minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+          mnum = Math.floor(minutes);
+          if(String(mnum).length ==1 ){
+                    mnum = "0" + mnum;
+          }
+          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+          snum = Math.round(seconds);
+          if(String(snum).length ==1 ){
+                    snum = "0" + snum;
+          }
+          
+          document.getElementById("timeDate").innerHTML = "🚀 &nbsp;"+dnum+"&nbsp天";  //此次自定义显示内容
+          document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+      }  //此次自定义显示内容
+      setInterval("createtime()",250);
+      </script>
+    </div>
+  </div>
+
+  
+  
+    <!-- 不蒜子统计 -->
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span >本站总访问量：
+            <span id="busuanzi_value_site_pv"></span>次</span>
+    
+    
+    
+    
+    
+    
+  <div>©2022<a href="https://d3n13d.github.io/">&nbsp;&nbsp;D3n13d 的快乐小屋</a></div>
+
+  
+</footer>
+
+
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":true,"trickleSpeed":80})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script>
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
