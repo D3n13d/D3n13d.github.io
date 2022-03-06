@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://d3n13d.github.io/2022/03/06/PHP-Audits-and-Tricks/</loc>
+    
+    <lastmod>2022-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://d3n13d.github.io/about/index.html</loc>
     
     <lastmod>2022-03-05</lastmod>
@@ -193,7 +202,7 @@
 
   <url>
     <loc>https://d3n13d.github.io/</loc>
-    <lastmod>2022-03-05</lastmod>
+    <lastmod>2022-03-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -201,35 +210,35 @@
   
   <url>
     <loc>https://d3n13d.github.io/tags/Hexo/</loc>
-    <lastmod>2022-03-05</lastmod>
+    <lastmod>2022-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://d3n13d.github.io/tags/%E7%BC%96%E7%A8%8B/</loc>
-    <lastmod>2022-03-05</lastmod>
+    <lastmod>2022-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://d3n13d.github.io/tags/Web/</loc>
-    <lastmod>2022-03-05</lastmod>
+    <lastmod>2022-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://d3n13d.github.io/tags/PHP/</loc>
-    <lastmod>2022-03-05</lastmod>
+    <lastmod>2022-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://d3n13d.github.io/tags/kali/</loc>
-    <lastmod>2022-03-05</lastmod>
+    <lastmod>2022-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -238,49 +247,49 @@
   
   <url>
     <loc>https://d3n13d.github.io/categories/Python/</loc>
-    <lastmod>2022-03-05</lastmod>
+    <lastmod>2022-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://d3n13d.github.io/categories/Linux/</loc>
-    <lastmod>2022-03-05</lastmod>
+    <lastmod>2022-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://d3n13d.github.io/categories/CTF/</loc>
-    <lastmod>2022-03-05</lastmod>
+    <lastmod>2022-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://d3n13d.github.io/categories/%E9%9D%B6%E6%9C%BA/</loc>
-    <lastmod>2022-03-05</lastmod>
+    <lastmod>2022-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://d3n13d.github.io/categories/%E9%80%86%E5%90%91/</loc>
-    <lastmod>2022-03-05</lastmod>
+    <lastmod>2022-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://d3n13d.github.io/categories/%E7%94%9F%E6%B4%BB/</loc>
-    <lastmod>2022-03-05</lastmod>
+    <lastmod>2022-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://d3n13d.github.io/categories/%E5%AE%A1%E8%AE%A1/</loc>
-    <lastmod>2022-03-05</lastmod>
+    <lastmod>2022-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
