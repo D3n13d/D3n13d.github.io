@@ -18,9 +18,9 @@
   <meta name="keywords" content="Web,CTF,渗透测试">
   
     <meta name="description" content="Java 安全学习             写在前面，这是一个成长文，记录笔者学习Java安全的过程。廖雪峰的内容真的不错，这个文章大多数内容参考了他的教程下面贴出主要参考的互联网资源链接             廖雪峰的Java教程：https:&#x2F;&#x2F;www.liaoxuefeng.com&#x2F;wiki&#x2F;1252599548343744  Java相较于其他语言的优势，编写完程序之后，可以将其编译为可">
-<meta property="og:type" content="article">
+<meta property="og:type" content="website">
 <meta property="og:title" content="Java Security">
-<meta property="og:url" content="https://d3n13d.github.io/2022/03/09/Java-Security/index.html">
+<meta property="og:url" content="https://d3n13d.github.io/Java-Security.html">
 <meta property="og:site_name" content="D3n13d &#39;s blog">
 <meta property="og:description" content="Java 安全学习             写在前面，这是一个成长文，记录笔者学习Java安全的过程。廖雪峰的内容真的不错，这个文章大多数内容参考了他的教程下面贴出主要参考的互联网资源链接             廖雪峰的Java教程：https:&#x2F;&#x2F;www.liaoxuefeng.com&#x2F;wiki&#x2F;1252599548343744  Java相较于其他语言的优势，编写完程序之后，可以将其编译为可">
 <meta property="og:locale" content="zh_CN">
@@ -84,7 +84,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"d3n13d.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":2,"color":"#29d","options":{"showSpinner":true,"trickleSpeed":80}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":21256305,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"d3n13d.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":2,"color":"#29d","options":{"showSpinner":true,"trickleSpeed":80}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":"ture","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":1,"placement":"left"},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":21256305,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
@@ -93,7 +93,7 @@
 
 
 <body>
-  <header style="height: 70vh;">
+  <header style="height: 60vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -201,7 +201,7 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('/img/bg/tree.jpg') no-repeat center center;
+         style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
@@ -209,45 +209,6 @@
             <span class="h2" id="subtitle" title="Java Security">
               
             </span>
-
-            
-              <div class="mt-3">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-author" aria-hidden="true"></i>
-      D3n13d
-    </span>
-  
-  
-    <span class="post-meta">
-      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-03-09 23:14" pubdate>
-        2022年3月9日 晚上
-      </time>
-    </span>
-  
-</div>
-
-<div class="mt-1">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      17k 字
-    </span>
-  
-
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
-      
-      
-      67 分钟
-    </span>
-  
-
-  
-  
-</div>
 
             
           </div>
@@ -260,20 +221,17 @@
 
   <main>
     
-      
+      <div class="container nopadding-x-md">
+        <div class="py-5" id="board"
+          >
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
 
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div class="py-5" id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">Java Security</h1>
-            
-            <div class="markdown-body">
-              <h1 id="Java-安全学习"><a href="#Java-安全学习" class="headerlink" title="Java 安全学习"></a>Java 安全学习</h1><div class="note note-success">
+<article class="page-content">
+  <h1 id="Java-安全学习"><a href="#Java-安全学习" class="headerlink" title="Java 安全学习"></a>Java 安全学习</h1><div class="note note-success">
             <p>写在前面，这是一个成长文，记录笔者学习Java安全的过程。廖雪峰的内容真的不错，这个文章大多数内容参考了他的教程下面贴出主要参考的互联网资源链接</p>
           </div>
 
@@ -569,112 +527,15 @@ class Student extends Person &#123;
 <p><a target="_blank" rel="noopener" href="https://javasec.org/">Javasec</a></p>
 <p><a target="_blank" rel="noopener" href="https://longlone.top/">longlone佬的blog</a></p>
 
-            </div>
-            <hr>
-            <div>
-              <div class="post-metas mb-3">
-                
-                  <div class="post-meta mr-3">
-                    <i class="iconfont icon-category"></i>
-                    
-                      <a class="hover-with-bg" href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">代码审计</a>
-                    
-                  </div>
-                
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/Java/">Java</a>
-                    
-                  </div>
-                
+
+  
+</article>
+
               </div>
-              <p class="note note-warning">
-                <strong>本文作者: </strong><a href="/">D3n13d</a> <br>
-                <strong>本文链接: </strong><a href="https://d3n13d.github.io/2022/03/09/Java-Security/">https://d3n13d.github.io/2022/03/09/Java-Security/</a> <br>
-                <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
-                   </p>
-                   
-              
-                <div class="post-prevnext">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/2022/03/12/%E8%AE%B0%E4%B8%80%E4%B8%AAJava-web%E6%90%AD%E5%BB%BA%E7%BB%8F%E5%8E%86/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">记一个Java-Web搭建经历</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/2022/03/06/PHP-Audits-and-Tricks/">
-                        <span class="hidden-mobile">PHP Audits and Tricks</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
             </div>
-
-            
-              <!-- Comments -->
-              <article class="comments" id="comments" lazyload>
-                
-                  
-                
-                
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#comments', function() {
-      var light = 'preferred-color-scheme';
-      var dark = 'github-dark';
-      var schema = document.documentElement.getAttribute('data-user-color-scheme');
-      if (schema === 'dark') {
-        schema = dark;
-      } else {
-        schema = light;
-      }
-      window.UtterancesThemeLight = light;
-      window.UtterancesThemeDark = dark;
-      var s = document.createElement('script');
-      s.setAttribute('src', 'https://utteranc.es/client.js');
-      s.setAttribute('repo', 'D3n13d/utterances');
-      s.setAttribute('issue-term', 'title');
-      
-      s.setAttribute('theme', schema);
-      s.setAttribute('crossorigin', 'anonymous');
-      document.getElementById('comments').appendChild(s);
-    })
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-              </article>
-            
-          </article>
+          </div>
         </div>
       </div>
-    </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-      </div>
-    
-  </div>
-</div>
-
-<!-- Custom -->
-
-
     
 
     
